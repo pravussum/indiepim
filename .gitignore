@@ -1,0 +1,11 @@
+IndiePIM2.iws
+.idea/workspace.xml
+archive - do not check in/**
+local/**
+.idea/dataSources.ids
+.idea/dataSources.xml
+src/main/webapp/server/**
+HibernateSQL*.log
+setup.txt
+out/**
+target/**
