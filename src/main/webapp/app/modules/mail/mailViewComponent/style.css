@@ -1,0 +1,80 @@
+
+/* Outer Frame */
+.messageViewFrame {
+    /* Element has fillParent class */
+}
+
+
+/* IFRAME */
+.messageIFrame {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+.messageContentFrame {
+    /* Element has fillParent class */
+    -moz-box-shadow: rgba(200, 200, 200, 1) 0 0 8px 2px;
+    -webkit-box-shadow: rgba(200, 200, 200, 1) 0 0 8px 2px;
+    -khtml-box-shadow: rgba(200, 200, 200, 1) 0 0 8px 2px;
+    box-shadow: rgba(200, 200, 200, 1) 0 0 8px 2px;
+    margin: 140px 30px 20px 20px;
+    padding: 15px;
+}
+
+.messageViewHeader {
+    height: 100px;
+    margin-left: 20px;
+    margin-right: 30px;
+    margin-top: 20px;
+}
+
+.messageViewHeader h3 {
+    margin: 0;
+}
+
+.messageViewSubjectHeader {
+
+}
+
+.dateAndControlsWrapper {
+    float: right;
+}
+
+.messageViewSenderHeader, .messageViewReceiverHeader {
+    color: darkslategray;
+}
+
+.messageViewTagHeader{
+    clear: both;
+}
+
+.mailViewTagBox {
+    z-index: 1000;
+}
+
+.mailViewTagBox ul {
+    border: none;
+}
+
+.mailViewTagBox:focus ul {
+    border: 1px solid #5897FB;
+}
+
+.select2-container-disabled .select2-choices {
+    background-color: #ffffff !important;
+    border: none !important;
+}
+
+.controls {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.controls button {
+    width: 100px;
+}
+
+.controls button i {
+    margin-right: 10px;
+}

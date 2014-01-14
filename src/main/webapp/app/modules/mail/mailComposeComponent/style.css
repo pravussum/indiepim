@@ -1,0 +1,42 @@
+/*Add css rules for the panel here*/
+.jqte {
+    border:1px solid #CCCCCC;
+    width: 1000px;
+}
+
+#typeheadtest {
+    width: 300px;
+}
+
+#subjectBox {
+    -moz-box-sizing: border-box;
+    width: 100%;
+    display: inline-block;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    font-size: 100%;
+}
+.select2-container {
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    vertical-align: middle;
+}
+
+#wrapper {
+    padding: 20px;
+}
+
+label {
+    font-size: 90%;
+    color: #666666;
+}
+
+.row {
+    margin-bottom: 10px;
+}
+
+#sendButton {
+    margin-top: 30px;
+}

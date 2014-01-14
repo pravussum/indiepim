@@ -1,0 +1,23 @@
+<div id="messageViewFrame" class="messageViewFrame fillParent">
+    <div class="messageViewHeader" data-bind="with: message">
+        <div>
+            <h3 class="messageViewSubjectHeader" data-bind="text: subject"></h3>
+        </div>
+        <div class="dateAndControlsWrapper">
+            <div class="messageViewDateReceivedHeader" data-bind="text: moment(dateReceived()).format('LLL')"></div>
+            <div class="controls">
+                <button class="stylishButton" data-bind="click: $root.reply"><i class="fa fa-reply" />Reply</button>
+                <button class="stylishButton" data-bind="click: $root.forward"><i class="fa fa-forward" />Forward</button>
+            </div>
+        </div>
+        <div class="messageViewSenderHeader">Von: <span data-bind="text: sender"></span></div>
+        <div class="messageViewReceiverHeader">An: <span data-bind="text: receiver"></span></div>
+        <div class="messageViewTagHeader">
+            <input id="tagBox" data-bind="select2: tags, select2options: $root.select2Options"/>
+            <button id="editTagsButton" class="stylishButton" data-bind="click: $root.editMessageTags"><i class="fa fa-pencil"/> </button>
+        </div>
+    </div>
+    <div id="messageContentFrame" class="messageContentFrame fillParent" >
+        <iframe id="messageIFrame" class="messageIFrame"></iframe>
+    </div>
+</div>

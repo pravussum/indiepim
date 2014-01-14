@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="AmIEvil (generated)" id="1319026263161-1">
+        <createTable tableName="address">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-2">
+        <createTable tableName="attachment">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="message_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mime_type" type="VARCHAR(150)"/>
+            <column name="filename" type="VARCHAR(300)"/>
+            <column name="pos_no" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="disposition" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-3">
+        <createTable tableName="contact">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-4">
+        <createTable tableName="contact_tag_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-5">
+        <createTable tableName="date">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-6">
+        <createTable tableName="email_addr_msg_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_address_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-7">
+        <createTable tableName="email_address">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email_address" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-8">
+        <createTable tableName="message">
+            <column autoIncrement="true" name="ID" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="msg_uid" type="INT UNSIGNED"/>
+            <column name="subject" type="VARCHAR(1024)"/>
+            <column name="sender" type="VARCHAR(1024)"/>
+            <column name="receiver" type="VARCHAR(1024)"/>
+            <column name="content_text" type="MEDIUMTEXT"/>
+            <column name="content_html" type="MEDIUMTEXT"/>
+            <column name="msg_account_id" type="INT UNSIGNED"/>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="INT UNSIGNED"/>
+            <column name="message_folder_id" type="INT UNSIGNED"/>
+            <column name="tag_lineage_id" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-9">
+        <createTable tableName="msg_account">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="host" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(200)"/>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="imaps" name="protocol" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_hierarchy_id" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-10">
+        <createTable tableName="msg_tag_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-11">
+        <createTable tableName="phone_no">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_no" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-12">
+        <createTable tableName="tag">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="tag" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-13">
+        <createTable tableName="tag_hierarchy">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(80)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-14">
+        <createTable tableName="tag_lineage">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lineage" type="VARCHAR(5000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_hierarchy_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-15">
+        <createTable tableName="tag_lineage_tag_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_lineage_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-16">
+        <createTable tableName="url">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="url" type="VARCHAR(400)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED"/>
+            <column name="event_id" type="INT UNSIGNED"/>
+            <column name="type" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-17">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="username" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pw_hash" type="CHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-18">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="address" constraintName="address_contact" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-19">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="address" constraintName="address_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-20">
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="attachment" constraintName="fk_attachment_message" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="message" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-21">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="attachment" constraintName="fk_attachment_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-22">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="contact" constraintName="contact_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-23">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="contact_tag_mapping" constraintName="contact_tag_map_contact" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-24">
+        <addForeignKeyConstraint baseColumnNames="tag_id" baseTableName="contact_tag_mapping" constraintName="contact_tag_map_tag" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-25">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="contact_tag_mapping" constraintName="contact_tag_map_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-26">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="date" constraintName="date_contact" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-27">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="date" constraintName="date_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-28">
+        <addForeignKeyConstraint baseColumnNames="email_address_id" baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_email_addr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="email_address" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-29">
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_msg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="message" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-30">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-31">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="email_address" constraintName="email_address_contact" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-32">
+        <addForeignKeyConstraint baseColumnNames="msg_account_id" baseTableName="message" constraintName="FK_MSG_MSG_ACC_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="msg_account" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-33">
+        <addForeignKeyConstraint baseColumnNames="tag_lineage_id" baseTableName="message" constraintName="FK_MSG_TAG_LINEAGE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag_lineage" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-34">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="message" constraintName="FK_MSG_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-35">
+        <addForeignKeyConstraint baseColumnNames="tag_hierarchy_id" baseTableName="msg_account" constraintName="FK_MSG_ACC_TAG_HIERARCHY" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag_hierarchy" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-36">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="msg_account" constraintName="FK_MSG_ACC_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-37">
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="msg_tag_mapping" constraintName="msg_tag_map_msg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="message" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-38">
+        <addForeignKeyConstraint baseColumnNames="tag_id" baseTableName="msg_tag_mapping" constraintName="msg_tag_map_tag" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-39">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="msg_tag_mapping" constraintName="msg_tag_map_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-40">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="phone_no" constraintName="phone_no_contact" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-41">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="phone_no" constraintName="phone_no_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-42">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="tag" constraintName="FK_TAG_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-43">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="tag_hierarchy" constraintName="fk_tag_hierarchy_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-44">
+        <addForeignKeyConstraint baseColumnNames="tag_hierarchy_id" baseTableName="tag_lineage" constraintName="fk_tag_lineage_tag_hierarchy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag_hierarchy" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-45">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="tag_lineage" constraintName="fk_tag_lineage_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-46">
+        <addForeignKeyConstraint baseColumnNames="tag_id" baseTableName="tag_lineage_tag_mapping" constraintName="tag_lineage_tag_map_tag" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-47">
+        <addForeignKeyConstraint baseColumnNames="tag_lineage_id" baseTableName="tag_lineage_tag_mapping" constraintName="tag_lineage_tag_map_tag_lineage" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag_lineage" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-48">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="tag_lineage_tag_mapping" constraintName="tag_lineage_tag_map_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-49">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="url" constraintName="url_contact" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-50">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="url" constraintName="url_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-51">
+        <createIndex indexName="idx_name" tableName="contact" unique="false">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-52">
+        <createIndex indexName="email_addr_user" tableName="email_address" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-53">
+        <createIndex indexName="idx_email_address" tableName="email_address" unique="false">
+            <column name="email_address"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-54">
+        <createIndex indexName="FK_MSG_MSG_FOLDER_ID" tableName="message" unique="false">
+            <column name="message_folder_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-55">
+        <createIndex indexName="IDX_MSG_UID" tableName="message" unique="true">
+            <column name="msg_uid"/>
+            <column name="msg_account_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-56">
+        <createIndex indexName="Tag" tableName="tag" unique="true">
+            <column name="user_id"/>
+            <column name="tag"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-57">
+        <createIndex indexName="idx_tag_lineage" tableName="tag_lineage" unique="false">
+            <column name="user_id"/>
+            <column name="lineage(300)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil (generated)" id="1319026263161-58">
+        <createIndex indexName="username_UNIQUE" tableName="user" unique="true">
+            <column name="username"/>
+        </createIndex>
+    </changeSet>
+	<changeSet author="AmIEvil" id="1319026263161-59">
+		<addColumn tableName="msg_account">
+		    <column name="tag_id" type="INT UNSIGNED" defaultValue="1">
+		    	<constraints nullable="false"/>		    	
+		    </column>
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="tag_id" baseTableName="msg_account" constraintName="FK_MSG_ACC_TAG" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag" referencesUniqueColumn="false"/>
+	</changeSet>
+	<changeSet id="1319026263161-60" author="AmIEvil">
+        <createIndex indexName="msg_account_name_UNIQUE" tableName="msg_account" unique="true">
+            <column name="name"/>
+        </createIndex>		
+	</changeSet>
+    <changeSet id="1319026263161-61" author="AmIEvil">
+    	<modifyDataType tableName="message" columnName="sender" newDataType="varchar(512)"/>
+    	<modifyDataType tableName="message" columnName="sender" newDataType="varchar(3072)"/>
+    </changeSet>
+    <changeSet id="1319026263161-62" author="AmIEvil">
+    	<modifyDataType tableName="message" columnName="sender" newDataType="varchar(512)"/>
+    	<modifyDataType tableName="message" columnName="receiver" newDataType="varchar(3072)"/>
+    </changeSet>
+    <changeSet id="1319026263161-63" author="AmIEvil">
+		<addColumn tableName="message">
+		    <column name="date_received" type="datetime" />
+		</addColumn>    	
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-64">
+        <createTable tableName="system_config">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="config_key" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="config_value" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>            
+		</createTable>
+	</changeSet>
+    <changeSet id="1319026263161-65" author="AmIEvil">
+		<addColumn tableName="msg_account">
+		    <column name="email" type="varchar(200)" />
+		    <column name="outgoing_host" type="varchar(300)" />		    
+		</addColumn>    	
+    </changeSet>
+    <changeSet id="1319026263161-66" author="AmIEvil">
+    <addNotNullConstraint
+        tableName="msg_account"
+        columnName="email"
+        columnDataType="varchar(200)"
+        defaultNullValue="generated" />
+    <addNotNullConstraint
+        tableName="msg_account"
+        columnName="outgoing_host"
+        columnDataType="varchar(300)"
+        defaultNullValue="generated" />
+	</changeSet>
+	<changeSet id="1319026263161-67" author="AmIEvil">
+		<dropUniqueConstraint tableName="msg_account" constraintName="msg_account_name_UNIQUE"/>
+	</changeSet>
+	<changeSet id="1319026263161-68" author="AmIEvil">
+        <createIndex indexName="msg_account_name_UNIQUE" tableName="msg_account" unique="true">
+            <column name="user_id"/>
+            <column name="name"/>            
+        </createIndex>		
+	</changeSet>	
+    <changeSet id="1319026263161-69" author="AmIEvil">
+		<addColumn tableName="msg_account">
+		    <column name="port" type="INT UNSIGNED" />
+		    <column name="outgoing_port" type="INT UNSIGNED" />
+		    <column name="authentication" type="varchar(20)" />
+			<column name="outgoing_authentication" type="varchar(20)" />
+		    <column name="encryption" type="varchar(20)" />
+			<column name="outgoing_encryption" type="varchar(20)" />					    		    
+		</addColumn>    	
+    </changeSet>
+    <changeSet id="1319026263161-70" author="AmIEvil">
+    	<dropForeignKeyConstraint baseTableName="tag_lineage_tag_mapping" constraintName="tag_lineage_tag_map_user" />
+    	<dropColumn tableName="tag_lineage_tag_mapping" columnName="user_id"/>
+    </changeSet>
+    <changeSet id="1319026263161-71" author="AmIEvil">
+    	<dropForeignKeyConstraint baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_user" />
+    	<dropColumn tableName="email_addr_msg_mapping" columnName="user_id"/>
+    </changeSet>
+    <changeSet id="1319026263161-72" author="AmIEvil">
+    	<dropForeignKeyConstraint baseTableName="msg_tag_mapping" constraintName="msg_tag_map_user" />
+    	<dropColumn tableName="msg_tag_mapping" columnName="user_id"/>
+    </changeSet>
+    <changeSet id="1319026263161-73" author="AmIEvil">
+    	<dropForeignKeyConstraint baseTableName="contact_tag_mapping" constraintName="contact_tag_map_user" />
+    	<dropColumn tableName="contact_tag_mapping" columnName="user_id"/>
+    </changeSet>
+    <changeSet id="1319026263161-74" author="AmIEvil">
+    	<dropUniqueConstraint tableName="message" constraintName="IDX_MSG_UID"/>
+	    <createIndex indexName="IDX_MSG_UID" tableName="message" unique="true">
+            <column name="user_id"/>
+            <column name="msg_account_id"/>
+            <column name="msg_uid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-75" author="AmIEvil">
+	    <createIndex indexName="IDX_MSG_UID_2" tableName="message" unique="true">
+            <column name="user_id"/>
+            <column name="msg_account_id"/>
+            <column name="tag_lineage_id" />
+            <column name="msg_uid"/>
+        </createIndex>
+    	<dropUniqueConstraint tableName="message" constraintName="IDX_MSG_UID"/>
+    </changeSet>
+    <changeSet id="1319026263161-76" author="AmIEvil">
+		<addColumn tableName="message">
+		    <column name="read_flag" type="boolean" />
+		</addColumn>    	
+    </changeSet>
+    <changeSet id="1319026263161-77" author="AmIEvil">
+		<addColumn tableName="msg_account">
+		    <column name="syncPeriod" type="INT" />
+		    <column name="syncMethod" type="INT UNSIGNED" />
+		    <column name="syncIntervalMode" type="INT" />
+		    <column name="lastSyncRun" type="datetime" />
+		    <column name="newMessages" type="boolean" />
+		    <column name="trustInvalidSSLCertificates" type="boolean" />
+		</addColumn>    	
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-78" context="production">
+    	<sqlFile path="quartzSetup.mysql" />
+	</changeSet>    
+    <changeSet author="AmIEvil" id="1319026263161-79">
+		<dropForeignKeyConstraint  constraintName="FK_MSG_MSG_ACC_ID"   baseTableName="message"/>
+        <addForeignKeyConstraint baseColumnNames="msg_account_id" baseTableName="message" constraintName="FK_MSG_MSG_ACC_ID" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="msg_account" referencesUniqueColumn="false"/>
+    </changeSet>
+	<changeSet author="AmIEvil" id="1319026263161-80">
+		<addColumn tableName="message">
+			<column name="hash" type="varchar(32)"/>
+		</addColumn>
+		<sql>update message set hash = md5(concat_ws(';',sender, receiver, subject, date_format(date_received, get_format(DATETIME,'EUR'))))</sql>
+	</changeSet>
+	<changeSet id="1319026263161-81" author="AmIEvil">
+		<createIndex tableName="message" indexName="idx_user_account_hash">
+    		<column name="user_id"/>
+    		<column name="msg_account_id"/>
+    		<column name="hash" />
+		</createIndex>
+	</changeSet>                
+	
+	<!-- changeSet id="1319026263161-82" author="AmIEvil">
+		<addUniqueConstraint tableName="message" columnNames="user_id, msg_account_id, hash"/>
+	</changeSet-->
+	
+	<changeSet author="AmIEvil" id="1319026263161-83">
+        <createTable tableName="msg_tag_lineage_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="message_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_lineage_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="tag_lineage_id" baseTableName="msg_tag_lineage_mapping" constraintName="msg_tag_lineage_map_tag_lineage" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag_lineage" referencesUniqueColumn="false"/>
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="msg_tag_lineage_mapping" constraintName="msg_tag_lineage_map_message" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="message" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-84">
+    	<sql>
+    		insert into msg_tag_lineage_mapping (message_id, tag_lineage_id) select id, tag_lineage_id from message
+    	</sql>  
+    </changeSet>
+	<changeSet author="AmIEvil" id="1319026263161-86">
+		<sql>
+			create or replace view msg_tag_view as
+			
+			select m.user_id user_id,  m.id message_id, t.id tag_id from message m, msg_tag_lineage_mapping mtlm, tag_lineage tl,  tag_lineage_tag_mapping tltm, tag t
+			where m.id = mtlm.message_id and 
+			mtlm.tag_lineage_id = tl.id and
+			tl.id = tltm.tag_lineage_id and
+			tltm.tag_id = t.id
+			
+			union distinct 
+			
+			select m.user_id user_id, m.id message_id, t.id tag_id from message m, msg_tag_mapping mtm, tag t
+			where m.id = mtm.message_id and
+			mtm.tag_id = t.id;
+		</sql>	
+	</changeSet>
+
+    <changeSet id="1319026263161-88" author="AmIEvil">
+		<addColumn tableName="tag">
+		    <column name="color" type="varchar(10)" />
+		</addColumn>    	
+    </changeSet>
+	<changeSet id="1319026263161-89" author="AmIEvil">	    	
+	    <createIndex indexName="idx_msg_user_date_received" tableName="message" unique="false">
+            <column name="user_id"/>
+            <column name="date_received"/>
+        </createIndex>
+	</changeSet>
+	<changeSet id="1319026263161-90" author="AmIEvil">
+		<modifyDataType tableName="message" columnName="receiver" newDataType="varchar(10000)"/>
+	</changeSet>
+    <changeSet id="1319026263161-91" author="AmIEvil">
+		<addColumn tableName="msg_account">
+		    <column name="ts_update" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+		    	<constraints nullable="false"/>
+		    </column>
+		</addColumn> 
+		<sql>update msg_account set ts_update = current_timestamp</sql>   	
+    </changeSet>	
+    <changeSet id="1319026263161-92" author="AmIEvil">
+		<addColumn tableName="msg_tag_lineage_mapping">
+		    <column name="msg_uid" type="INT UNSIGNED" />
+		</addColumn> 
+		<sql>update msg_tag_lineage_mapping set msg_uid = (select msg_uid from message where id = message_id)</sql>
+		<dropColumn tableName="message" columnName="msg_uid"/>   	
+    </changeSet>		
+	
+	
+	<changeSet author="AmIEvil" id="1319026263161-87" context="production">
+		<dropUniqueConstraint tableName="message" constraintName="IDX_MSG_UID_2"/>
+	</changeSet>
+	<!-- changeSet author="AmIEvil" id="1319026263161-88">
+		<dropColumn tableName="message" columnName="tag_lineage_id"/>
+	    <createIndex indexName="IDX_MSG_UID" tableName="message" unique="true">
+            <column name="user_id"/>
+            <column name="msg_account_id"/>
+			<column name="hash"/>
+        </createIndex>
+	</changeSet-->	     	                
+
+    <changeSet author="AmIEvil" id="1319026263161-93">
+        <createTable tableName="user_config">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="config_key" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="config_value" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>            
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="user_id" 
+								 baseTableName="user_config" 
+								 constraintName="user_config_user"
+								 deferrable="false" 
+								 initiallyDeferred="false" 
+								 onDelete="NO ACTION"
+                                 onUpdate="CASCADE"
+								 referencedColumnNames="id" 
+								 referencedTableName="user" 
+								 referencesUniqueColumn="false"/>
+        <createIndex indexName="IDX_USER_CONFIG_KEY" tableName="user_config" unique="true">
+            <column name="user_id"/>
+            <column name="config_key"/>
+        </createIndex>								 
+	</changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-94">
+        <createTable tableName="image">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="image"
+                                 constraintName="fk_image_user"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"
+                                 referencesUniqueColumn="false"/>
+        <createIndex indexName="idx_image_user_id" tableName="image" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-95">
+        <addColumn tableName="contact">
+            <column name="contact_image_id" type="INT UNSIGNED" />
+            <column name="given_name" type="VARCHAR(200)" />
+            <column name="family_name" type="VARCHAR(200)" />
+            <column name="origin" type="VARCHAR(200)" />
+        </addColumn>
+        <createIndex indexName="idx_contact_user_names" tableName="contact" unique="false">
+            <column name="user_id"/>
+            <column name="given_name" />
+            <column name="family_name" />
+        </createIndex>
+        <renameColumn tableName="contact" oldColumnName="name" newColumnName="displayName" columnDataType="VARCHAR(300)" />
+        <addForeignKeyConstraint baseColumnNames="contact_image_id"
+                                 baseTableName="contact"
+                                 constraintName="fk_contact_image"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="CASCADE"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="id"
+                                 referencedTableName="image"
+                                 referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-96">
+        <dropColumn tableName="msg_account" columnName="syncPeriod"/>
+        <renameColumn tableName="msg_account" oldColumnName="syncIntervalMode" newColumnName="syncInterval" columnDataType="INT"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-97">
+        <dropForeignKeyConstraint baseTableName="user_config" constraintName="user_config_user" />
+        <addForeignKeyConstraint baseColumnNames="user_id"
+      								 baseTableName="user_config"
+      								 constraintName="fk_user_config_user"
+      								 deferrable="false"
+      								 initiallyDeferred="false"
+      								 onDelete="NO ACTION"
+                                       onUpdate="CASCADE"
+      								 referencedColumnNames="id"
+      								 referencedTableName="user"
+      								 referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-98">
+        <renameColumn tableName="contact" oldColumnName="displayName" newColumnName="display_name" columnDataType="VARCHAR(300)"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-99">
+        <addColumn tableName="email_address">
+            <column name="type" type="VARCHAR(10)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="AmIEvil"  id="1319026263161-100">
+		<addColumn tableName="email_address">
+		    <column name="is_primary" type="boolean" />
+		</addColumn>
+    </changeSet>
+    <changeSet author="AmIEvil"  id="1319026263161-101">
+		<addColumn tableName="phone_no">
+		    <column name="is_primary" type="boolean" />
+		</addColumn>
+    </changeSet>
+    <changeSet author="AmIEvil"  id="1319026263161-102">
+		<addColumn tableName="address">
+		    <column name="is_primary" type="boolean" />
+		</addColumn>
+    </changeSet>
+    <changeSet author="AmIEvil"  id="1319026263161-103">
+        <modifyDataType tableName="address" columnName="type" newDataType="varchar(20)"/>
+    </changeSet>
+    <changeSet author="AmIEvil"  id="1319026263161-104">
+        <modifyDataType tableName="phone_no" columnName="type" newDataType="varchar(20)"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-105">
+        <createTable tableName="contact_tag_lineage_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="contact_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_lineage_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="tag_lineage_id" baseTableName="contact_tag_lineage_mapping" constraintName="contact_tag_lineage_map_tag_lineage" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tag_lineage" referencesUniqueColumn="false"/>
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="contact_tag_lineage_mapping" constraintName="contact_tag_lineage_map_message" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contact" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-106">
+   		<sql>
+   			create or replace view contact_tag_view as
+
+   			select c.user_id user_id, t.id tag_id from contact c, contact_tag_lineage_mapping ctlm, tag_lineage tl,  tag_lineage_tag_mapping tltm, tag t
+   			where c.id = ctlm.contact_id and
+   			ctlm.tag_lineage_id = tl.id and
+   			tl.id = tltm.tag_lineage_id and
+   			tltm.tag_id = t.id
+
+   			union distinct
+
+   			select c.user_id user_id, t.id tag_id from contact c, contact_tag_mapping ctm, tag t
+   			where c.id = ctm.contact_id and
+   			ctm.tag_id = t.id;
+   		</sql>
+   	</changeSet>
+    <changeSet author="AmIEvil" id="1319026263161-107" >
+        <addUniqueConstraint tableName="email_address" columnNames="user_id, email_address" />
+    </changeSet>
+    <changeSet id="1319026263161-108" author="AmIEvil">
+        <modifyDataType tableName="user" columnName="pw_hash" newDataType="blob" />
+    </changeSet>
+    <changeSet id="1319026263161-109" author="AmIEvil">
+        <createTable tableName="msg_account_stats">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="msg_account_id" type="INT UNSIGNED" />
+            <column name="lastSyncRun" type="datetime" />
+            <column name="msg_sync_error_cnt" type="INT UNSIGNED" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="msg_account_stats" baseColumnNames="msg_account_id"
+                                 constraintName="fk_msg_acc_stats_msg_acc"
+                                 referencedTableName="msg_account" referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="custom-1" author="AmIEvil">
+        <customChange class="net.mortalsilence.indiepim.server.liquibase.RollbackSqlStatementChange">
+            <param name="sql" value="insert into msg_account_stats (msg_account_id, lastSyncRun) select id, lastSyncRun from msg_account" />
+            <param name="rollbackSql" value="update msg_account set lastSyncRun = (select lastSyncRun from msg_account_stats where id = msg_account.id);delete from msg_account_stats" />
+        </customChange>
+    </changeSet>
+    <changeSet id="1319026263161-110" author="AmIEvil">
+        <dropColumn tableName="msg_account" columnName="lastSyncRun" />
+    </changeSet>
+    <changeSet id="1319026263161-111" author="AmIEvil">
+        <addUniqueConstraint tableName="message" columnNames="user_id, hash" constraintName="msg_user_hash_UNIQUE"/>
+    </changeSet>
+    <changeSet id="1319026263161-112" author="AmIEvil">
+        <addColumn tableName="msg_account">
+            <column name="msg_account_stats_id" type="INT UNSIGNED"></column>
+        </addColumn>
+        <sql>update msg_account set msg_account_stats_id = (select id from msg_account_stats where msg_account_id = msg_account.id)</sql>
+        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="msg_account_stats_id" constraintName="fk_msg_account_2_msg_acc_stats"
+                                 referencedTableName="msg_account_stats" referencedColumnNames="id" />
+        <dropForeignKeyConstraint baseTableName="msg_account_stats" constraintName="fk_msg_acc_stats_msg_acc" />
+        <dropColumn tableName="msg_account_stats" columnName="msg_account_id" />
+        <addNotNullConstraint tableName="msg_account" columnName="msg_account_stats_id" columnDataType="INT UNSIGNED"/>
+    </changeSet>
+    <changeSet id="1319026263161-113" author="AmIEvil">
+        <createTable tableName="calendar">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(200)" />
+            <column name="ctag" type="varchar(50)" />
+            <column name="default" type="boolean" />
+            <column name="color" type="varchar(10)" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="calendar" baseColumnNames="user_id"
+                                 constraintName="fk_calendar_2_user"
+                                 referencedTableName="user" referencedColumnNames="id" />
+        <createTable tableName="event">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="user_id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="calendar_id" type="INT UNSIGNED">
+                <constraints nullable="false" />
+            </column>
+            <column name="uid" type="varchar(50)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(1000)" />
+            <column name="start" type="datetime" >
+                <constraints nullable="false" />
+            </column>
+            <column name="end" type="datetime" />
+            <column name="location" type="varchar(1000)" />
+            <column name="url" type="varchar(1000)" />
+            <column name="description" type="mediumtext" />
+            <column name="etag" type="varchar(50)" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="event" baseColumnNames="user_id"
+                                 constraintName="fk_event_2_user"
+                                 referencedTableName="user" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="event" baseColumnNames="calendar_id"
+                                 constraintName="fk_event_2_calendar"
+                                 referencedTableName="calendar" referencedColumnNames="id" />
+        <createIndex tableName="event" indexName="idx_event_user_calendar_start">
+            <column name="user_id" />
+            <column name="calendar_id" />
+            <column name="start" />
+        </createIndex>
+        <createTable tableName="recurrence">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="interval" type="INT UNSIGNED" />
+            <column name="freq" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="until" type="datetime" />
+            <column name="count" type="INT UNSIGNED" />
+            <column name="bysecond" type="varchar(200)" />
+            <column name="byminute" type="varchar(200)" />
+            <column name="byhour" type="varchar(100)" />
+            <column name="byday" type="varchar(20)" />
+            <column name="bymonthday" type="varchar(100)" />
+            <column name="byyearday" type="longtext" />
+            <column name="byweekno" type="varchar(250)" />
+            <column name="bymonth" type="varchar(25)" />
+            <column name="bysetpos" type="INT" />
+            <column name="week_start_day" type="varchar(3)" />
+        </createTable>
+        <createTable tableName="event_recurrence_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="event_id" type="INT UNSIGNED">
+                <constraints nullable="false" />
+            </column>
+            <column name="recurrence_id" type="INT UNSIGNED">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="event_recurrence_mapping" baseColumnNames="event_id"
+                                 constraintName="fk_event_recurrence_mapping_2_event"
+                                 referencedTableName="event" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="event_recurrence_mapping" baseColumnNames="recurrence_id"
+                                 constraintName="fk_event_recurrence_mapping_2_recurrence"
+                                 referencedTableName="recurrence" referencedColumnNames="id" />
+        <createTable tableName="attendee">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="user_id" type="INT UNSIGNED" remarks="another user attending an event, either this (x)or email_adress must be set"/>
+            <column name="email_address_id" type="INT UNSIGNED" remarks="any other person (not an user) represented by an email address. Either this (x)or user_id must be set."/>
+        </createTable>
+        <createTable tableName="event_attendee_mapping">
+            <column autoIncrement="true" name="id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="event_id" type="INT UNSIGNED">
+                <constraints nullable="false" />
+            </column>
+            <column name="attendee_id" type="INT UNSIGNED">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1319026263161-114" author="AmIEvil">
+        <!-- default admin user -->
+        <insert tableName="user">
+            <column name="username">admin</column>
+            <column name="pw_hash" valueComputed="sha2('admin{admin}', 256)" />
+        </insert>
+    </changeSet>
+    <changeSet id="1319026263161-115" author="AmIEvil">
+        <addColumn tableName="user">
+            <column name="admin" type="boolean" defaultValueBoolean="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <!-- security issue ??? -->
+        <sql>update user set admin = 1 where username = 'admin'</sql>
+    </changeSet>
+    <changeSet id="1319026263161-116" author="AmIEvil">
+        <renameColumn tableName="calendar" oldColumnName="default" newColumnName="defaultCalendar" columnDataType="boolean"/>
+    </changeSet>
+    <changeSet id="1319026263161-117" author="AmIEvil">
+        <dropTable tableName="event_recurrence_mapping" />
+    </changeSet>
+    <changeSet id="1319026263161-118" author="AmIEvil">
+        <addColumn tableName="event">
+            <column name="recurrence_id" type="INT UNSIGNED"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="event" baseColumnNames="recurrence_id"
+                                 constraintName="fk_event_2_recurrence"
+                                 referencedTableName="recurrence" referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="1319026263161-119" author="AmIEvil">
+        <dropTable tableName="event_attendee_mapping" />
+        <addColumn tableName="attendee">
+            <column name="event_id" type="INT UNSIGNED">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="attendee" baseColumnNames="event_id"
+                                 constraintName="fk_attendee_2_event"
+                                 referencedTableName="event" referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="1319026263161-120" author="AmIEvil">
+        <addForeignKeyConstraint baseTableName="attendee" baseColumnNames="user_id"
+                                 constraintName="fk_attendee_2_user"
+                                 referencedTableName="user" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="attendee" baseColumnNames="email_address_id"
+                                 constraintName="fk_attendee_2_email_address"
+                                 referencedTableName="email_address"
+                                 referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="1319026263161-121" author="AmIEvil">
+        <addNotNullConstraint tableName="calendar" columnName="defaultCalendar" columnDataType="boolean"/>
+    </changeSet>
+    <changeSet id="1319026263161-122" author="AmIEvil">
+        <renameColumn tableName="recurrence" oldColumnName="interval" newColumnName="rec_interval" columnDataType="INT UNSIGNED"/>
+    </changeSet>
+    <changeSet id="1319026263161-123" author="AmIEvil">
+        <!-- convert the message content columns to support 4-byte UTF8 characters. Requires Mysql 5.5 -->
+        <sql>
+        alter table message
+        modify column content_text longtext character set utf8mb4,
+        modify column content_html longtext character set utf8mb4
+        </sql>
+    </changeSet>
+    <changeSet id="1319026263161-124" author="AmIEvil">
+        <addUniqueConstraint tableName="msg_tag_lineage_mapping" columnNames="message_id, tag_lineage_id, msg_uid" constraintName="mtlm_msgid_tlid_msguid_UNIQUE" />
+    </changeSet>
+</databaseChangeLog>

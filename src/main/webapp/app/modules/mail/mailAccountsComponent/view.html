@@ -1,0 +1,33 @@
+<h1>Manage message accounts</h1>
+<ul data-bind="foreach: messageAccounts, visible: messageAccounts().length > 0 ">
+    <li><span class="messageAccountListItem" data-bind="text: accountName, click: $parent.selectAccount"></span></li>
+</ul>
+<button data-bind="click: addAccount">Add...</button>
+<div data-bind="with:selectedAccount">
+    <a href="#" data-bind="click: $root.removeAccount">Remove account</a>
+    <a href="#" data-bind="click: $root.saveAccount">Save account</a>
+    <p>Account name: <input data-bind="value: accountName" /></p>
+    <p>Tag: <input data-bind="value: tag" /></p>
+    <p>Email address: <input data-bind="value: email" /></p>
+    <p>User name: <input data-bind="value: userName" /></p>
+    <p>Password: <input type="password" data-bind="value: password" /></p>
+    <p>Host: <input data-bind="value: host" /></p>
+    <p>Port: <input data-bind="value: port" /></p>
+    <p>Authentication method: <select data-bind="value: authentication, options: $root.availableAuthentications, optionsText: 'key', optionsValue: 'key'" /></p>
+    <p>Protocol: <select data-bind="value: protocol,options: $root.availableProtocols, optionsText: 'key', optionsValue: 'key'" /></p>
+    <p>Encryption: <select data-bind="value: encryption, options: $root.availableEncryptions, optionsText: 'key', optionsValue: 'key'" /></p>
+    <p>Host (sending): <input data-bind="value: outgoingHost" /></p>
+    <p>Port (sending): <input data-bind="value: outgoingPort" /></p>
+    <p>Authentication method (sending): <select data-bind="value: outgoingAuthentication,options: $root.availableAuthentications, optionsText: 'key', optionsValue: 'key'" /></p>
+    <!-- TODO: outgoing password !!! -->
+    <p>Encryption (sending): <select data-bind="value: outgoingEncryption,options: $root.availableEncryptions, optionsText: 'key', optionsValue: 'key'" /></p>
+    <p>Account sync update method: <select data-bind="value: syncMethod,options: $root.availableSyncUpdateMethods, optionsText: 'key', optionsValue: 'value'" /></p>
+    <p>Account sync interval (minutes): <input data-bind="value: syncInterval"/></p>
+    <p>Trust invalid SSL certificates: <input type="checkbox" data-bind="checked: trustInvalidSSLCertificates"/></p>
+    <!--<p data-bind="text: moment(lastSyncRun).format('LL')"></p>-->
+    <p>Last synchronized <span data-bind="text: moment(lastSyncRun()).fromNow()" /></p>
+    <div id="syncInfoPanel" data-bind="visible: syncActive">
+        <p>Synchronizing...</p><span data-bind="text: syncProgress" /><p>
+        <div id="syncProgressBar" data-bind="progressBind: syncProgressValue"> </div>
+    </div>
+</div>

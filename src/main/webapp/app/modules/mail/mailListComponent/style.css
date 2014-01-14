@@ -1,0 +1,144 @@
+/*Add css rules for the panel here*/
+table {
+    width: "100%";
+    table-layout: fixed;
+    font-size: 80%;
+    border: 0;
+    border-collapse: collapse;
+}
+table td { clear: both;
+    /* border: 1px solid black */
+    background-color: transparent;
+    padding: 0;
+}
+
+.mailListCell {
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+
+tr.mailListRow:hover {
+    background-color: #CCCCFF;
+    cursor: pointer;
+}
+.cellEllipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.contentWrapper {
+    white-space: nowrap;
+}
+
+.readIcon {
+    color: #d3d3d3;
+}
+
+.readCol, .attachmentCol {
+    width: 20px;
+    text-align: center;
+}
+.fromCol {
+    width: 200px;
+}
+.tagsCol {
+    width: 30px;
+}
+.subjectCol {
+    width: 120px;
+}
+.receivedCol {
+    width: 180px;
+    text-align: right;
+}
+.contentCol {
+
+}
+
+.contentPreview {
+    color: #9b9b9b;
+}
+
+.subject.unread {
+    font-weight: bold;
+}
+
+.fromCol.unread {
+    font-weight: bold;
+}
+
+.tag {
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+.tag, .subject {
+    margin-right: 7px;
+}
+
+/* header - left */
+.mailSearchPanel {
+    position: absolute;
+    left: 0;
+    height: 30px;
+    width: 50%;
+    background-color: white;
+    z-index: 50;
+}
+
+.mailSearchPanelPos {
+    margin-right: 175px;
+    height:100%;
+    text-align: left;
+}
+
+.messageSearchBox {
+    width: 400px;
+}
+
+/* header - center */
+.mailNavigationPanel {
+    position:absolute;
+    text-align: center;
+    width: 350px;
+    height: 30px;
+    left: 50%;
+    margin-left: -175px;
+    z-index: 100;
+}
+
+.mailNavigationButtonPrev{
+    float: left;
+}
+
+.mailNavigationButtonNext{
+    float: right;
+}
+
+/*  header - right */
+.mailIndicatorPanel {
+    position: absolute;
+    right: 0;
+    width: 50%;
+    height: 30px;
+}
+
+.mailIndicatorPanelPos {
+    margin-left: 175px;
+    height: 100%;
+    text-align: right;
+    padding-right: 20px;
+}
+
+/* Tabelle */
+.mailListCurrentViewText{
+    color: #9B9B9B;
+}
+
+.mailTablePanel {
+    position: absolute;
+    margin-top: 30px;
+}

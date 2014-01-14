@@ -1,0 +1,4 @@
+/*Add css rules for the panel here*/
+.userListItem {
+    cursor: pointer;
+}

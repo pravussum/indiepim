@@ -1,0 +1,12 @@
+<h1>Manage user accounts</h1>
+<ul data-bind="foreach: users, visible: users().length > 0 ">
+    <li><span class="userListItem" data-bind="text: userName, click: $parent.selectUser"></span></li>
+</ul>
+<button data-bind="click: addUser">Add...</button>
+<div data-bind="with:selectedUser">
+    <a href="#" data-bind="click: $root.removeUser">Remove user</a>
+    <a href="#" data-bind="click: $root.saveUser">Save user</a>
+    <p>User name: <input data-bind="value: userName" /></p>
+    <p>(New) Password: <input type="password" data-bind="value: password" /><small>(leave empty to keep the old password for existing users)</small></p>
+    <p>Admin rights: <input type="checkbox" data-bind="checked: isAdmin" /></p>
+</div>

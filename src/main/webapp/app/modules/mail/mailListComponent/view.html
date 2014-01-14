@@ -1,0 +1,47 @@
+<div class="mailSearchPanel">
+    <div class="mailSearchPanelPos">
+        <form data-bind="submit: performSearch">
+            <input class="messageSearchBox" type=text data-bind="value: searchTermInput">
+            <button type=submit><i class="fa fa-search"/> Search</button>
+        </form>
+    </div>
+</div>
+<div class="mailNavigationPanel" data-bind="visible: showFromTo">
+    <button class="mailNavigationButtonPrev" data-bind="click: firstPage"><i class="fa fa-angle-double-left" /></button>
+    <button class="mailNavigationButtonPrev" data-bind="click: prevPage"><i class="fa fa-angle-left" /></button>
+    <span class="mailNavigationPanelText">
+        <span data-bind="text: from" /> to <span data-bind="text: to" /> of <span data-bind="text: totalSize" />
+    </span>
+    <button class="mailNavigationButtonNext" data-bind="click: lastPage"><i class="fa fa-angle-double-right"/></button>
+    <button class="mailNavigationButtonNext" data-bind="click: nextPage"><i class="fa fa-angle-right" /></button>
+</div>
+<div class="mailIndicatorPanel">
+    <div class="mailIndicatorPanelPos">
+        <i class="fa" data-bind="css:{'fa-spinner fa-spin': loading}"/>
+        <span class="mailListCurrentViewText" data-bind="text: currentView().displayText" />
+        <span id="sparkline"></span>
+    </div>
+</div>
+<div class="mailTablePanel">
+    <table width="100%">
+        <tbody data-bind="foreach: mailList">
+            <tr class="mailListRow">
+                <td class="mailListCell readCol">
+                    <i class="fa" data-bind="css: readIcon, click: $parent.toggleRead" />
+                </td>
+                <td class="mailListCell fromCol" data-bind="css:{'unread': unread}">
+                    <div data-bind="text: from, click: $parent.viewSelectedMail" class="cellEllipsis"></div>
+                </td>
+                <td class="mailListCell contentCol" data-bind="click: $parent.viewSelectedMail"><div class="cellEllipsis">
+                    <span class="tags" data-bind="html: displayTags"></span>
+                    <span class="subject" data-bind="text:subject,css:{'unread': unread}"></span>
+                    <span class="contentPreview" data-bind="text: contentPreview"></span>
+                </div></td>
+                <td class="mailListCell receivedCol" data-bind="text: displayDate, click: $parent.viewSelectedMail"></td>
+                <td class="mailListCell attachmentCol">
+                    <i class='fa fa-paperclip' data-bind="visible:attachment"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
