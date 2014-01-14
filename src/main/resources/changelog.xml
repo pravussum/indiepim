@@ -1028,4 +1028,41 @@
     <changeSet id="1319026263161-124" author="AmIEvil">
         <addUniqueConstraint tableName="msg_tag_lineage_mapping" columnNames="message_id, tag_lineage_id, msg_uid" constraintName="mtlm_msgid_tlid_msguid_UNIQUE" />
     </changeSet>
+    <changeSet id="1319026263161-125" author="AmIEvil">
+        <createIndex indexName="idx_msg_tag_lineage_mapping" tableName="msg_tag_lineage_mapping" unique="true">
+            <column name="tag_lineage_id"/>
+            <column name="msg_uid" />
+            <column name="message_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-126" author="AmIEvil">
+        <createIndex indexName="idx_msg_tag_mapping" tableName="msg_tag_mapping" unique="true">
+            <column name="message_id"/>
+            <column name="tag_id" />
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-127" author="AmIEvil">
+        <createIndex indexName="idx_email_addr_msg_mapping" tableName="email_addr_msg_mapping" unique="true">
+            <column name="message_id"/>
+            <column name="email_address_id" />
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-128" author="AmIEvil">
+        <createIndex indexName="idx_contact_tag_lineage_mapping" tableName="contact_tag_lineage_mapping" unique="true">
+            <column name="tag_lineage_id"/>
+            <column name="contact_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-129" author="AmIEvil">
+        <createIndex indexName="idx_contact_tag_mapping" tableName="contact_tag_mapping" unique="true">
+            <column name="contact_id"/>
+            <column name="tag_id" />
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-130" author="AmIEvil">
+        <createIndex indexName="idx_tag_lineage_tag_mapping" tableName="tag_lineage_tag_mapping" unique="true">
+            <column name="tag_lineage_id"/>
+            <column name="tag_id" />
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

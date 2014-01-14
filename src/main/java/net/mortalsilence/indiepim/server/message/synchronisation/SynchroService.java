@@ -125,6 +125,7 @@ public class SynchroService implements MessageConstants {
 								if(imapReadFlag != dbReadFlagMap.get(curMsgId)) {
 									if(logger.isDebugEnabled())
 										logger.debug("Updating READ-Flag of existing message " + curMsgId);
+                                    // TODO performance issue: this is VERY slow when updating lots of messages
                                     persistenceHelper.markMessageAsRead(user.getId(), curMsgId, tagLineage.getId(), imapReadFlag);
 								}
 							}

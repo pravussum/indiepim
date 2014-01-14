@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>BoilerplateJS - JavaScript Reference Architecture</title>
+    <title>IndiePIM</title>
     <!--[if lt IE 9]>
     <script type="text/javascript" charset="utf-8" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
