@@ -5,9 +5,6 @@ define([], function () {
         self.userId = userId;
         self.id = id;
         self.userName = userName;
-        self.windowHtml = ko.computed(function() {
-            return "<div id='" + self.id + "'></div>";
-        });
         self.sendMessage = function(message) {
             $("#" + self.id).chatbox("option", "boxManager").addMsg(self.userName, message);
         };
@@ -15,22 +12,26 @@ define([], function () {
 
     var ViewModel = function (moduleContext) {
         var self = this;
-        self.count = ko.observable(0);
 
         self.chatWindows = ko.observableArray();
         self.addChat = function(userId, userName) {
-            if(self.getChatForUserId(userId))
+            var existingWindow = self.getChatForUserId(userId);
+            if(existingWindow) {
+                console.log("addChat(): already there, ignoring.");
+                $("#" + existingWindow.id).chatbox("option", "boxManager").showBox();
                 return;
-            self.count(self.count() + 1);
-            var newWindow = new chatWindow("chatWindow_" + self.count(), userId, userName);
+            }
+            console.log("addChat(): new, creating.");
+            var newWindow = new chatWindow("chatWindow_" + self.chatWindows().length, userId, userName);
             self.chatWindows.push(newWindow);
-            $("#" + newWindow.id).chatbox({
+            $("<div id='" + newWindow.id + "'/>").appendTo(document.body).chatbox({
                 id: newWindow.id,
                 title: "Chat with " + userName,
-                offset: 300 * (self.count() - 1),
-                boxClosed: function() {
-                    self.chatWindows.remove(newWindow);
-                },
+                offset: 300 * (self.chatWindows.length),
+//                boxClosed: function() {
+//                    self.chatWindows.remove(newWindow);
+//                    $("#" + newWindow.id).remove();
+//                },
                 messageSent: function(id, user, msg) {
                     $.ajax(
                         "command/sendChatMessage/" + newWindow.userId,

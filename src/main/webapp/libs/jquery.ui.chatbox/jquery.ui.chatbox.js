@@ -74,6 +74,9 @@
                         self._scrollToBottom();
                     });
                 },
+                showBox: function() {
+                    this.elem.uiChatbox.show();
+                },
                 toggleBox: function() {
                     this.elem.uiChatbox.toggle();
                 },

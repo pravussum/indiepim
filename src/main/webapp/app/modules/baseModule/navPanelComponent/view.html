@@ -30,7 +30,7 @@
     <h3><i class="fa fa-group" />Chat</h3>
     <div>
         <ul class="nav_chat_user_list" data-bind="foreach: users">
-            <li><i class="fa fa-male" /><a class="chatLink" data-bind="click: $root.openChat, text: userName"></a></li>
+            <li data-bind="click:$root.openChat"><i class="fa fa-male" /><a href="#" class="chatLink" data-bind="text: userName"></a></li>
         </ul>
     </div>
 

@@ -1,35 +1,32 @@
-define(['Boiler', 'text!./view.html', './viewmodel', 'path!./style.css', 'i18n!./nls/resources'], 
-        function(Boiler, template, ViewModel, styleText, nls) {
+define(['Boiler', './viewmodel'],
+        function(Boiler, ViewModel) {
 
 	var Component = function(moduleContext) {
 
-        var panel, vm = null;
+        var vm = null;
 
 		// called without UrlController when module is created
         this.activate = function(parent) {
-			if (!panel) {
-				panel = new Boiler.ViewTemplate(parent, template, nls);
+			if (!vm) {
 				vm = new ViewModel(moduleContext);
-				ko.applyBindings(vm, panel.getDomElement());
-                Boiler.ViewTemplate.setStyleLink(styleText);
 			}
-            panel.show();
-
+            console.log("adding NEW_CHAT_MESSAGE listener...");
             moduleContext.listen("NEW_CHAT_MESSAGE", function(data) {
+                console.log("NEW_CHAT_MESSAGE, adding window for user " + data.fromUserId);
                 vm.addChat( data.fromUserId, data.fromUserName);
                 vm.sendMessage(data.fromUserId, data.message);
             });
 
+            console.log("adding OPEN_CHAT listener...");
             moduleContext.listen("OPEN_CHAT", function(data) {
+                console.log("OPEN_CHAT, adding window for user " + data.userId);
                 vm.addChat(data.userId, data.userName);
             });
 		}
 
         // is never called
 		this.deactivate = function() {
-			if(panel) {
-				panel.hide();
-			}
+            vm = null;
 		}
 	};
 
