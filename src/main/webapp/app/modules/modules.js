@@ -11,7 +11,8 @@ define(function(require) {
 		require('./contacts/module'),
 		require('./mail/module'),
         require('./settings/module'),
-        require('./calendar/module')
-                ];
+        require('./calendar/module'),
+        require('./chat/module')
+                        ];
 
 });

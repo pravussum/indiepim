@@ -2,6 +2,7 @@ package net.mortalsilence.indiepim.server.command.handler;
 
 import net.mortalsilence.indiepim.server.comet.CometMessage;
 import net.mortalsilence.indiepim.server.comet.CometService;
+import net.mortalsilence.indiepim.server.comet.UserOnlineStateMessage;
 import net.mortalsilence.indiepim.server.command.Command;
 import net.mortalsilence.indiepim.server.command.actions.GetCometMessages;
 import net.mortalsilence.indiepim.server.command.results.CometMessagesResult;
@@ -24,19 +25,23 @@ public class GetCometMessagesHandler implements Command<GetCometMessages, CometM
 
 	final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 	final public static Integer HEARTBEAT_TIMEOUT = 50;
-	
+
 	@Override
 	public CometMessagesResult execute(GetCometMessages action) {
 		if(logger.isDebugEnabled())
 			logger.debug("GetCometMessagesHandler.execute"); 
 		final UserPO user = userDAO.getUser(ActionUtils.getUserId());
-		if(logger.isDebugEnabled())
+
+        cometService.updateLastSeenTimestamp(user);
+
+        if(logger.isDebugEnabled())
 			logger.debug("Waiting for comet messages in session with id " + action.getSessionId());
 		final BlockingQueue<CometMessage> cometQueue = cometService.getCometMessageQueue(user.getId(), action.getSessionId());
         if(cometQueue == null)
             throw new RuntimeException("No comet queue for current session!");
 		final Collection<CometMessage> messages = new LinkedList<CometMessage>();
 		CometMessage curMsg;
+
 		/* receive waiting messages from the queue (blocking!). max for the heartbeat time */
 		if(cometQueue.peek() != null) {
 			/* messages available -- send them to the client */

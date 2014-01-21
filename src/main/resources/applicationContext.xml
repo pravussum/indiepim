@@ -109,7 +109,7 @@
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <security:intercept-url pattern="/expired" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <security:intercept-url pattern="/command/createOrUpdateUser" access="ROLE_ADMIN" />
-        <security:intercept-url pattern="/command/getUsers" access="ROLE_ADMIN" />
+        <security:intercept-url pattern="/command/getUsers" access="ROLE_USER" />
         <security:intercept-url pattern="/command/**" access="ROLE_USER" />
         <security:intercept-url pattern="/" access="ROLE_USER" />
         <security:logout />

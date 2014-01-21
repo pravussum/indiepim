@@ -48,6 +48,13 @@ define(function(require) {
                                     context.notify("ACCOUNT_SYNCED", data.cometMessages[i]);
                                 } else if(data.cometMessages[i].messageType == "NewMessage") {
                                     context.notify("NEW_MESSAGE", data.cometMessages[i]);
+                                } else if(data.cometMessages[i].messageType == "NewChatMessage") {
+                                    context.notify("NEW_CHAT_MESSAGE", data.cometMessages[i]);
+                                } else if(data.cometMessages[i].messageType == "UserOnlineStateMessage") {
+                                    if(data.cometMessages[i].online)
+                                        context.notify("USER_ONLINE", data.cometMessages[i]);
+                                    else
+                                        context.notify("USER_OFFLINE", data.cometMessages[i]);
                                 }
                             }
                         }

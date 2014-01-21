@@ -8,7 +8,7 @@
     width: 100%;
 }
 
-.nav_mail_actions_list li {
+.nav_mail_actions_list li, .nav_chat_user_list li {
     padding-left: 5px;
 }
 
@@ -16,7 +16,7 @@
     padding-left: 5px;
 }
 
-.nav_mail_actions_list li:hover {
+.nav_mail_actions_list li:hover, .nav_chat_user_list li:hover {
     background-color: #b0b0b0;
     -webkit-border-radius: 2px;
     border-radius: 2px;
@@ -29,9 +29,12 @@
 
 }
 
-.nav_mail_actions_list, .nav_mail_account_list {
+#accordion ul {
     list-style-type: none;
     list-style-position: outside;
+}
+
+.nav_mail_actions_list, .nav_mail_account_list, .nav_chat_user_list {
     padding-left: 0;
     margin-top: 0.2em;
     margin-bottom: 0;
@@ -51,4 +54,8 @@
 .accountSyncButton {
     cursor: pointer;
     font-size: 80%;
+}
+
+.chatLink {
+    cursor: pointer;
 }

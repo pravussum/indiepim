@@ -6,10 +6,7 @@ import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -69,7 +66,7 @@ public class UserPO implements Serializable, PersistentObject {
 
 	@OneToMany(mappedBy="user", targetEntity=UrlPO.class)
 	private List<UrlPO> urls;
-	
+
 //	@OneToMany(mappedBy="user", targetEntity=AttachmentPO.class, fetch=FetchType.LAZY)
 //	private List<UrlPO> attachments;	
 	
@@ -184,4 +181,5 @@ public class UserPO implements Serializable, PersistentObject {
 //	public void setAttachments(List<UrlPO> attachments) {
 //		this.attachments = attachments;
 //	}
+
 }

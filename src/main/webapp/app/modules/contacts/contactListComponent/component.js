@@ -19,14 +19,14 @@ define(['Boiler', 'text!./view.html', './viewmodel', 'text!./style.css', 'i18n!.
 	                    [ 'contact2', 'contact4'],
 	
 	                ]
-	            $('#contactListTable').dataTable( {
-	                "aaData": dataSet,
-	                "aoColumns": [
-	                        { "sTitle": "C 1" },
-	                        { 'sTitle': "C 2" },
-	                    ],
-	                "bJQueryUI" : true,
-	            } );
+//	            $('#contactListTable').dataTable( {
+//	                "aaData": dataSet,
+//	                "aoColumns": [
+//	                        { "sTitle": "C 1" },
+//	                        { 'sTitle': "C 2" },
+//	                    ],
+//	                "bJQueryUI" : true,
+//	            } );
 			}
 
 			panel.show();

@@ -101,7 +101,7 @@ public class SynchroService implements MessageConstants {
 						/* Handle new Messages */
 						@SuppressWarnings("unchecked")
 						final Collection<Long> newUids = ListUtils.removeAll(remoteUids, knownUids);
-						cometService.sendCometMesssages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), accountId, folder.getFullName(), newUids.size(), 0));
+						cometService.sendCometMessages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), accountId, folder.getFullName(), newUids.size(), 0));
 						if(newUids.size() > 0) {
                             // ignore failed messages
                             newMessages |= handleNewMessages(uidMsgMap, newUids, account, folder, tagLineage, updateHandler, persistMessageHandler, mailAddressHandler, session, user);
@@ -152,9 +152,9 @@ public class SynchroService implements MessageConstants {
 
 				/* Send Comet messages to clients */
 				if(newMessages) {
-					cometService.sendCometMesssages(user.getId(), new NewMsgMessage/*LOL*/(user.getId(), accountId));
+					cometService.sendCometMessages(user.getId(), new NewMsgMessage/*LOL*/(user.getId(), accountId));
 				}
-				cometService.sendCometMesssages(user.getId(), new AccountSyncedMessage(user.getId(), accountId, lastSyncRun));
+				cometService.sendCometMessages(user.getId(), new AccountSyncedMessage(user.getId(), accountId, lastSyncRun));
 
 				if(logger.isDebugEnabled())
 					logger.debug("Overall sync duration: " + (System.currentTimeMillis() - overallTime) + "ms.");				
@@ -213,7 +213,7 @@ public class SynchroService implements MessageConstants {
 			/* Update clients every second */
 			i++;
             if(System.currentTimeMillis() - cometEventTime > 1000) {
-				cometService.sendCometMesssages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(), folder.getFullName(), uids.size(), i));
+				cometService.sendCometMessages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(), folder.getFullName(), uids.size(), i));
 				cometEventTime = System.currentTimeMillis();
 			}
 			Long msgUid = it.next();

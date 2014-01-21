@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
+import java.util.Collections;
 
 
 @Named
@@ -43,6 +44,14 @@ public class UserDAO {
 
     public Collection<UserPO> getUsers() {
         return em.createQuery("from UserPO", UserPO.class).getResultList();
+    }
+
+    public Collection<UserPO> getUsers(final Collection<Long> ids) {
+        if(ids == null || ids.isEmpty())
+            return Collections.EMPTY_LIST;
+        return em.createQuery("from UserPO where id in :ids", UserPO.class)
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
 	public boolean userExists(final String userName) {

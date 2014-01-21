@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.mortalsilence.indiepim.server.calendar.EventDTO;
 import net.mortalsilence.indiepim.server.calendar.ICSParser;
-import net.mortalsilence.indiepim.server.command.Result;
 import net.mortalsilence.indiepim.server.command.actions.*;
 import net.mortalsilence.indiepim.server.command.exception.CommandException;
 import net.mortalsilence.indiepim.server.command.handler.*;
 import net.mortalsilence.indiepim.server.command.results.*;
-import net.mortalsilence.indiepim.server.dao.GenericDAO;
 import net.mortalsilence.indiepim.server.dao.UserDAO;
 import net.mortalsilence.indiepim.server.domain.CalendarPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
@@ -24,8 +22,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,7 +46,6 @@ public class CommandController {
     @Inject private CreateOrUpdateUserHandler createUserHandler;
     @Inject private GetUsersHandler getUsersHandler;
     @Inject private UserDAO userDAO;
-    @Inject private GenericDAO genericDAO;
     @Inject private ICSParser icsParser;
     @Inject private MarkMessageAsReadHandler markReadHandler;
     @Inject private GetMessageStatsHandler messageStatsHandler;
@@ -54,18 +53,12 @@ public class CommandController {
     @Inject private SendMessageHandler sendMessageHandler;
     @Inject private GetTagsHandler tagsHandler;
     @Inject private StartAccountSynchronisationHandler accountSyncHandler;
+    @Inject private SendChatMessageHandler chatMessageHandler;
 
-    @RequestMapping(value="getMessageAccounts")
+    @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    // TODO rework response object (use JSON annotation, specify produce and charset
-    public String getMessageAccounts() {
-        final GetMessageAccountsResult result = getMessageAccountsHandler.execute(new GetMessageAccounts());
-        final ObjectMapper jsonMapper = new ObjectMapper();
-        try {
-            return jsonMapper.writeValueAsString(result);
-        } catch (JsonProcessingException e) {
-            return "{\"error\": \"" + e.getMessage() + "\"}";
-        }
+    public GetMessageAccountsResult getMessageAccounts() {
+        return getMessageAccountsHandler.execute(new GetMessageAccounts());
     }
 
     @RequestMapping(value="getMessages", produces = "application/json;charset=UTF-8")
@@ -108,18 +101,24 @@ public class CommandController {
         return result.getMessages();
     }
 
+    @RequestMapping(value="sendChatMessage/{userId}", consumes = "text/plain", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object sendChatMessage(@PathVariable(value = "userId") final Long userId,
+                                  @RequestBody final String message) {
+        return chatMessageHandler.execute(new SendChatMessage(userId, message));
+    }
+
     @RequestMapping(value="createOrUpdateUser", consumes = "application/json", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object createUser(@RequestBody final UserDTO user) {
-       final IdResult result = createUserHandler.execute(new CreateOrUpdateUser(user));
-       return result;
+       return createUserHandler.execute(new CreateOrUpdateUser(user));
     }
 
     @RequestMapping(value="getUsers", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Collection<UserDTO> getUsers() {
-        final UserDTOListResult result = getUsersHandler.execute(new GetUsers());
-        return result.getUsers();
+    public Collection<UserDTO> getUsers(@RequestParam(value="onlineOnly", required = false) final Boolean onlineOnly) {
+        final GetUsers action = onlineOnly != null ? new GetUsers(onlineOnly) : new GetUsers();
+        return getUsersHandler.execute(action).getUsers();
     }
 
      // TODO rework response object (use JSON annotation, specify produce and charset
