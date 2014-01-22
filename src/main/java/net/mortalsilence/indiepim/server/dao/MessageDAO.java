@@ -10,7 +10,6 @@ import org.apache.lucene.search.SortField;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -146,23 +145,44 @@ public class MessageDAO {
 			.getSingleResult();
 	}
 
-    public int deleteMessagesForTagLineage(final Long userId, final Collection<Long> msgIds, Long tagLineageId) {
-        // delete msg_tag_lineage_mappings
-//        String sql = "delete from "
-
-        // delete email_addr_msg_mappings
-
-        // delete attachments
-
-        final String sql = "delete from MessagePO where user.id = :userId and id in (select message.id from MessageTagLineageMappingPO where msgUid in :msgIds and tagLineage.id = :tagLineageId)";
-        return em.createQuery(sql)
-                .setParameter("msgIds", msgIds)
-                .setParameter("userId", userId)
+    public int deleteMessagesForTagLineage(final Long userId, final Collection<Long> msgUids, Long tagLineageId) {
+        // Workaround
+        // TODO: get cascading to work with batch deletes
+        final List<Long> msgIds = em.createQuery("select message.id from MessageTagLineageMappingPO where msgUid in :msgIds and tagLineage.id = :tagLineageId", Long.class)
+                .setParameter("msgIds", msgUids)
                 .setParameter("tagLineageId", tagLineageId)
-                .executeUpdate();
+                .getResultList();
+
+        return deleteMessages(userId, msgIds);
     }
-	
-	public List<MessagePO> getMessagesByIdAndUser(final List<Long> messageIds, final Long userId, final boolean orderByAccount) {
+
+    public int deleteMessages(final Long userId, final List<Long> messageIds) {
+        final int deletedTagLineageMappings = em.createQuery("delete from MessageTagLineageMappingPO where message.id in :msgIds")
+                .setParameter("msgIds", messageIds)
+                .executeUpdate();
+        if(logger.isDebugEnabled()) {
+            logger.debug("Deleted " + deletedTagLineageMappings + " MessageTagLineageMappings.");
+        }
+
+        final int deletedAttachments = em.createQuery("delete from AttachmentPO where message.id in :msgIds and user.id = :userId")
+                .setParameter("msgIds", messageIds)
+                .setParameter("userId", userId)
+                .executeUpdate();
+        if(logger.isDebugEnabled()) {
+            logger.debug("Deleted " + deletedAttachments + " attachments.");
+        }
+
+        final int deletedMessages = em.createQuery("delete from MessagePO where user.id = :userId and id in :msgIds")
+                .setParameter("msgIds", messageIds)
+                .setParameter("userId", userId)
+                .executeUpdate();
+        if(logger.isDebugEnabled()) {
+            logger.debug("Deleted " + deletedMessages + " messages.");
+        }
+        return deletedMessages;
+    }
+
+    public List<MessagePO> getMessagesByIdAndUser(final List<Long> messageIds, final Long userId, final boolean orderByAccount) {
 		String sql = "from MessagePO where id IN ?1 and user.id = ?2";
 		if(orderByAccount)
 			sql += " order by messageAccount.id";

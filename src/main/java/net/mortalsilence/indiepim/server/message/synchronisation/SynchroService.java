@@ -137,7 +137,7 @@ public class SynchroService implements MessageConstants {
 						@SuppressWarnings("unchecked")
 						final Collection<Long> deleteUids = ListUtils.removeAll(knownUids, remoteUids); /* CollectionUtils.removeAll seems to be buggy (calls wrong ListUtils method) */
 						if(!deleteUids.isEmpty())
-                           // handleDeletedMessages(deleteUids, user, tagLineage);
+                            handleDeletedMessages(deleteUids, user, tagLineage);
 
 						// TODO recognize messages moved to another folder by another client (new message UID and tag lineage). Use unique business key (from/to/receivedDate)? Performance?
 	

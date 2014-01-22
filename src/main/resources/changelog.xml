@@ -1065,4 +1065,8 @@
             <column name="tag_id" />
         </createIndex>
     </changeSet>
+    <changeSet id="1319026263161-131" author="AmIEvil">
+        <dropForeignKeyConstraint baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_msg" />
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_msg" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="message" referencesUniqueColumn="false"/>
+    </changeSet>
 </databaseChangeLog>

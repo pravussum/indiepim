@@ -62,7 +62,7 @@ public class MessageUpdateService implements MessageConstants {
 						imapMsg.setFlag(flag, set);
 						resultList.add(msg);
 					}
-					folder.close(false);
+					folder.close(true);
 				}
 			}
 			return resultList;

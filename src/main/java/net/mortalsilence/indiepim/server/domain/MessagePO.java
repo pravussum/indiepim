@@ -94,7 +94,8 @@ public class MessagePO implements Serializable, PersistentObject {
 		)
 	private List<TagPO> tags = new LinkedList<TagPO>();
 
-	@ManyToMany(fetch= FetchType.LAZY, cascade = javax.persistence.CascadeType.ALL)
+	@ManyToMany(fetch= FetchType.LAZY)
+    @Cascade({CascadeType.ALL})
 	@JoinTable(name="email_addr_msg_mapping",
 			joinColumns =
 			@JoinColumn(name="message_id", referencedColumnName="ID"),
