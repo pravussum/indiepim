@@ -96,3 +96,13 @@ input:focus {
 .select2-input {
     padding: 0 !important;
 }
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nowrap {
+    white-space: nowrap;
+}

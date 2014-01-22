@@ -11,6 +11,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Service
 public class CometService {
 
+    // TODO recognize users going offline and send + process UserOnlineStateMessage
+
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
     final public static Long BROADCAST = -1L;
     final public static Integer ONLINE_TIMEOUT = 60 * 1000;

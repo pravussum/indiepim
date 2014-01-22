@@ -7,7 +7,6 @@ table {
     border-collapse: collapse;
 }
 table td { clear: both;
-    /* border: 1px solid black */
     background-color: transparent;
     padding: 0;
 }
@@ -20,11 +19,6 @@ table td { clear: both;
 tr.mailListRow:hover {
     background-color: #CCCCFF;
     cursor: pointer;
-}
-.cellEllipsis {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
 .contentWrapper {

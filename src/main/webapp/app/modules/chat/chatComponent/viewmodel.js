@@ -17,21 +17,15 @@ define([], function () {
         self.addChat = function(userId, userName) {
             var existingWindow = self.getChatForUserId(userId);
             if(existingWindow) {
-                console.log("addChat(): already there, ignoring.");
                 $("#" + existingWindow.id).chatbox("option", "boxManager").showBox();
                 return;
             }
-            console.log("addChat(): new, creating.");
             var newWindow = new chatWindow("chatWindow_" + self.chatWindows().length, userId, userName);
             self.chatWindows.push(newWindow);
             $("<div id='" + newWindow.id + "'/>").appendTo(document.body).chatbox({
                 id: newWindow.id,
                 title: "Chat with " + userName,
                 offset: 300 * (self.chatWindows.length),
-//                boxClosed: function() {
-//                    self.chatWindows.remove(newWindow);
-//                    $("#" + newWindow.id).remove();
-//                },
                 messageSent: function(id, user, msg) {
                     $.ajax(
                         "command/sendChatMessage/" + newWindow.userId,

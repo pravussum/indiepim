@@ -18,7 +18,7 @@
 <div class="mailIndicatorPanel">
     <div class="mailIndicatorPanelPos">
         <i class="fa" data-bind="css:{'fa-spinner fa-spin': loading}"/>
-        <span class="mailListCurrentViewText" data-bind="text: currentView().displayText" />
+        <span class="mailListCurrentViewText ellipsis" data-bind="text: currentView().displayText" />
         <span id="sparkline"></span>
     </div>
 </div>
@@ -30,9 +30,9 @@
                     <i class="fa" data-bind="css: readIcon, click: $parent.toggleRead" />
                 </td>
                 <td class="mailListCell fromCol" data-bind="css:{'unread': unread}">
-                    <div data-bind="text: from, click: $parent.viewSelectedMail" class="cellEllipsis"></div>
+                    <div data-bind="text: from, click: $parent.viewSelectedMail" class="ellipsis"></div>
                 </td>
-                <td class="mailListCell contentCol" data-bind="click: $parent.viewSelectedMail"><div class="cellEllipsis">
+                <td class="mailListCell contentCol" data-bind="click: $parent.viewSelectedMail"><div class="ellipsis">
                     <span class="tags" data-bind="html: displayTags"></span>
                     <span class="subject" data-bind="text:subject,css:{'unread': unread}"></span>
                     <span class="contentPreview" data-bind="text: contentPreview"></span>
