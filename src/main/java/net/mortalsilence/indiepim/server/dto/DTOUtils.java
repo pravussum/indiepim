@@ -11,6 +11,7 @@ public class DTOUtils {
 		messageListDTO.dateReceived = messageDTO.dateReceived;
 		messageListDTO.msgId = messageDTO.id;
 		messageListDTO.read = messageDTO.read;
+        messageListDTO.deleted = messageDTO.deleted;
 		messageListDTO.sender = messageDTO.sender;
 		messageListDTO.subject = messageDTO.subject;
 		messageListDTO.hasAttachment = messageDTO.hasAttachment;

@@ -7,6 +7,7 @@ import net.mortalsilence.indiepim.server.dao.GenericDAO;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.domain.MessagePO;
 import net.mortalsilence.indiepim.server.dto.MessageDTO;
+import net.mortalsilence.indiepim.server.message.ImapMsgOperationCallback;
 import net.mortalsilence.indiepim.server.message.MessageUpdateService;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
 import org.apache.log4j.Logger;
@@ -15,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +39,7 @@ public class MarkMessageAsReadHandler implements Command<MarkMessagesAsRead, Mes
 
 	@Transactional
     @Override
-    public MessageDTOListResult execute(MarkMessagesAsRead action) {
+    public MessageDTOListResult execute(final MarkMessagesAsRead action) {
 		final List<Long> messageIds = action.getMessageIds();
         final Long userId = ActionUtils.getUserId();
         final List<MessagePO> messages = messageDAO.getMessagesByIdAndUser(messageIds, userId, true);
@@ -50,16 +54,26 @@ public class MarkMessageAsReadHandler implements Command<MarkMessagesAsRead, Mes
 			if(accountId.equals(curMsg.getMessageAccount().getId()) && i < messages.size() -1) {
 				accountMessages.add(curMsg);
 			} else {
-				// TODO give accountMessages and not messages as parameter 
-                final long start = Calendar.getInstance().getTimeInMillis();
-                final List<MessagePO> result = messageUpdateService.setImapFlagForMessages(userId, messages, accountId, Flags.Flag.SEEN, action.isRead());
-                logger.debug("messageUpdateService.setImapFlagForMessages (markMessageRead) took " + (Calendar.getInstance().getTimeInMillis() - start) + " ms.");
 
-                for(final MessagePO succMsg : result) {
-					succMsg.setRead(action.isRead());
-					genericDAO.update(succMsg);
-					resultList.add(messageUtils.mapMessagePOtoMessageDTO(succMsg));
-				}
+                final long start = Calendar.getInstance().getTimeInMillis();
+                messageUpdateService.updateImapMessages(userId, messages, accountId, false, new ImapMsgOperationCallback() {
+                    @Override
+                    public void processMessage(final Folder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage) throws MessagingException {
+                        imapMessage.setFlag(Flags.Flag.SEEN, action.isRead());
+                        indieMessage.setRead(action.isRead());
+                        genericDAO.update(indieMessage);
+                        resultList.add(messageUtils.mapMessagePOtoMessageDTO(indieMessage));
+                    }
+                });
+                if(logger.isDebugEnabled()) {
+                    logger.debug("messageUpdateService.updateImapMessages (markMessageRead) took " + (Calendar.getInstance().getTimeInMillis() - start) + " ms.");
+                }
+
+//                for(final MessagePO succMsg : result) {
+//					succMsg.setRead(action.isRead());
+//					genericDAO.update(succMsg);
+//					resultList.add(messageUtils.mapMessagePOtoMessageDTO(succMsg));
+//				}
 				accountId = curMsg.getMessageAccount().getId();
 				accountMessages = new LinkedList<MessagePO>();
 			}

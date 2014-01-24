@@ -3,6 +3,7 @@ package net.mortalsilence.indiepim.server.message;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.exception.UserRuntimeException;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ import java.util.List;
 @Service
 public class SendService implements MessageConstants {
 
+    final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
     @Inject
     private MessageDAO messageDAO;
     @Inject
@@ -76,8 +78,17 @@ public class SendService implements MessageConstants {
 			}
 			
 			transport.sendMessage(message, message.getAllRecipients());
-            // TODO make configurable
-            final Folder folder = store.getFolder("INBOX.Sent");
+
+            final String sentFolderPath = connectionUtils.getSentFolderPath(account, store);
+            final Folder folder = store.getFolder(sentFolderPath);
+            if(!folder.exists()) {
+                final boolean createSuccessful = folder.create(Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES);
+                if(!createSuccessful) {
+                    final String errMsg = "Folder for sent messages '" + sentFolderPath + "' on account '" + account.getName() + "' does not exists and its creation failed.";
+                    logger.error(errMsg);
+                    throw new RuntimeException(errMsg);
+                }
+            }
             folder.open(Folder.READ_WRITE);
             message.setFlag(Flags.Flag.SEEN, true);
             folder.appendMessages(new Message[] {message});
@@ -107,5 +118,6 @@ public class SendService implements MessageConstants {
 	}
 
 
-	
+
+
 }

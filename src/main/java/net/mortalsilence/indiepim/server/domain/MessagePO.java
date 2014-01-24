@@ -118,7 +118,14 @@ public class MessagePO implements Serializable, PersistentObject {
   	@Column(name = "read_flag")
   	private Boolean read;
 
-	public Boolean getRead() {
+    @Column(name = "draft_flag")
+    private Boolean draft;
+
+    @Column(name = "deleted_flag")
+    private Boolean deleted;
+
+
+    public Boolean getRead() {
 		return read;
 	}
 
@@ -126,7 +133,23 @@ public class MessagePO implements Serializable, PersistentObject {
 		this.read = read;
 	}
 
-	public Long getId() {
+    public Boolean getDraft() {
+        return draft;
+    }
+
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public Long getId() {
 		return id;
 	}
 

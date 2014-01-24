@@ -61,6 +61,14 @@ public class MessageDAO {
    			.getResultList();
    	}
 
+    public int updateDeletedFlags(final Long userId, final Collection<Long> msgIds, final boolean deleted) {
+        return em.createQuery("update MessagePO set deleted = :deleted where :msgIds in :msgIds and user.id = :userId")
+                .setParameter("deleted", deleted)
+                .setParameter("msgIds", msgIds)
+                .setParameter("userId", userId)
+                .executeUpdate();
+    }
+
 	public Long getMessagesForAccountTotalCount(final Long userId, final Long accountId) {
 		return  em.createQuery("select count(*) from MessagePO where user.id = ?1 and messageAccount.id = ?2", Long.class)
 			.setParameter(1, userId)

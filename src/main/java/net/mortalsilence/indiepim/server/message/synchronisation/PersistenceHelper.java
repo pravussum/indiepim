@@ -5,6 +5,7 @@ import net.mortalsilence.indiepim.server.dao.GenericDAO;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.TagDAO;
 import net.mortalsilence.indiepim.server.domain.*;
+import net.mortalsilence.indiepim.server.message.ConnectionUtils;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -35,8 +36,7 @@ public class PersistenceHelper {
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
     @Inject private MessageUtils messageUtils;
     @Inject private MessageDAO messageDAO;
-    @Inject private GenericDAO genericDAO;
-    @Inject private TagDAO tagDAO;
+    @Inject private ConnectionUtils connectionUtils;
 
     @Transactional(propagation = Propagation.REQUIRED)
     /* made public for transactional annotation to work */
@@ -101,31 +101,7 @@ public class PersistenceHelper {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public TagLineagePO getOrCreateTagLineage(final UserPO user, final MessageAccountPO account, final Folder folder) {
-   		final List<String> tags = new LinkedList<String>();
-   		try {
-   			StringTokenizer st = new StringTokenizer(folder.getFullName(), new Character(folder.getSeparator()).toString());
-   			while(st.hasMoreElements()) {
-   				tags.add(st.nextToken());
-   			}
-   		} catch (MessagingException e) {
-   			e.printStackTrace();
-   			throw new RuntimeException("Error parsing folder name " + folder.getFullName(), e);
-   		}
-
-   		if(account.getTagHierarchy() == null) {
-   			createTagHierarchy4Account(user, account);
-   		}
-
-   		final List<String> partialTagLineageTags = new LinkedList<String>();
-   		final Iterator<String> tagIt = tags.iterator();
-   		TagLineagePO tagLineage = null;
-   		while(tagIt.hasNext()) {
-   			partialTagLineageTags.add(tagIt.next());
-   			final String tagLineageStr = StringUtils.join(partialTagLineageTags, SharedConstants.TAG_LINEAGE_SEPARATOR);
-   			tagLineage = tagDAO.getOrCreateTagLineage(user, tagLineageStr, account.getTagHierarchy());
-   		}
-
-   		return tagLineage;
+   		return connectionUtils.getOrCreateTagLineage(user, account, folder);
    	}
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -145,14 +121,6 @@ public class PersistenceHelper {
     public int deleteMessagesForTagLineage(final Long userId, final Collection<Long> msgIds, Long tagLineageId) {
         return messageDAO.deleteMessagesForTagLineage(userId, msgIds, tagLineageId);
     }
-
-   	private void createTagHierarchy4Account(final UserPO user, final MessageAccountPO account) {
-   		TagHierarchyPO tagHierarchy = new TagHierarchyPO();
-   		tagHierarchy.setUser(user);
-   		tagHierarchy.setName(account.getTag().getTag());
-   		genericDAO.persist(tagHierarchy);
-   		account.setTagHierarchy(tagHierarchy);
-   	}
 
     private MessagePO getDuplicate(final MessageAccountPO account, final String hash) throws MessagingException {
    		return messageDAO.getMessageFromHash(account.getUser().getId(), account.getId(), hash);

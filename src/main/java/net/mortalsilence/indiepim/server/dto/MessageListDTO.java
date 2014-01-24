@@ -21,6 +21,8 @@ public class MessageListDTO implements Serializable {
 	public  String subject;
 	public Long msgId;
 	public Boolean read;
+    public Boolean deleted;
+    public Boolean draft;
 	public Set<TagDTO> tags = new TreeSet<TagDTO>();
 	public Boolean hasAttachment;
 	public String contentPreview;

@@ -1069,4 +1069,45 @@
         <dropForeignKeyConstraint baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_msg" />
         <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="email_addr_msg_mapping" constraintName="email_addr_msg_map_msg" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="message" referencesUniqueColumn="false"/>
     </changeSet>
+    <changeSet id="1319026263161-132" author="AmIEvil">
+        <addColumn tableName="msg_account">
+            <column name="sent_tag_lineage_id" type="INT UNSIGNED"/>
+        </addColumn>
+        <addColumn tableName="msg_account">
+            <column name="trash_tag_lineage_id" type="INT UNSIGNED"/>
+        </addColumn>
+        <addColumn tableName="msg_account">
+            <column name="drafts_tag_lineage_id" type="INT UNSIGNED"/>
+        </addColumn>
+        <addColumn tableName="msg_account">
+            <column name="junk_tag_lineage_id" type="INT UNSIGNED"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="sent_tag_lineage_id"
+                                 constraintName="msg_account_s_2_tag_lineage"
+                                 referencedTableName="tag_lineage" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="trash_tag_lineage_id"
+                                 constraintName="msg_account_t_2_tag_lineage"
+                                 referencedTableName="tag_lineage" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="drafts_tag_lineage_id"
+                                 constraintName="msg_account_d_2_tag_lineage"
+                                 referencedTableName="tag_lineage" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="junk_tag_lineage_id"
+                                 constraintName="msg_account_j_2_tag_lineage"
+                                 referencedTableName="tag_lineage" referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="1319026263161-133" author="AmIEvil">
+        <addColumn tableName="msg_account">
+            <column name="delete_mode" type="VARCHAR(20)" defaultValue="MOVE_2_TRASH">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1319026263161-134" author="AmIEvil">
+        <addColumn tableName="message">
+            <column name="deleted_flag" type="boolean" />
+        </addColumn>
+        <addColumn tableName="message">
+            <column name="draft_flag" type="boolean" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

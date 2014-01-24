@@ -1,5 +1,6 @@
 package net.mortalsilence.indiepim.server.domain;
 
+import net.mortalsilence.indiepim.server.message.MessageConstants;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -106,7 +107,26 @@ public class MessageAccountPO implements Serializable, PersistentObject {
     @JoinColumn(name = "msg_account_stats_id", referencedColumnName = "id")
     private MessageAccountStatsPO messageAccountStats;
 
-	public Integer getSyncMethod() {
+    @ManyToOne
+    @JoinColumn(name="sent_tag_lineage_id", referencedColumnName="id")
+    private TagLineagePO sentFolder;
+
+    @ManyToOne
+    @JoinColumn(name="trash_tag_lineage_id", referencedColumnName="id")
+    private TagLineagePO trashFolder;
+
+    @ManyToOne
+    @JoinColumn(name="junk_tag_lineage_id", referencedColumnName="id")
+    private TagLineagePO junkFolder;
+
+    @ManyToOne
+    @JoinColumn(name="drafts_tag_lineage_id", referencedColumnName="id")
+    private TagLineagePO draftsFolder;
+
+    @Column (name = "delete_mode")
+    private MessageConstants.MESSAGE_DELETE_MODE deleteMode;
+
+    public Integer getSyncMethod() {
 		return syncMethod;
 	}
 
@@ -300,5 +320,45 @@ public class MessageAccountPO implements Serializable, PersistentObject {
 
     public void setMessageAccountStats(MessageAccountStatsPO messageAccountStats) {
         this.messageAccountStats = messageAccountStats;
+    }
+
+    public TagLineagePO getSentFolder() {
+        return sentFolder;
+    }
+
+    public void setSentFolder(TagLineagePO sentFolder) {
+        this.sentFolder = sentFolder;
+    }
+
+    public TagLineagePO getTrashFolder() {
+        return trashFolder;
+    }
+
+    public void setTrashFolder(TagLineagePO trashFolder) {
+        this.trashFolder = trashFolder;
+    }
+
+    public TagLineagePO getJunkFolder() {
+        return junkFolder;
+    }
+
+    public void setJunkFolder(TagLineagePO junkFolder) {
+        this.junkFolder = junkFolder;
+    }
+
+    public TagLineagePO getDraftsFolder() {
+        return draftsFolder;
+    }
+
+    public void setDraftsFolder(TagLineagePO draftsFolder) {
+        this.draftsFolder = draftsFolder;
+    }
+
+    public MessageConstants.MESSAGE_DELETE_MODE getDeleteMode() {
+        return deleteMode;
+    }
+
+    public void setDeleteMode(MessageConstants.MESSAGE_DELETE_MODE deleteMode) {
+        this.deleteMode = deleteMode;
     }
 }

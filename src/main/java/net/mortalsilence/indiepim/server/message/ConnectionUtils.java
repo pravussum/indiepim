@@ -1,14 +1,21 @@
 package net.mortalsilence.indiepim.server.message;
 
+import net.mortalsilence.indiepim.server.SharedConstants;
+import net.mortalsilence.indiepim.server.dao.GenericDAO;
+import net.mortalsilence.indiepim.server.dao.TagDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
+import net.mortalsilence.indiepim.server.domain.TagHierarchyPO;
+import net.mortalsilence.indiepim.server.domain.TagLineagePO;
+import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.exception.NotImplementedException;
 import net.mortalsilence.indiepim.server.security.SecurityUtils;
 import net.mortalsilence.indiepim.server.utils.ArgUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.*;
-import java.util.Properties;
+import java.util.*;
 
 /*
 
@@ -29,8 +36,9 @@ import java.util.Properties;
 @Named
 public class ConnectionUtils implements MessageConstants {
 
-    @Inject
-    private SecurityUtils securityUtils;
+    @Inject private SecurityUtils securityUtils;
+    @Inject private TagDAO tagDAO;
+    @Inject private GenericDAO genericDAO;
 
 	private boolean debug = false;
 	
@@ -160,4 +168,73 @@ public class ConnectionUtils implements MessageConstants {
 		final EncryptionMode encryptionMode = EncryptionMode.valueOf(account.getEncryption());
 		return encryptionMode == EncryptionMode.SSL ? "smtps" : "smtp";
 	}
+
+    public String getFolderPathFromTagLineage(char separator, TagLineagePO tagLineage) {
+        final String[] parts = StringUtils.split(tagLineage.getLineage(), SharedConstants.TAG_LINEAGE_SEPARATOR.toString());
+        return StringUtils.join(parts, separator);
+    }
+
+    public String getSentFolderPath(MessageAccountPO account, Store store) throws MessagingException {
+        final char separator = store.getDefaultFolder().getSeparator();
+        if(account.getSentFolder() == null)
+            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+        return getFolderPathFromTagLineage(separator, account.getSentFolder());
+    }
+
+    public String getTrashFolderPath(MessageAccountPO account, Store store) throws MessagingException {
+        final char separator = store.getDefaultFolder().getSeparator();
+        if(account.getTrashFolder() == null)
+            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+        return getFolderPathFromTagLineage(separator, account.getTrashFolder());
+    }
+
+    public String getJunkFolderPath(MessageAccountPO account, Store store) throws MessagingException {
+        final char separator = store.getDefaultFolder().getSeparator();
+        if(account.getJunkFolder() == null)
+            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+        return getFolderPathFromTagLineage(separator, account.getJunkFolder());
+    }
+
+    public String getDraftsFolderPath(MessageAccountPO account, Store store) throws MessagingException {
+        final char separator = store.getDefaultFolder().getSeparator();
+        if(account.getDraftsFolder() == null)
+            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+        return getFolderPathFromTagLineage(separator, account.getDraftsFolder());
+    }
+
+    public TagLineagePO getOrCreateTagLineage(final UserPO user, final MessageAccountPO account, final Folder folder) {
+        final List<String> tags = new LinkedList<String>();
+        try {
+            StringTokenizer st = new StringTokenizer(folder.getFullName(), new Character(folder.getSeparator()).toString());
+            while(st.hasMoreElements()) {
+                tags.add(st.nextToken());
+            }
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error parsing folder name " + folder.getFullName(), e);
+        }
+
+        if(account.getTagHierarchy() == null) {
+            createTagHierarchy4Account(user, account);
+        }
+
+        final List<String> partialTagLineageTags = new LinkedList<String>();
+        final Iterator<String> tagIt = tags.iterator();
+        TagLineagePO tagLineage = null;
+        while(tagIt.hasNext()) {
+            partialTagLineageTags.add(tagIt.next());
+            final String tagLineageStr = StringUtils.join(partialTagLineageTags, SharedConstants.TAG_LINEAGE_SEPARATOR);
+            tagLineage = tagDAO.getOrCreateTagLineage(user, tagLineageStr, account.getTagHierarchy());
+        }
+
+        return tagLineage;
+    }
+
+    public void createTagHierarchy4Account(final UserPO user, final MessageAccountPO account) {
+        TagHierarchyPO tagHierarchy = new TagHierarchyPO();
+        tagHierarchy.setUser(user);
+        tagHierarchy.setName(account.getTag().getTag());
+        genericDAO.persist(tagHierarchy);
+        account.setTagHierarchy(tagHierarchy);
+    }
 }

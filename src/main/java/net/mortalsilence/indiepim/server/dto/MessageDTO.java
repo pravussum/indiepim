@@ -28,6 +28,8 @@ public class MessageDTO implements Serializable {
 	public String contentText;
 	public Long accountId;
 	public Boolean read;
+    public Boolean deleted;
+    public Boolean draft;
 	public Boolean hasAttachment;
 	public Integer star;	
 }

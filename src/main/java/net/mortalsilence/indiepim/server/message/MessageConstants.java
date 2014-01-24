@@ -12,6 +12,12 @@ public interface MessageConstants {
         OTHER
     }
 
+    public enum MESSAGE_DELETE_MODE {
+        MOVE_2_TRASH,
+        MARK_DELETED,
+        EXPUNGE
+    }
+
 	public enum EncryptionMode {
 		NONE (1), 
 		STARTTLS (2),
@@ -73,4 +79,10 @@ public interface MessageConstants {
 	public static final String PROTOCOL_POP3 = "POP3";
 	
 	public static final String DATETIME_FORMAT_EUR = "yyyy-MM-dd HH.mm.ss";
+
+    public static final String DEFAULT_FOLDER_SENT = "Sent";
+    public static final String DEFAULT_FOLDER_TRASH = "Trash";
+    public static final String DEFAULT_FOLDER_JUNK = "Junk";
+    public static final String DEFAULT_FOLDER_DRAFTS = "Drafts";
+
 }

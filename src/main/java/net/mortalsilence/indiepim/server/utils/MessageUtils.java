@@ -46,6 +46,8 @@ public class MessageUtils implements MessageConstants {
 			resultMsg.msgId = msg.getId();
 			resultMsg.dateReceived = msg.getDateReceived();
 			resultMsg.read = msg.getRead();
+            resultMsg.deleted = msg.getDeleted();
+            resultMsg.draft = msg.getDraft();
 			if(msg.getAttachments() != null && !msg.getAttachments().isEmpty())
 				resultMsg.hasAttachment = true;
 			else 
@@ -85,6 +87,8 @@ public class MessageUtils implements MessageConstants {
 		result.receiver = message.getReceiver() != null ? Arrays.asList(StringUtils.split(message.getReceiver(), ",")) : null;
 		result.dateReceived = message.getDateReceived();
 		result.read = message.getRead();
+        result.deleted = message.getDeleted();
+        result.draft = message.getDraft();
 		if(message.getContentHtml() != null)
 			result.contentHtml = message.getContentHtml();
 		else result.contentText = message.getContentText();
