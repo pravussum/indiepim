@@ -1,5 +1,6 @@
 package net.mortalsilence.indiepim.server.command.handler;
 
+import com.sun.org.apache.regexp.internal.recompile;
 import net.mortalsilence.indiepim.server.command.Command;
 import net.mortalsilence.indiepim.server.command.actions.DeleteMessages;
 import net.mortalsilence.indiepim.server.command.results.BooleanResult;
@@ -64,6 +65,13 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, BooleanRes
                             final Folder trashFolder = store.getFolder(connectionUtils.getTrashFolderPath(account, store));
                             if(logger.isDebugEnabled())
                                 logger.debug("copying IMAP message whith UID " + messageUID + " from folder '" + folder.getName() + "' to trash folder '" + trashFolder + "'.");
+                            if(!trashFolder.exists()) {
+                                if(logger.isDebugEnabled())
+                                    logger.debug("Configured trashfolder '" + trashFolder.getFullName() + "' does not exists. Creating...");
+                                boolean creationResult = trashFolder.create(Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES);
+                                if(!creationResult)
+                                    throw new RuntimeException("Error creating trash folder '" + trashFolder.getFullName() + "'");
+                            }
                             folder.copyMessages(new Message[]{imapMessage}, trashFolder);
 
                             TagLineagePO trashFolderTagLineage;

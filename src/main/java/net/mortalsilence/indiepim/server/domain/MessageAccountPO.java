@@ -124,6 +124,7 @@ public class MessageAccountPO implements Serializable, PersistentObject {
     private TagLineagePO draftsFolder;
 
     @Column (name = "delete_mode")
+    @Enumerated(EnumType.STRING)
     private MessageConstants.MESSAGE_DELETE_MODE deleteMode;
 
     public Integer getSyncMethod() {

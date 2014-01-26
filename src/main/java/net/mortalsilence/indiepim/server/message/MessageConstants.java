@@ -84,5 +84,5 @@ public interface MessageConstants {
     public static final String DEFAULT_FOLDER_TRASH = "Trash";
     public static final String DEFAULT_FOLDER_JUNK = "Junk";
     public static final String DEFAULT_FOLDER_DRAFTS = "Drafts";
-
+    public static final String DEFAULT_FOLDER_INBOX = "INBOX";
 }

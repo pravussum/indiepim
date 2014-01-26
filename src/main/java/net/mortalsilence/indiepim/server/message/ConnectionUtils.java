@@ -177,30 +177,37 @@ public class ConnectionUtils implements MessageConstants {
     public String getSentFolderPath(MessageAccountPO account, Store store) throws MessagingException {
         final char separator = store.getDefaultFolder().getSeparator();
         if(account.getSentFolder() == null)
-            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+            return getDefaultFolderName(store) + separator + DEFAULT_FOLDER_SENT;
         return getFolderPathFromTagLineage(separator, account.getSentFolder());
     }
 
     public String getTrashFolderPath(MessageAccountPO account, Store store) throws MessagingException {
         final char separator = store.getDefaultFolder().getSeparator();
         if(account.getTrashFolder() == null)
-            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+            return getDefaultFolderName(store) + separator + DEFAULT_FOLDER_TRASH;
         return getFolderPathFromTagLineage(separator, account.getTrashFolder());
     }
 
     public String getJunkFolderPath(MessageAccountPO account, Store store) throws MessagingException {
         final char separator = store.getDefaultFolder().getSeparator();
         if(account.getJunkFolder() == null)
-            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+            return getDefaultFolderName(store) + separator + DEFAULT_FOLDER_JUNK;
         return getFolderPathFromTagLineage(separator, account.getJunkFolder());
     }
 
     public String getDraftsFolderPath(MessageAccountPO account, Store store) throws MessagingException {
         final char separator = store.getDefaultFolder().getSeparator();
         if(account.getDraftsFolder() == null)
-            return store.getDefaultFolder().getName() + separator + DEFAULT_FOLDER_SENT;
+            return getDefaultFolderName(store) + separator + DEFAULT_FOLDER_DRAFTS;
         return getFolderPathFromTagLineage(separator, account.getDraftsFolder());
     }
+
+    private String getDefaultFolderName(Store store) throws MessagingException {
+//         return store.getDefaultFolder().getName();
+        // TODO store.getDefaultFolder() seems to return empty strings, at least sometimes... what to do about it?
+        return DEFAULT_FOLDER_INBOX;
+    }
+
 
     public TagLineagePO getOrCreateTagLineage(final UserPO user, final MessageAccountPO account, final Folder folder) {
         final List<String> tags = new LinkedList<String>();

@@ -54,6 +54,7 @@ public class CommandController {
     @Inject private GetTagsHandler tagsHandler;
     @Inject private StartAccountSynchronisationHandler accountSyncHandler;
     @Inject private SendChatMessageHandler chatMessageHandler;
+    @Inject private DeleteMessagesHandler deleteMessagesHandler;
 
     @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -209,5 +210,13 @@ public class CommandController {
     public Collection<TagDTO> searchForTags(@RequestParam(value="tagLineageId", required = false) final Long tagLinageId,
                                             @RequestParam(value="query", required = false) final String query) {
         return tagsHandler.execute(new GetTags(tagLinageId, query)).getTags();
+    }
+
+    @RequestMapping(value="deleteMessage/{id}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object deleteMessage(@PathVariable(value = "id") final Long msgId) {
+        final List<Long> msgIds = new LinkedList<Long>();
+        msgIds.add(msgId);
+        return deleteMessagesHandler.execute(new DeleteMessages(msgIds));
     }
 }
