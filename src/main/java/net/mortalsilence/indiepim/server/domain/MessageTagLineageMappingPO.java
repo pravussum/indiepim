@@ -14,7 +14,7 @@ public class MessageTagLineageMappingPO {
 	@Column(name = "msg_uid")
 	private Long msgUid; 
 
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false) // no cascade!
 	@JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
 	private MessagePO message;
 	

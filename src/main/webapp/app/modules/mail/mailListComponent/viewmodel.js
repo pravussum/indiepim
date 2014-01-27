@@ -192,6 +192,30 @@ define([], function () {
             window.location.href="#mailview/" + selectedMail.id;
         };
 
+        self.deleteMessage = function(selectedMessage) {
+            var url = "command/deleteMessage/" + selectedMessage.id;
+            $.getJSON(
+                url,
+                function(data) {
+                    if(data.result[selectedMessage.id].deleted) {
+                        var extraInfo = data.result[selectedMessage.id].reason;
+                        toastr.info("Message deleted." + (extraInfo ? "\n" + extraInfo : ""));
+                        self.mailList.remove(selectedMessage);
+                        self.totalSize(self.totalSize() - 1);
+                        //TODO decrease the shown page size (pagination controls), but not the real one
+
+                    } else {
+                        toastr.warning("Message not deleted.\n" + data.result[selectedMessage.id].reason);
+                    }
+                }
+            ).fail(function(xhr, textStatus, errorThrown) {
+                    if(xhr.status == 403)
+                        window.location.href = contextPath + "/login"; // access denied = not logged in --> redirect to login
+                    else
+                        toastr.error(JSON.stringify(textStatus));
+            });
+        }
+
         self.toggleRead = function(selectedMessage) {
             selectedMessage.read(!selectedMessage.read());
             var url = "command/markAsRead/" + selectedMessage.id;
@@ -209,7 +233,7 @@ define([], function () {
                         window.location.href = contextPath + "/login"; // access denied = not logged in --> redirect to login
                     else
                         toastr.error(JSON.stringify(textStatus));
-                });
+            });
         };
 
         self.nextPage = function() {

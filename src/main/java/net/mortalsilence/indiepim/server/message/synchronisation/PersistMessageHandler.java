@@ -1,6 +1,7 @@
 package net.mortalsilence.indiepim.server.message.synchronisation;
 
 import net.mortalsilence.indiepim.server.dao.GenericDAO;
+import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.domain.*;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
@@ -25,8 +26,8 @@ import java.nio.charset.CodingErrorAction;
 public class PersistMessageHandler implements IncomingMessageHandler, MessageConstants {
 	
 	final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
-    @Inject
-    private GenericDAO genericDAO;
+    @Inject private GenericDAO genericDAO;
+    @Inject private MessageDAO messageDAO;
     @Inject
     private MessageUtils messageUtils;
 	
@@ -67,11 +68,11 @@ public class PersistMessageHandler implements IncomingMessageHandler, MessageCon
 			
 			handleAddresses(message, msg);
 
-            msg.addTagLineage(tagLineage, msgUid);
-
 			/* PERSIST */
-			genericDAO.updateOrPersist(msg);
-			
+            genericDAO.updateOrPersist(msg);
+
+            messageDAO.addTagLineage(msg, tagLineage, msgUid);
+
 		} catch (MessagingException e) {
 			/* Workaround for email server bugs */
 			logger.error("Error occured parsing message " + msgUid, e);

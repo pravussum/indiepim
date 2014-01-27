@@ -122,14 +122,6 @@ define([], function () {
                 }
             );
 
-            self.reply = function() {
-                window.location.href="#mailcompose/reply/" + self.messageId();
-            };
-
-            self.forward = function() {
-                window.location.href="#mailcompose/forward/" + self.messageId();
-            };
-
             self.markReadTimer = window.setTimeout(function(){
                 moduleContext.notify("MESSAGE_READ", self.messageId());
                 $.getJSON(
@@ -144,6 +136,34 @@ define([], function () {
                             toastr.error(JSON.stringify(textStatus));
                 });
             },1000);
+        }
+
+        self.reply = function() {
+            window.location.href="#mailcompose/reply/" + self.messageId();
+        };
+
+        self.forward = function() {
+            window.location.href="#mailcompose/forward/" + self.messageId();
+        };
+
+        self.delete = function() {
+            var url = "command/deleteMessage/" + self.messageId();
+            $.getJSON(
+                url,
+                function(data) {
+                    if(data.result) {
+                        toastr.info("Message deleted.");
+                        window.location.href= contextPath + "/#maillist";
+                    } else {
+                        toastr.info("Message deletion failed. See server log for details.");
+                    }
+                }
+            ).fail(function(xhr, textStatus, errorThrown) {
+                    if(xhr.status == 403)
+                        window.location.href = contextPath + "/login"; // access denied = not logged in --> redirect to login
+                    else
+                        toastr.error(JSON.stringify(textStatus));
+                });
         }
 
         this.cleanup = function() {

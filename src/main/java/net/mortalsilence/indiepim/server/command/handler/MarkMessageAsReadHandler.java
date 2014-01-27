@@ -1,11 +1,13 @@
 package net.mortalsilence.indiepim.server.command.handler;
 
+import com.sun.mail.imap.IMAPFolder;
 import net.mortalsilence.indiepim.server.command.Command;
 import net.mortalsilence.indiepim.server.command.actions.MarkMessagesAsRead;
 import net.mortalsilence.indiepim.server.command.results.MessageDTOListResult;
 import net.mortalsilence.indiepim.server.dao.GenericDAO;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.domain.MessagePO;
+import net.mortalsilence.indiepim.server.domain.MessageTagLineageMappingPO;
 import net.mortalsilence.indiepim.server.dto.MessageDTO;
 import net.mortalsilence.indiepim.server.message.ImapMsgOperationCallback;
 import net.mortalsilence.indiepim.server.message.MessageUpdateService;
@@ -16,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.mail.Flags;
-import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.util.Calendar;
@@ -58,7 +59,7 @@ public class MarkMessageAsReadHandler implements Command<MarkMessagesAsRead, Mes
                 final long start = Calendar.getInstance().getTimeInMillis();
                 messageUpdateService.updateImapMessages(userId, messages, accountId, false, new ImapMsgOperationCallback() {
                     @Override
-                    public void processMessage(final Folder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage) throws MessagingException {
+                    public void processMessage(final IMAPFolder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage, MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException {
                         imapMessage.setFlag(Flags.Flag.SEEN, action.isRead());
                         indieMessage.setRead(action.isRead());
                         genericDAO.update(indieMessage);

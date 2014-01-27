@@ -1,6 +1,8 @@
 package net.mortalsilence.indiepim.server.message;
 
+import com.sun.mail.imap.IMAPFolder;
 import net.mortalsilence.indiepim.server.domain.MessagePO;
+import net.mortalsilence.indiepim.server.domain.MessageTagLineageMappingPO;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -13,5 +15,5 @@ import javax.mail.MessagingException;
  * Time: 23:13
  */
 public interface ImapMsgOperationCallback {
-    public void processMessage(final Folder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage) throws MessagingException;
+    public void processMessage(final IMAPFolder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage, MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException;
 }

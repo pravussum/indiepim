@@ -38,6 +38,9 @@
                     <span class="contentPreview" data-bind="text: contentPreview"></span>
                 </div></td>
                 <td class="mailListCell receivedCol" data-bind="text: displayDate, click: $parent.viewSelectedMail"></td>
+                <td class="mailListCell deleteCol">
+                    <i class="fa fa-trash-o" data-bind="click: $parent.deleteMessage" />
+                </td>
                 <td class="mailListCell attachmentCol">
                     <i class='fa fa-paperclip' data-bind="visible:attachment"/>
                 </td>

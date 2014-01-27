@@ -111,8 +111,6 @@ public class MessagePO implements Serializable, PersistentObject {
 	private Integer size;
 	
 	@OneToMany(mappedBy="message")
-//	@Cascade({CascadeType.PERSIST, CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-	@Cascade({CascadeType.ALL})
 	private Set<MessageTagLineageMappingPO> msgTagLineageMappings = new HashSet<MessageTagLineageMappingPO>();
 
   	@Column(name = "read_flag")
@@ -267,14 +265,6 @@ public class MessagePO implements Serializable, PersistentObject {
 
 	public void setHash(String hash) {
 		this.hash = hash;
-	}
-
-	public void addTagLineage(final TagLineagePO tagLineage, final Long messageUid) {
-        final MessageTagLineageMappingPO mapping = new MessageTagLineageMappingPO();
-		mapping.setMessage(this);
-		mapping.setTagLineage(tagLineage);
-		mapping.setMsgUid(messageUid);
-		this.msgTagLineageMappings.add(mapping);
 	}
 
     public boolean hasTagLineage(final TagLineagePO tagLineage, final Long messageUid) {

@@ -63,7 +63,7 @@ public class PersistenceHelper {
                 /* Update existing message in different folder */
                 final MessagePO duplicate = getDuplicate(account, hash);
                 if(!duplicate.hasTagLineage(tagLineage, msgUid)){
-                    duplicate.addTagLineage(tagLineage, msgUid);
+                    messageDAO.addTagLineage(duplicate, tagLineage, msgUid);
                 }
                 // TODO: replace by something cool
                 if(updateHandler != null)

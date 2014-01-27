@@ -93,6 +93,33 @@ input:focus {
     text-shadow: none;
 }
 
+.attentionButton {
+    background-color: #D20000;
+    border:1px solid #C10000;
+    color:#ededed;
+}
+
+.attentionButton:hover {
+    background-color: #BD0000;
+}
+
+.attentionButton i {
+    color: #cccccc;
+}
+.importantButton {
+    background-color: #003366;
+    border:1px solid #002b55;
+    color:#cccccc;
+}
+
+.importantButton:hover {
+    background-color: #001040;
+}
+
+.importantButton i {
+    color:#cccccc;
+}
+
 .select2-input {
     padding: 0 !important;
 }

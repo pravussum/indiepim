@@ -6,6 +6,7 @@
         <div class="dateAndControlsWrapper">
             <div class="messageViewDateReceivedHeader" data-bind="text: moment(dateReceived()).format('LLL')"></div>
             <div class="controls">
+                <button class="stylishButton attentionButton" data-bind="click: $root.delete"><i class="fa fa-trash-o"/>Delete</button>
                 <button class="stylishButton" data-bind="click: $root.reply"><i class="fa fa-reply" />Reply</button>
                 <button class="stylishButton" data-bind="click: $root.forward"><i class="fa fa-forward" />Forward</button>
             </div>

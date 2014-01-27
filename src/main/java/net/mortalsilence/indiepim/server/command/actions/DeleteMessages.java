@@ -1,13 +1,12 @@
 package net.mortalsilence.indiepim.server.command.actions;
 
 import net.mortalsilence.indiepim.server.command.AbstractSessionAwareAction;
-import net.mortalsilence.indiepim.server.command.results.BooleanResult;
-import net.mortalsilence.indiepim.server.command.results.MessageDTOListResult;
+import net.mortalsilence.indiepim.server.command.results.DeleteMessagesResult;
 
 import java.util.List;
 
 
-public class DeleteMessages extends AbstractSessionAwareAction<BooleanResult> {
+public class DeleteMessages extends AbstractSessionAwareAction<DeleteMessagesResult> {
 
 	private List<Long> messageIds;
 

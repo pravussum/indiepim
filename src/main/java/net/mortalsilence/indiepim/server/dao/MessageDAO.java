@@ -1,9 +1,6 @@
 package net.mortalsilence.indiepim.server.dao;
 
-import net.mortalsilence.indiepim.server.domain.EmailAddressPO;
-import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
-import net.mortalsilence.indiepim.server.domain.MessagePO;
-import net.mortalsilence.indiepim.server.domain.UserPO;
+import net.mortalsilence.indiepim.server.domain.*;
 import org.apache.log4j.Logger;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
@@ -327,5 +324,16 @@ public class MessageDAO {
 		}
 		return resultMap;
 	}
-	
+
+    public void addTagLineage(final MessagePO message, final TagLineagePO tagLineage, final Long messageUid) {
+        if(message.getMsgTagLineageMappings().contains(tagLineage))
+            return;
+        final MessageTagLineageMappingPO mapping = new MessageTagLineageMappingPO();
+        mapping.setMessage(message);
+        mapping.setTagLineage(tagLineage);
+        mapping.setMsgUid(messageUid);
+        genericDAO.persist(mapping);
+        message.getMsgTagLineageMappings().add(mapping);
+    }
+
 }

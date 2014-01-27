@@ -1,5 +1,6 @@
 package net.mortalsilence.indiepim.server.message;
 
+import com.sun.mail.imap.IMAPFolder;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.MessagePO;
@@ -74,7 +75,7 @@ public class MessageUpdateService implements MessageConstants {
 					if(imapMsg == null) {
 						logger.error("updateImapMessages(): Msg with uid "+ msgUid +" not found on server. Account " + account.getId() + ", Folder " + folder.getFullName());
 					} else {
-						callback.processMessage(folder, imapMsg, msgUid, msg);
+						callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, mapping);
 					}
 					folder.close(expunge);
 				}
