@@ -67,38 +67,35 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                     // TODO performance tuning
                     @Override
                     public void processMessage(IMAPFolder folder, Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO tagLineageMapping) throws MessagingException {
+                        boolean finalDeleteFromTrash = false;
                         try {
                             if (account.getDeleteMode().equals(MessageConstants.MESSAGE_DELETE_MODE.MOVE_2_TRASH)) {
-                                // MOVE to trash folder
                                 final Store store = folder.getStore();
                                 final Folder trashFolder = store.getFolder(connectionUtils.getTrashFolderPath(account, store));
                                 if(trashFolder.getFullName().equals(folder.getFullName())) {
-                                    // message already in trash, ignore
-                                    if(logger.isDebugEnabled()) {
-                                        logger.debug("Message with UID " + messageUID + " already in trash. Ignoring.");
-                                    }
-                                    result.put(indieMessage.getId(), new DeleteResultInfo(false, "Message already in trash. Ignored."));
-                                    return;
-                                }
-                                if (logger.isDebugEnabled())
-                                    logger.debug("copying IMAP message whith UID " + messageUID + " from folder '" + folder.getName() + "' to trash folder '" + trashFolder + "'.");
-                                if (!trashFolder.exists()) {
+                                    finalDeleteFromTrash = true;
+                                } else if (!trashFolder.exists()) {
                                     if (logger.isDebugEnabled())
                                         logger.debug("Configured trashfolder '" + trashFolder.getFullName() + "' does not exists. Creating...");
                                     boolean creationResult = trashFolder.create(Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES);
                                     if (!creationResult)
                                         throw new RuntimeException("Error creating trash folder '" + trashFolder.getFullName() + "'");
                                 }
-                                // TODO fallback when this is not supported by the server!
-                                final AppendUID[] copyResult = folder.copyUIDMessages(new Message[]{imapMessage}, trashFolder);
+                                if(!finalDeleteFromTrash) {
+                                    if (logger.isDebugEnabled())
+                                        logger.debug("copying IMAP message whith UID " + messageUID + " from folder '" + folder.getName() + "' to trash folder '" + trashFolder + "'.");
+                                    // TODO fallback when this is not supported by the server!
+                                    final AppendUID[] copyResult = folder.copyUIDMessages(new Message[]{imapMessage}, trashFolder);
 
-                                TagLineagePO trashFolderTagLineage;
-                                if ((trashFolderTagLineage = account.getTrashFolder()) == null)
-                                    trashFolderTagLineage = connectionUtils.getOrCreateTagLineage(userDAO.getUser(userId), account, trashFolder);
+                                    TagLineagePO trashFolderTagLineage;
+                                    if ((trashFolderTagLineage = account.getTrashFolder()) == null) {
+                                        trashFolderTagLineage = connectionUtils.getOrCreateTagLineage(userDAO.getUser(userId), account, trashFolder);
+                                    }
+                                    messageDAO.addTagLineage(indieMessage, trashFolderTagLineage, copyResult[0].uid);
+                                }
 
                                 // defer the deletion of the tag lineage mappings, since the caller of the callback keeps them in an iterator
                                 tagLineageMappingsToDelete.add(tagLineageMapping);
-                                messageDAO.addTagLineage(indieMessage, trashFolderTagLineage, copyResult[0].uid);
                             }
 
                             if (logger.isDebugEnabled())
