@@ -43,6 +43,7 @@
 
 .messageViewSenderHeader, .messageViewReceiverHeader {
     color: darkslategray;
+    font-size: 90%;
 }
 
 .messageViewTagHeader{
@@ -77,4 +78,29 @@
 
 .controls button i {
     margin-right: 10px;
+}
+
+.mailInfoWrapper {
+    float: left;
+}
+
+.attachmentPanel {
+    text-align: right;
+}
+
+.attachmentPanel li {
+    cursor: pointer;
+}
+
+.attachment {
+    list-style-type: none;
+    list-style-position: outside;
+}
+
+.attachmentFilename {
+    margin-left: 5px;
+}
+
+.messageViewDateReceivedHeader {
+    text-align: right;
 }

@@ -2,13 +2,11 @@ package net.mortalsilence.indiepim.server.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.mortalsilence.indiepim.server.domain.AttachmentPO;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class MessageDTO implements Serializable {
 
@@ -31,5 +29,6 @@ public class MessageDTO implements Serializable {
     public Boolean deleted;
     public Boolean draft;
 	public Boolean hasAttachment;
-	public Integer star;	
+	public Integer star;
+    public List<AttachmentDTO> attachments = new LinkedList<AttachmentDTO>();
 }

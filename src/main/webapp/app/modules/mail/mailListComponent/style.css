@@ -106,11 +106,22 @@ tr.mailListRow:hover {
 
 .mailNavigationButtonPrev{
     float: left;
+    font-weight: bold;
 }
 
 .mailNavigationButtonNext{
     float: right;
+    font-weight: bold;
 }
+
+.mailNavigationButtonFirst{
+    margin-right: 5px;
+}
+
+.mailNavigationButtonLast{
+    margin-left: 5px;
+}
+
 
 /*  header - right */
 .mailIndicatorPanel {

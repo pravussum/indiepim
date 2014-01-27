@@ -2,18 +2,18 @@
     <div class="mailSearchPanelPos">
         <form data-bind="submit: performSearch">
             <input class="messageSearchBox" type=text data-bind="value: searchTermInput">
-            <button type=submit><i class="fa fa-search"/> Search</button>
+            <button type=submit class="stylishButton"><i class="fa fa-search"/> Search</button>
         </form>
     </div>
 </div>
 <div class="mailNavigationPanel" data-bind="visible: showFromTo">
-    <button class="mailNavigationButtonPrev" data-bind="click: firstPage"><i class="fa fa-angle-double-left" /></button>
-    <button class="mailNavigationButtonPrev" data-bind="click: prevPage"><i class="fa fa-angle-left" /></button>
+    <button class="mailNavigationButtonPrev mailNavigationButtonFirst stylishButton" data-bind="click: firstPage"><i class="fa fa-angle-double-left" /></button>
+    <button class="mailNavigationButtonPrev stylishButton" data-bind="click: prevPage"><i class="fa fa-angle-left" /></button>
     <span class="mailNavigationPanelText">
         <span data-bind="text: from" /> to <span data-bind="text: to" /> of <span data-bind="text: totalSize" />
     </span>
-    <button class="mailNavigationButtonNext" data-bind="click: lastPage"><i class="fa fa-angle-double-right"/></button>
-    <button class="mailNavigationButtonNext" data-bind="click: nextPage"><i class="fa fa-angle-right" /></button>
+    <button class="mailNavigationButtonNext mailNavigationButtonLast stylishButton" data-bind="click: lastPage"><i class="fa fa-angle-double-right"/></button>
+    <button class="mailNavigationButtonNext stylishButton" data-bind="click: nextPage"><i class="fa fa-angle-right" /></button>
 </div>
 <div class="mailIndicatorPanel">
     <div class="mailIndicatorPanelPos">

@@ -16,6 +16,7 @@ define([], function () {
        	self.read = ko.observable(data.read);
        	self.hasAttachment = ko.observable(data.hasAttachment);
        	self.star = ko.observable(data.star);
+        self.attachments = ko.observableArray(data.attachments);
     }
 
     var ViewModel = function (moduleContext) {
@@ -145,6 +146,10 @@ define([], function () {
         self.forward = function() {
             window.location.href="#mailcompose/forward/" + self.messageId();
         };
+
+        self.openAttachment = function(attachment) {
+            alert("opening attachment with id " + attachment.id);
+        }
 
         self.delete = function() {
             var url = "command/deleteMessage/" + self.messageId();

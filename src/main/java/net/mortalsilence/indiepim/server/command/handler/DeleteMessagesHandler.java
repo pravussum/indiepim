@@ -122,7 +122,6 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                 final Iterator<MessageTagLineageMappingPO> it = tagLineageMappingsToDelete.iterator();
                 while(it.hasNext()) {
                     final MessageTagLineageMappingPO curTagLineageMapping = it.next();
-                    final Long msgUid = curTagLineageMapping.getMsgUid();
                     if(logger.isDebugEnabled())
                         logger.debug("Removing tag lineage " + curTagLineageMapping.getTagLineage().getLineage() + " from message with UID " + curTagLineageMapping.getMsgUid());
                     it.remove();

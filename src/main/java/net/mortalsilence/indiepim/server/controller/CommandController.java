@@ -3,6 +3,7 @@ package net.mortalsilence.indiepim.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.http.HttpResponse;
 import net.mortalsilence.indiepim.server.calendar.EventDTO;
 import net.mortalsilence.indiepim.server.calendar.ICSParser;
 import net.mortalsilence.indiepim.server.command.actions.*;
@@ -55,6 +56,7 @@ public class CommandController {
     @Inject private StartAccountSynchronisationHandler accountSyncHandler;
     @Inject private SendChatMessageHandler chatMessageHandler;
     @Inject private DeleteMessagesHandler deleteMessagesHandler;
+    @Inject private GetAttachmentHandler attachmentHandler;
 
     @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -218,5 +220,17 @@ public class CommandController {
         final List<Long> msgIds = new LinkedList<Long>();
         msgIds.add(msgId);
         return deleteMessagesHandler.execute(new DeleteMessages(msgIds));
+    }
+
+    @RequestMapping(value="getAttachment/{id}")
+    @ResponseBody
+    public Object getAttachment(@PathVariable(value = "id") final Long attachmentId, HttpResponse response) {
+        try {
+            return attachmentHandler.execute(new GetAttachment(attachmentId));
+        } catch (CommandException e) {
+            return new ErrorResult(e.getMessage());
+        }
+
+
     }
 }

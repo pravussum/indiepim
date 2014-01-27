@@ -2,13 +2,11 @@ package net.mortalsilence.indiepim.server.utils;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
+import net.mortalsilence.indiepim.server.domain.AttachmentPO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.MessagePO;
 import net.mortalsilence.indiepim.server.domain.TagPO;
-import net.mortalsilence.indiepim.server.dto.MessageAccountDTO;
-import net.mortalsilence.indiepim.server.dto.MessageDTO;
-import net.mortalsilence.indiepim.server.dto.MessageListDTO;
-import net.mortalsilence.indiepim.server.dto.TagDTO;
+import net.mortalsilence.indiepim.server.dto.*;
 import net.mortalsilence.indiepim.server.exception.NotImplementedException;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.security.EncryptionService;
@@ -96,6 +94,12 @@ public class MessageUtils implements MessageConstants {
 			result.hasAttachment = true;
 		else 
 			result.hasAttachment = false;
+        for(final AttachmentPO attachment : message.getAttachments()) {
+            if(DISPOSITION_ATTACHMENT.equalsIgnoreCase(attachment.getDisposition())) {
+                AttachmentDTO attachmentDTO = new AttachmentDTO(attachment.getId(), attachment.getFilename(), attachment.getMimeType());
+                result.attachments.add(attachmentDTO);
+            }
+        }
 		return result;
 	}	
 

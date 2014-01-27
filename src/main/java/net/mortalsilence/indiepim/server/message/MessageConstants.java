@@ -85,4 +85,7 @@ public interface MessageConstants {
     public static final String DEFAULT_FOLDER_JUNK = "Junk";
     public static final String DEFAULT_FOLDER_DRAFTS = "Drafts";
     public static final String DEFAULT_FOLDER_INBOX = "INBOX";
+
+    public static final String DISPOSITION_ATTACHMENT = "attachment";
+    public static final String DISPOSITION_INLINE = "inline";
 }
