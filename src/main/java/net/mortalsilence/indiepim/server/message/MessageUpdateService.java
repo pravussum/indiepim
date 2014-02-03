@@ -103,4 +103,65 @@ public class MessageUpdateService implements MessageConstants {
 			}
 		}
 	}
+
+    public void handleSingleMessage(final Long userId,
+                                              final MessageTagLineageMappingPO msgTagLineageMapping,
+                                              final Long accountId,
+                                              final Boolean readOnly,
+                                              final Boolean expunge,
+                                              final ImapMsgOperationCallback callback) {
+
+        final MessageAccountPO account = messageDAO.getMessageAccount(userId, accountId);
+		/* only IMAP supported at the moment */
+        if(account.getProtocol() == null || !PROTOCOL_IMAP.equals(account.getProtocol().toUpperCase())) {
+            logger.error("Protocol " + account.getProtocol() + " not supported.");
+            return;
+        }
+        final Session session = connectionUtils.getSession(account, true);
+        final Store store = connectionUtils.connectToStore(account, session);
+        Folder folder = null;
+        try {
+            final char separator = store.getDefaultFolder().getSeparator();
+            final MessagePO msg = msgTagLineageMapping.getMessage();
+
+            final String path = connectionUtils.getFolderPathFromTagLineage(separator, msgTagLineageMapping.getTagLineage());
+            folder = store.getFolder(path);
+            // TODO necessary?
+            if(!folder.exists()) { /* Fix for [Google Mail] folder issue */
+                logger.error("Folder " + path + " does not exist.");
+                folder.close(expunge);
+                return;
+            }
+            folder.open(readOnly ? Folder.READ_ONLY : Folder.READ_WRITE);
+            final Long msgUid = msgTagLineageMapping.getMsgUid();
+            final Message imapMsg = messageUtils.getMsgByUID(folder, msgUid);
+            if(imapMsg == null) {
+                logger.error("updateImapMessages(): Msg with uid "+ msgUid +" not found on server. Account " + account.getId() + ", Folder " + folder.getFullName());
+            } else {
+                callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, msgTagLineageMapping);
+            }
+            folder.close(expunge);
+            return;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            if(folder != null && folder.isOpen()) {
+                try {
+                    folder.close(false);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+					/* Ignore */
+                }
+            }
+            if(store != null) {
+                try {
+                    store.close();
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+					/* Ignore */
+                }
+            }
+        }
+    }
 }

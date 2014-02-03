@@ -3,14 +3,15 @@ package net.mortalsilence.indiepim.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.http.HttpResponse;
 import net.mortalsilence.indiepim.server.calendar.EventDTO;
 import net.mortalsilence.indiepim.server.calendar.ICSParser;
 import net.mortalsilence.indiepim.server.command.actions.*;
 import net.mortalsilence.indiepim.server.command.exception.CommandException;
 import net.mortalsilence.indiepim.server.command.handler.*;
 import net.mortalsilence.indiepim.server.command.results.*;
+import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.UserDAO;
+import net.mortalsilence.indiepim.server.domain.AttachmentPO;
 import net.mortalsilence.indiepim.server.domain.CalendarPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.dto.EmailAddressDTO;
@@ -22,8 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +61,7 @@ public class CommandController {
     @Inject private SendChatMessageHandler chatMessageHandler;
     @Inject private DeleteMessagesHandler deleteMessagesHandler;
     @Inject private GetAttachmentHandler attachmentHandler;
+    @Inject private MessageDAO messageDAO;
 
     @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -224,13 +229,22 @@ public class CommandController {
 
     @RequestMapping(value="getAttachment/{id}")
     @ResponseBody
-    public Object getAttachment(@PathVariable(value = "id") final Long attachmentId, HttpResponse response) {
+    public void getAttachment(@PathVariable(value = "id") final Long attachmentId, HttpServletResponse response) throws CommandException {
         try {
-            return attachmentHandler.execute(new GetAttachment(attachmentId));
-        } catch (CommandException e) {
-            return new ErrorResult(e.getMessage());
+            final AttachmentPO attachment = messageDAO.getAttachmentById(attachmentId, ActionUtils.getUserId());
+            // TODO make the following line configurable. Leaving it out it makes the browser opening it directly (no download dialog),
+            // but the filename information will be lost.
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + attachment.getFilename() + "\"");
+
+            response.setHeader("Content-Type", attachment.getMimeType());
+            final boolean success = attachmentHandler.execute(new GetAttachment(attachmentId, response.getOutputStream())).getResult();
+            if(success) {
+                return;
+            } else {
+                throw new CommandException("Could not download attachment from mail server. ");
+            }
+        } catch(IOException ioe) {
+            throw new RuntimeException(ioe);
         }
-
-
     }
 }

@@ -9,7 +9,12 @@
             </div>
             <div class="attachmentPanel">
                 <ul data-bind="foreach: attachments">
-                    <li class="attachment" data-bind="click: $root.openAttachment"><i class="fa fa-paperclip" /><span class="attachmentFilename" data-bind="text: filename" /></li>
+                    <li class="attachment ellipsis">
+                        <a data-bind="attr:{href:'command/getAttachment/' + id}" target="_blank">
+                            <i class="fa fa-paperclip" />
+                            <span class="attachmentFilename" data-bind="text: filename" />
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

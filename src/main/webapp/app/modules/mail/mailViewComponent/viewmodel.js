@@ -148,7 +148,7 @@ define([], function () {
         };
 
         self.openAttachment = function(attachment) {
-            alert("opening attachment with id " + attachment.id);
+            window.location.href = "command/getAttachment/"  + attachment.id;
         }
 
         self.delete = function() {

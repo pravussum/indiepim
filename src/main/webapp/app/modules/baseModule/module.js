@@ -15,6 +15,7 @@ define(function(require) {
         initialize : function(parentContext) {
             //create module context by assiciating with the parent context
             var context = new Boiler.Context(parentContext);
+            var self = this;
 
             $('#page-content').layout({
                 north__initClosed: true,
@@ -33,13 +34,13 @@ define(function(require) {
             controller.start();
 
             // initialize comet system (server "push")
-            var cometSetup = function() {
+            self.cometSetup = function() {
                 $.ajax("command/getCometMessages")
                     .done(function(data){
                         if(data.isHeartbeat) {
                             toastr.info("Comet Heartbeat...");
                         } else if (data.isError) {
-                            toastr.error("Commet Error " + data.errorMessage);
+                            toastr.error("Comet Error " + data.errorMessage);
                         } else {
                             for(i=0; i<data.cometMessages.length; i++) {
                                 if(data.cometMessages[i].messageType == "AccountSyncProgress") {
@@ -58,21 +59,21 @@ define(function(require) {
                                 }
                             }
                         }
-                        cometSetup();
+                        self.cometSetup();
                     })
                     .fail(function(error, textStatus, errorThrown) {
+                        console.log("cometSetup(): fail.");
                         if(error.status == 403) {
                             // access denied = not logged in --> redirect to login
                             window.location.href = contextPath + "/login";
                         } else {
                             toastr.error("An error occured during comet connection setup: " + errorThrown);
-                            // TODO retry later
+                            console.log(JSON.stringify(error) + "\n" + JSON.stringify(textStatus) + "\n" + JSON.stringify(errorThrown));
+                            setTimeout("self.cometSetup()", 1000);
                         }
                     });
             };
-            cometSetup();
-
-
+            self.cometSetup();
             //the landing page should respond to the root URL, so let's use an URLController too
             // var controller = new Boiler.UrlController($("#content"));
             // controller.addRoutes({

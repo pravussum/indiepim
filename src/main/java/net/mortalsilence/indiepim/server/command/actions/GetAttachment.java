@@ -2,15 +2,18 @@ package net.mortalsilence.indiepim.server.command.actions;
 
 
 import net.mortalsilence.indiepim.server.command.AbstractSessionAwareAction;
-import net.mortalsilence.indiepim.server.command.results.ByteArrayResult;
-import net.mortalsilence.indiepim.server.command.results.MessageDTOResult;
+import net.mortalsilence.indiepim.server.command.results.BooleanResult;
 
-public class GetAttachment extends AbstractSessionAwareAction<ByteArrayResult> {
+import java.io.OutputStream;
+
+public class GetAttachment extends AbstractSessionAwareAction<BooleanResult> {
 
 	private Long attachmentId;
+    private OutputStream outputStream;
 
-	public GetAttachment(Long attachmentId) {
+	public GetAttachment(final Long attachmentId, final OutputStream outputStream) {
 		this.attachmentId = attachmentId;
+        this.outputStream = outputStream;
 	}
 
 	public Long getAttachmentId() {
@@ -18,5 +21,9 @@ public class GetAttachment extends AbstractSessionAwareAction<ByteArrayResult> {
 	}
 
 	public GetAttachment() {
-	}	
+	}
+
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
 }

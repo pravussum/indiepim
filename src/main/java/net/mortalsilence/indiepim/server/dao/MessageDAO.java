@@ -150,6 +150,14 @@ public class MessageDAO {
 			.getSingleResult();
 	}
 
+    public AttachmentPO getAttachmentById(final Long attachmentId, final Long userId) {
+        return em.createQuery("from AttachmentPO where id = :id and user.id = :userId", AttachmentPO.class)
+            .setParameter("id", attachmentId)
+            .setParameter("userId", userId)
+            .getSingleResult();
+
+    }
+
     public int deleteMessagesForTagLineage(final Long userId, final Collection<Long> msgUids, Long tagLineageId) {
         // Workaround
         // TODO: get cascading to work with batch deletes
