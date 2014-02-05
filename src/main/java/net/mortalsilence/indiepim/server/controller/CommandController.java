@@ -13,11 +13,14 @@ import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.UserDAO;
 import net.mortalsilence.indiepim.server.domain.AttachmentPO;
 import net.mortalsilence.indiepim.server.domain.CalendarPO;
+import net.mortalsilence.indiepim.server.domain.MessagePO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.dto.EmailAddressDTO;
 import net.mortalsilence.indiepim.server.dto.MessageAccountDTO;
 import net.mortalsilence.indiepim.server.dto.TagDTO;
 import net.mortalsilence.indiepim.server.dto.UserDTO;
+import net.mortalsilence.indiepim.server.message.MessageConstants;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -25,9 +28,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -174,6 +175,44 @@ public class CommandController {
 
         int imported = newCalendar.getEvents().size();
         return "<h3>Import successful</h3><p>Imported " + imported + " events.";
+    }
+
+    @RequestMapping(value="uploadAttachment", consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object uploadAttachment(@RequestParam("file") CommonsMultipartFile attachment,
+                                   @RequestParam("messageId") Long messageId) {
+
+        if(attachment.getOriginalFilename() == null)
+            throw new IllegalArgumentException("Attachment has no name!");
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            final File tmpFile = File.createTempFile(attachment.getOriginalFilename(), ".tmp");
+            os = new FileOutputStream(tmpFile);
+            is = attachment.getInputStream();
+            IOUtils.copy(is, os);
+            final AttachmentPO attachmentPO = new AttachmentPO();
+            final UserPO user = userDAO.getUser(ActionUtils.getUserId());
+            final MessagePO msg = messageDAO.getMessageByIdAndUser(messageId, user.getId());
+            if(msg == null)
+                throw new IllegalArgumentException("Message with id " + messageId + " not found.");
+            attachmentPO.setUser(user);
+            attachmentPO.setDisposition(MessageConstants.DISPOSITION_ATTACHMENT);
+            attachmentPO.setFilename(attachment.getOriginalFilename());
+            attachmentPO.setMimeType(attachment.getContentType());
+            attachmentPO.setMessage(msg);
+            attachmentPO.setTempFilename(tmpFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(is != null) {
+                try { is.close();} catch(IOException ioe) {};
+            }
+            if(os != null) {
+                try {os.close();} catch(IOException ioe) {};
+            }
+        }
+        return "{\"result\":\"OK\"}";
     }
 
 
