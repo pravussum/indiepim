@@ -64,35 +64,32 @@ public class MessageUpdateService implements MessageConstants {
 				final Iterator<MessageTagLineageMappingPO> it = msg.getMsgTagLineageMappings().iterator(); 
 
 				while(it.hasNext()) {
-					final MessageTagLineageMappingPO mapping = it.next();
-                    final String path = connectionUtils.getFolderPathFromTagLineage(separator, mapping.getTagLineage());
-					folder = store.getFolder(path);
-					if(!folder.exists()) /* Fix for [Google Mail] folder issue */
-						continue;
-					folder.open(Folder.READ_WRITE);
-                    final Long msgUid = mapping.getMsgUid();
-                    final Message imapMsg = messageUtils.getMsgByUID(folder, msgUid);
-					if(imapMsg == null) {
-						logger.error("updateImapMessages(): Msg with uid "+ msgUid +" not found on server. Account " + account.getId() + ", Folder " + folder.getFullName());
-					} else {
-						callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, mapping);
-					}
-					folder.close(expunge);
-				}
+                    try {
+                        final MessageTagLineageMappingPO mapping = it.next();
+                        final String path = connectionUtils.getFolderPathFromTagLineage(separator, mapping.getTagLineage());
+                        folder = store.getFolder(path);
+                        if(!folder.exists()) /* Fix for [Google Mail] folder issue */
+                            continue;
+                        folder.open(Folder.READ_WRITE);
+                        final Long msgUid = mapping.getMsgUid();
+                        final Message imapMsg = messageUtils.getMsgByUID(folder, msgUid);
+                        if(imapMsg == null) {
+                            logger.error("updateImapMessages(): Msg with uid "+ msgUid +" not found on server. Account " + account.getId() + ", Folder " + folder.getFullName());
+                        } else {
+                            callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, mapping);
+                        }
+                        folder.close(expunge);
+                    } finally {
+                        if(folder != null && folder.isOpen())
+                            folder.close(expunge);
+                    }
+                }
 			}
 			return resultList;
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
-			if(folder != null && folder.isOpen()) {
-				try {
-					folder.close(false);
-				} catch (MessagingException e) {
-					e.printStackTrace();
-					/* Ignore */
-				}
-			}
 			if(store != null) {
 				try {
 					store.close();

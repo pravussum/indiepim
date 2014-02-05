@@ -44,8 +44,8 @@ public class SendService implements MessageConstants {
 		final Session outgoingSession = connectionUtils.getSession(account, false);
         final Session incomingSession = connectionUtils.getSession(account, true);
 		final Transport transport = connectionUtils.getTransport(account, outgoingSession, protocol);
-        final Store store = connectionUtils.connectToStore(account, incomingSession);
-
+        Store store = connectionUtils.connectToStore(account, incomingSession);
+        Folder folder = null;
 		MimeMessage message = new MimeMessage(outgoingSession);
 		try {
 			message.setSentDate(Calendar.getInstance().getTime());
@@ -80,7 +80,7 @@ public class SendService implements MessageConstants {
 			transport.sendMessage(message, message.getAllRecipients());
 
             final String sentFolderPath = connectionUtils.getSentFolderPath(account, store);
-            final Folder folder = store.getFolder(sentFolderPath);
+            folder = store.getFolder(sentFolderPath);
             if(!folder.exists()) {
                 final boolean createSuccessful = folder.create(Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES);
                 if(!createSuccessful) {
@@ -94,6 +94,7 @@ public class SendService implements MessageConstants {
             folder.appendMessages(new Message[] {message});
 
             store.close();
+            store = null;
 			
 		} catch (AddressException e) {
 			e.printStackTrace();
@@ -102,7 +103,24 @@ public class SendService implements MessageConstants {
 			e.printStackTrace();
 			throw new RuntimeException("Error sending message (" + e.getMessage() + ")");
 		} finally {
-			if(transport != null) {
+
+            if(folder != null && folder.isOpen()) {
+                try {
+                    folder.close(false);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+					/* Ignore */
+                }
+            }
+            if(store != null) {
+                try {
+                    store.close();
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+					/* Ignore */
+                }
+            }
+            if(transport != null) {
 				try {
 					transport.close();
 				} catch (MessagingException e) {
