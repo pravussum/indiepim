@@ -66,7 +66,7 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                 messageUpdateService.updateImapMessages(userId, messages, accountId, expunge, new ImapMsgOperationCallback() {
                     // TODO performance tuning
                     @Override
-                    public void processMessage(IMAPFolder folder, Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO tagLineageMapping) throws MessagingException {
+                    public MessagePO processMessage(IMAPFolder folder, Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO tagLineageMapping) throws MessagingException {
                         boolean finalDeleteFromTrash = false;
                         try {
                             if (account.getDeleteMode().equals(MessageConstants.MESSAGE_DELETE_MODE.MOVE_2_TRASH)) {
@@ -116,6 +116,7 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                             logger.error("Deletion of message with UID " + messageUID + " from folder " + folder.getFullName() + " failed.", e);
                             result.put(indieMessage.getId(), new DeleteResultInfo(false, e.getMessage()));
                         }
+                        return indieMessage;
                     }
                 });
 

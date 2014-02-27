@@ -2,7 +2,6 @@
 table {
     width: "100%";
     table-layout: fixed;
-    font-size: 80%;
     border: 0;
     border-collapse: collapse;
 }
@@ -145,5 +144,10 @@ tr.mailListRow:hover {
 
 .mailTablePanel {
     position: absolute;
-    margin-top: 30px;
+    margin-top: 40px;
+}
+
+.mailSearchPanel .stylishButton, .mailNavigationPanel .stylishButton {
+    height: 24px;
+    line-height: 22px;
 }

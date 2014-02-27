@@ -1,1 +1,6 @@
-<div id="calendar"></div>
+<div id="calendar" data-bind="fullCalendar: calendarViewModel"></div>
+<div class="eventEditorDialog" title="Edit event details" data-bind="with: currentEvent">
+    <p><label class="formLabel" for="eventTitle">Title:</label><input id="eventTitle" type="text" data-bind="value: title"/></p>
+    <button class="stylishButton"><i class="fa fa-times mr5"/>Cancel</button>
+    <button class="stylishButton importantButton" data-bind="click: $root.saveEvent"><i class="fa fa-floppy-o mr5"/>Save</button>
+</div>

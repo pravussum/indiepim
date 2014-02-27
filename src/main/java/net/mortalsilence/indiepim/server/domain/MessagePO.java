@@ -103,7 +103,11 @@ public class MessagePO implements Serializable, PersistentObject {
 			@JoinColumn(name="email_address_id", referencedColumnName="ID")
 		)
 	private List<EmailAddressPO> emailAddresses = new LinkedList<EmailAddressPO>();	
-	
+
+    @ManyToOne(optional=true)
+    @JoinColumn(name="related_msg_id", referencedColumnName = "id")
+    private MessagePO relatedMessage;
+
 	@OneToMany( mappedBy="message", cascade=javax.persistence.CascadeType.ALL, targetEntity=AttachmentPO.class)
 	private List<AttachmentPO> attachments = new LinkedList<AttachmentPO>();
 	
@@ -320,7 +324,12 @@ public class MessagePO implements Serializable, PersistentObject {
 			Set<MessageTagLineageMappingPO> msgTagLineageMappings) {
 		this.msgTagLineageMappings = msgTagLineageMappings;
 	}
-	
-	
-	
+
+    public MessagePO getRelatedMessage() {
+        return relatedMessage;
+    }
+
+    public void setRelatedMessage(MessagePO relatedMessage) {
+        this.relatedMessage = relatedMessage;
+    }
 }

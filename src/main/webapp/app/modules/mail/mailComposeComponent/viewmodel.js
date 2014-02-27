@@ -1,5 +1,12 @@
 define([], function () {
 
+    var MessageAccount = function(data) {
+        var self = this;
+        self.id = data.id;
+        self.email = data.email;
+        self.accountName = data.accountName;
+    };
+
     var ViewModel = function (moduleContext) {
 
         var self = this;
@@ -8,6 +15,8 @@ define([], function () {
         self.to = ko.observableArray();
         self.cc = ko.observableArray();
         self.bcc = ko.observableArray();
+        self.messageAccounts = ko.observableArray();
+        self.selectedAccount = ko.observable();
 
         self.select2options = {
             width: "100%",
@@ -63,7 +72,7 @@ define([], function () {
 
         self.sendMessage = function() {
             var requestData = {
-                accountId: 1,
+                accountId: self.selectedAccount().id,
                 subject: self.subject(),
                 to: $.map(self.to(), function(element) {return element.emailAddress;}),
                 cc: $.map(self.cc(), function(element) {return element.emailAddress;}),
@@ -90,23 +99,64 @@ define([], function () {
             });
         }
 
-        self.initialize = function(msgId, replyMode) {
-            if(msgId) {
-                $.getJSON(
-                    "command/getMessage/" + msgId,
-                    function(origMessage) {
-                        if(origMessage.error) {
-                            toastr.error(origMessage.error);
-                            return;
-                        }
+        self.initialize = function(origMessageId, replyMode) {
+            // init message account selectbox
+            $.getJSON("command/getMessageAccounts", function(data) {
+                    if(typeof data.error != "undefined") {
+                        toastr.error("Receiving the account list failed. See server log for details.");
+                    } else {
+                        var mappedAccounts = $.map(data.accounts, function(item) {return new MessageAccount(item)});
+                        self.messageAccounts(mappedAccounts);
+                        self.selectedAccount(self.messageAccounts()[0]);
+                    }
+                }
+            ).fail(function(xhr, textStatus, errorThrown) {
+                    if(xhr.status == 403)
+                        window.location.href = contextPath + "/login"; // access denied = not logged in --> redirect to login
+                    else
+                        toastr.error(JSON.stringify(textStatus));
+            });
+
+            if(!origMessageId) {
+                // clear
+                self.to.removeAll();
+                self.subject("");
+                $("#composeeditor").val("");
+            }
+            self.cc.removeAll();
+            self.bcc.removeAll();
+
+            $.getJSON(
+                "command/createDraft" + (origMessageId ? ("?origMessageId=" + origMessageId) : ""),
+                function(draft) {
+
+                    if(draft.error) {
+                        toastr.error(draft.error);
+                        return;
+                    }
+                    if(origMessageId) {
                         var prefix;
-                        if(replyMode === "REPLY") {
+                        var origMessage = draft.origMessage;
+                        if(replyMode === "REPLY" || replyMode === "REPLYALL") {
                             prefix = "Re: ";
                             self.to.removeAll();
                             self.to.push({
                                 id: origMessage.senderEmail,
                                 emailAddress: origMessage.senderEmail
                             });
+                            if(replyMode === "REPLYALL") {
+
+                                for(var i=0;i<origMessage.receiver.length; i++) {
+                                    // exclude myself
+                                    var rec = origMessage.receiver[i];
+                                    if(rec.contains("<") && rec.contains(">"))
+                                        rec = (rec.substring(rec.indexOf("<")+1, rec.indexOf(">")));
+                                    self.cc.push({
+                                        id: rec,
+                                        emailAddress: rec
+                                    });
+                                }
+                            }
                         } else {
                             prefix = "Fwd: ";
                             self.to.removeAll();
@@ -126,26 +176,33 @@ define([], function () {
                         } else {
                             content = "The message contained no valid content.";
                         }
-
-
-
                     }
-                ).fail(function(xhr, textStatus, errorThrown) {
-                        if(xhr.status == 403)
-                            window.location.href = contextPath + "/login";
-                        else
-                            toastr.error(JSON.stringify(textStatus));
-                    }
-                );
-
-            } else {
-                // clear
-                self.to.removeAll();
-                self.subject("");
-                $("#composeeditor").val("");
-            }
-            self.cc.removeAll();
-            self.bcc.removeAll();
+                    console.log("draftid:" + draft.id);
+                    $("#fileupload").fileupload({
+                        url: "/command/uploadAttachment?messageId=" + draft.id,
+                        dropZone: $("#attachmentPanel"),
+                        dataType: 'json',
+                        done: function (e, data) {
+                            $.each(data.result.files, function (index, file) {
+                                $('<p/>').text(file.name).appendTo($("#attachmentPanel"));
+                            });
+                        },
+                        progressall: function (e, data) {
+                            var progress = parseInt(data.loaded / data.total * 100, 10);
+                            $('#attachmentoverallprogress').css(
+                                'width',
+                                progress + '%'
+                            );
+                        }
+                    });
+                }
+            ).fail(function(xhr, textStatus, errorThrown) {
+                    if(xhr.status == 403)
+                        window.location.href = contextPath + "/login";
+                    else
+                        toastr.error(JSON.stringify(textStatus));
+                }
+            );
         };
     };
 

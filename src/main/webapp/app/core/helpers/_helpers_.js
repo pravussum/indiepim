@@ -10,9 +10,9 @@ define(function(require) {
 	**/
 	return {
 		Localizer : require("./localizer"),
-		Logger : require("./logger"),
 		Mediator : require("./mediator"),
-		Router : require("./router"),
+//        Logger : require("./logger"),
+        Router : require("./router"),
 		Settings : require("./settings"),
 		Styler : require("./styler")
 	};

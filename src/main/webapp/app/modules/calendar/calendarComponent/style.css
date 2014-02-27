@@ -1,2 +1,5 @@
 /*Add css rules for the panel here*/
+.eventEditorDialog {
+    display: none;
+}
 

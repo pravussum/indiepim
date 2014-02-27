@@ -59,11 +59,12 @@ public class MarkMessageAsReadHandler implements Command<MarkMessagesAsRead, Mes
                 final long start = Calendar.getInstance().getTimeInMillis();
                 messageUpdateService.updateImapMessages(userId, messages, accountId, false, new ImapMsgOperationCallback() {
                     @Override
-                    public void processMessage(final IMAPFolder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage, MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException {
+                    public MessagePO processMessage(final IMAPFolder folder, final Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException {
                         imapMessage.setFlag(Flags.Flag.SEEN, action.isRead());
                         indieMessage.setRead(action.isRead());
-                        genericDAO.update(indieMessage);
+                        indieMessage = genericDAO.update(indieMessage);
                         resultList.add(messageUtils.mapMessagePOtoMessageDTO(indieMessage));
+                        return indieMessage;
                     }
                 });
                 if(logger.isDebugEnabled()) {

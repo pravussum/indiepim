@@ -5,13 +5,11 @@ import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.domain.*;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
-import net.mortalsilence.indiepim.server.utils.StringHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.activation.UnsupportedDataTypeException;
 import javax.inject.Inject;
 import javax.mail.*;
 import javax.mail.internet.ContentType;
@@ -40,13 +38,13 @@ public class PersistMessageHandler implements IncomingMessageHandler, MessageCon
 	}
 
 	@Override
-	public void handleMessage(final Message message,
-                              MessagePO msg,
-                              final Long msgUid,
-                              final MessageAccountPO account,
-                              final Folder folder,
-                              final TagLineagePO tagLineage,
-                              Session session, UserPO user) {
+	public MessagePO handleMessage(final Message message,
+                                   MessagePO msg,
+                                   final Long msgUid,
+                                   final MessageAccountPO account,
+                                   final Folder folder,
+                                   final TagLineagePO tagLineage,
+                                   Session session, UserPO user) {
 
 		msg.setUser(user);
 		msg.setMessageAccount(account);
@@ -69,7 +67,7 @@ public class PersistMessageHandler implements IncomingMessageHandler, MessageCon
 			handleAddresses(message, msg);
 
 			/* PERSIST */
-            genericDAO.updateOrPersist(msg);
+            msg = genericDAO.updateOrPersist(msg);
 
             messageDAO.addTagLineage(msg, tagLineage, msgUid);
 
@@ -79,7 +77,7 @@ public class PersistMessageHandler implements IncomingMessageHandler, MessageCon
 			if(e.getMessage().equals("Unable to load BODYSTRUCTURE") && message instanceof MimeMessage) {
 				try {
 					MimeMessage copy = new MimeMessage((MimeMessage)message);
-					handleMessage(copy, msg, msgUid, account, folder, tagLineage, session, user);
+					msg = handleMessage(copy, msg, msgUid, account, folder, tagLineage, session, user);
 				} catch (MessagingException e1) {
 					e.printStackTrace();
 					throw new RuntimeException(e);
@@ -90,6 +88,7 @@ public class PersistMessageHandler implements IncomingMessageHandler, MessageCon
 			}
 			
 		}
+        return msg;
 	}
 
 	private void handleFlags(final Message message, MessagePO msg) throws MessagingException {

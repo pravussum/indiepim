@@ -60,7 +60,7 @@ public class MessageUpdateService implements MessageConstants {
 		Folder folder = null;
 		try {
 			separator = store.getDefaultFolder().getSeparator();
-			for(final MessagePO msg : messages) {
+			for(MessagePO msg : messages) {
 				final Iterator<MessageTagLineageMappingPO> it = msg.getMsgTagLineageMappings().iterator(); 
 
 				while(it.hasNext()) {
@@ -75,7 +75,7 @@ public class MessageUpdateService implements MessageConstants {
 					if(imapMsg == null) {
 						logger.error("updateImapMessages(): Msg with uid "+ msgUid +" not found on server. Account " + account.getId() + ", Folder " + folder.getFullName());
 					} else {
-						callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, mapping);
+						msg = callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, mapping);
 					}
 					folder.close(expunge);
 				}
@@ -122,7 +122,7 @@ public class MessageUpdateService implements MessageConstants {
         Folder folder = null;
         try {
             final char separator = store.getDefaultFolder().getSeparator();
-            final MessagePO msg = msgTagLineageMapping.getMessage();
+            MessagePO msg = msgTagLineageMapping.getMessage();
 
             final String path = connectionUtils.getFolderPathFromTagLineage(separator, msgTagLineageMapping.getTagLineage());
             folder = store.getFolder(path);
@@ -138,7 +138,7 @@ public class MessageUpdateService implements MessageConstants {
             if(imapMsg == null) {
                 logger.error("updateImapMessages(): Msg with uid "+ msgUid +" not found on server. Account " + account.getId() + ", Folder " + folder.getFullName());
             } else {
-                callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, msgTagLineageMapping);
+                msg = callback.processMessage((IMAPFolder)folder, imapMsg, msgUid, msg, msgTagLineageMapping);
             }
             folder.close(expunge);
             return;

@@ -1,8 +1,16 @@
 <div id="wrapper">
-    <div class="row"><label for="toBox">To:</label><input id="toBox" data-bind="select2: to, select2options: select2options" /></div>
-    <div class="row"><label for="ccBox">Cc:</label><input id="ccBox" data-bind="select2: cc,  select2options: select2options"></div>
-    <div class="row"><label for="bccBox">Bcc:</label><input  id="bccBox" data-bind="select2: bcc, select2options: select2options"></div>
-    <div class="row"><label for="subjectBox">Subject: </label><input type="text" id="subjectBox" data-bind="value: subject"/></div>
+    <div class="row"><label class="formLabel" for="accountOptions">From:</label>
+        <select id="accountOptions" data-bind="options: messageAccounts, optionsText: 'accountName', value: selectedAccount" />
+    </div>
+    <div class="row"><label class="formLabel" for="toBox">To:</label><input id="toBox" data-bind="select2: to, select2options: select2options" /></div>
+    <div class="row"><label class="formLabel" for="ccBox">Cc:</label><input id="ccBox" data-bind="select2: cc,  select2options: select2options"></div>
+    <div class="row"><label class="formLabel" for="bccBox">Bcc:</label><input  id="bccBox" data-bind="select2: bcc, select2options: select2options"></div>
+    <div class="row"><label class="formLabel" for="subjectBox">Subject: </label><input type="text" id="subjectBox" data-bind="value: subject"/></div>
     <textarea class="composeeditor" id="composeeditor" />
     <button class="stylishButton importantButton" id="sendButton" data-bind="click: sendMessage"><i class="fa fa-arrow-right"/>Send</button>
+</div>
+<div id="attachmentPanel">
+    <h3>Attachments</h3>
+    <input id="fileupload" type="file" name="files[]" multiple>
+    <div id="attachmentoverallprogress" style="width:0%"></div>
 </div>

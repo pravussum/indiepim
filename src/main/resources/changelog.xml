@@ -1115,4 +1115,78 @@
             <column name="tempfilename" type="varchar(300)" />
         </addColumn>
     </changeSet>
+    <changeSet id="1319026263161-136" author="AmIEvil">
+        <addColumn tableName="message">
+            <column name="related_msg_id" type="INT UNSIGNED" />
+        </addColumn>
+        <addForeignKeyConstraint
+            baseColumnNames="related_msg_id"
+            baseTableName="message"
+            constraintName="fk_msg_msg"
+            deferrable="false"
+            initiallyDeferred="false"
+            onDelete="SET NULL"
+            onUpdate="NO ACTION"
+            referencedColumnNames="id"
+            referencedTableName="message"
+            referencesUniqueColumn="true"/>
+        <createIndex indexName="idx_msg_msg" tableName="message">
+            <column name="related_msg_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-137" author="AmIEvil">
+        <addColumn tableName="calendar">
+            <column name="syncUrl" type="varchar(1000)" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="1319026263161-138" author="AmIEvil">
+        <addColumn tableName="calendar">
+            <column name="syncUserName" type="varchar(200)" />
+            <column name="syncPassword" type="varchar(60)" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="1319026263161-139" author="AmIEvil">
+        <modifyDataType tableName="calendar" columnName="syncPassword" newDataType="varchar(200)" />
+        <modifyDataType tableName="msg_account" columnName="password" newDataType="varchar(200)" />
+    </changeSet>
+    <changeSet id="1319026263161-140" author="AmIEvil">
+        <addColumn tableName="calendar">
+            <column name="syncCalendarName" type="varchar(200)" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="1319026263161-141" author="AmIEvil">
+        <addColumn tableName="event">
+            <column name="orig_event_id" type="INT UNSIGNED" />
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="event" baseColumnNames="orig_event_id" constraintName="fk_event_2_event"
+                                 referencedTableName="event"
+                                 referencedColumnNames="id" />
+    </changeSet>
+    <changeSet id="1319026263161-142" author="AmIEvil">
+        <dropUniqueConstraint tableName="event" uniqueColumns="uid" constraintName="uid"/>
+    </changeSet>
+    <changeSet id="1319026263161-143" author="AmIEvil">
+        <dropForeignKeyConstraint baseTableName="event" constraintName="fk_event_2_recurrence" />
+        <addForeignKeyConstraint baseTableName="event" baseColumnNames="recurrence_id"
+                                 constraintName="fk_event_2_recurrence"
+                                 referencedTableName="recurrence" referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+    <changeSet id="1319026263161-144" author="AmIEvil">
+        <addColumn tableName="recurrence">
+            <column name="user_id" type="INT UNSIGNED" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="1319026263161-145" author="AmIEvil">
+        <addNotNullConstraint tableName="recurrence" columnName="user_id" columnDataType="INT UNSIGNED"/>
+    </changeSet>
+    <changeSet id="1319026263161-146" author="AmIEvil">
+        <addColumn tableName="calendar">
+            <column name="syncPrincipalPath" type="varchar(200)" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="1319026263161-147" author="AmIEvil">
+        <dropNotNullConstraint tableName="event" columnName="uid" columnDataType="VARCHAR(50)"/>
+    </changeSet>
+    
 </databaseChangeLog>

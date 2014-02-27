@@ -13,6 +13,7 @@ define([], function () {
         self.tagHierarchy = new ko.ui.Tree({
             nodes : data.tagHierarchy.rootElement.nodes
         });
+
         self.url = ko.computed(function(){
             return '#maillist/account/' + self.id();
         });
@@ -36,17 +37,34 @@ define([], function () {
         }
     };
 
+    var Calendar = function(data) {
+        var self = this;
+        self.id = data.id;
+        self.name = data.name;
+        self.defaultCalendar = data.defaultCalendar;
+        self.color = data.color;
+        self.syncUrl = data.syncUrl; // TODO only show refresh button when syncUrl is set
+        self.calendarSettings = function() {
+            window.location.href = "#calendarsettings/" + self.id;
+        }
+    }
+
     var ViewModel = function (moduleContext) {
 
         var self = this;
 
         self.messageAccounts = ko.observableArray();
+        self.calendars = ko.observableArray();
         self.users = ko.observableArray();
         self.selectedAccount = ko.observable();
+        self.selectedCalendar = ko.observable();
 
         self.selectAccount = function(account) {
             self.selectedAccount(account);
         };
+        self.selectCalendar = function(calendar) {
+            self.selectedCalendar(calendar);
+        }
 
         var initTree = function() {
             $.getJSON("command/getMessageAccounts",
@@ -66,6 +84,26 @@ define([], function () {
             });
         };
         initTree();
+
+        var initCalendarList = function() {
+            $.getJSON("command/getCalendars",
+                function(data) {
+                    if(typeof data.error != "undefined") {
+                        toastr.error("Receiving the calendars list failed. See server log for details.");
+                    } else {
+                        self.calendars($.map(data, function(item) {return new Calendar(item)}));
+                    }
+                }
+            ).fail(function(xhr, textStatus, errorThrown) {
+                    if(xhr.status == 403){
+                        window.location.href = contextPath + "/login"; // access denied = not logged in --> redirect to login
+                    }
+                    else
+                        toastr.error(JSON.stringify(textStatus));
+                });
+
+        }
+        initCalendarList();
 
         // init user list 4 chat
         var initUsers = function() {

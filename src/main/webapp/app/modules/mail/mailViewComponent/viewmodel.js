@@ -143,6 +143,10 @@ define([], function () {
             window.location.href="#mailcompose/reply/" + self.messageId();
         };
 
+        self.replyall = function() {
+            window.location.href="#mailcompose/replyall/" + self.messageId();
+        }
+
         self.forward = function() {
             window.location.href="#mailcompose/forward/" + self.messageId();
         };

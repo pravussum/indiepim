@@ -1,9 +1,13 @@
-<h1>Settings</h1>
-<h3>Import ICS file</h3>
-<form id="uploadform" action="command/importics" method="post" enctype="multipart/form-data">
-    <p>Please choose the .ics Calendar file:</p>
-    <input id="file" type="file" name="file" /><br/>
-    <input id="submit" type="submit" value="Upload File"/>
-</form>
+<h1>Calendar Settings <span data-bind="text: name, visible: name" /></h1>
 
-<div id="uploadresult"></div>
+<p><label class="formLabel" for="calendarName">Name:</label><input id="calendarName" type="text" data-bind="value: name"/></p>
+<p><label class="formLabel" for="calendarIsDefault">Default calendar:</label><input id="calendarIsDefault" type="checkbox" data-bind="checked: defaultCalendar"/></p>
+<p><label class="formLabel" for="calendarColor">Color:</label><span id="calendarColor" data-bind="style:{backgroundColor:color}, text:color"/></p>
+<p><label class="formLabel" for="calendarSyncURL">External CalDAV URL:</label><input id="calendarSyncURL" type="text" data-bind="value: syncUrl"/></p>
+<p><label class="formLabel" for="calendarSyncPrincipalPath">External CalDAV principal path:</label><input id="calendarSyncPrincipalPath" type="text" data-bind="value: syncPrincipalPath"/></p>
+<p><label class="formLabel" for="calendarSyncUser">External CalDAV user name:</label><input id="calendarSyncUser" type="text" data-bind="value: userName"/></p>
+<p><label class="formLabel" for="calendarSyncPassword">External CalDAV password:</label><input id="calendarSyncPassword" type="password" data-bind="value: password"/></p>
+
+<button class="stylishButton attentionButton" data-bind="click: removeCalendar"><i class="fa fa-trash-o mr5"/>Delete</button>
+<button class="stylishButton" data-bind="click: syncCalendar"><i class="fa fa-refresh mr5"/>Synchronize now</button>
+<button class="stylishButton importantButton" data-bind="click: saveCalendar"><i class="fa fa-floppy-o mr5"/>Save</button>

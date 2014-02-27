@@ -5,8 +5,9 @@ html, body, #page-content {
 }
 
 body {
-        margin : 0;
-        font-family: Verdana,Arial,sans-serif;
+    margin : 0;
+    font-family: Verdana,Arial,sans-serif;
+    font-size: .85em;
 }
 
 .ui-layout-center {
@@ -25,9 +26,22 @@ body {
     background-color: #35499e;
 }
 
-input[type=text] {
+input[type=text], input[type=number], input[type=email], input[type=password], select {
 	border:1px solid #AAAAAA;
+    width: 250px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
+
+.formLabel {
+    display: block;
+    float: left;
+    width: 200px;
+    font-size: 0.875em;
+    color: #aaaaaa;
+}
+
 
 input:focus {
 	border: 1px solid #5897FB;
@@ -68,7 +82,6 @@ input:focus {
 	display:inline-block;
 	color:#555555;
 	font-family:Arial;
-	font-size:15px;
 	font-weight:bold;
 	font-style:normal;
 	height:30px;
@@ -94,13 +107,13 @@ input:focus {
 }
 
 .attentionButton {
-    background-color: #D20000;
-    border:1px solid #C10000;
+    background-color: rgb(164,60,55);
+    border:1px solid rgb(150, 63, 58);
     color:#ededed;
 }
 
 .attentionButton:hover {
-    background-color: #A00000;
+    background-color: rgb(125, 49, 44);
 }
 
 .attentionButton i {
@@ -132,4 +145,47 @@ input:focus {
 
 .nowrap {
     white-space: nowrap;
+}
+
+#progressbar {
+    box-sizing: border-box;
+    height: 10px;
+    top: 50%;
+    margin-left: 30%;
+    position: absolute;
+    width: 40%;
+}
+
+.mr5 {
+    margin-right: 7px;
+}
+
+.hlinetext {
+    width:100%;
+    text-align:center;
+    border-bottom: 1px solid #AAAAAA;
+    line-height:0.1em;
+    margin:10px 0;
+}
+
+.hline {
+    border-bottom: 1px solid #AAAAAA;
+    line-height:0.1em;
+    margin:10px;
+}
+
+
+.hlinetext span {
+    background:#fff;
+    padding:0 10px;
+    color: #AAAAAA;
+}
+
+.hlinetext span i {
+    line-height: 0.1em !important;
+}
+
+.formLabel {
+    font-size: 0.8em;
+    color: #666666;
 }

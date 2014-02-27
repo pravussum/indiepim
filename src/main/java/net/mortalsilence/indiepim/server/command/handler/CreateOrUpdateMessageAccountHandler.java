@@ -77,7 +77,7 @@ public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpda
         }
 
 		if(account.id != null) {
-			genericDAO.update(accountPO);
+			accountPO = genericDAO.update(accountPO);
 		} else {
 			genericDAO.persist(accountPO);
 		}

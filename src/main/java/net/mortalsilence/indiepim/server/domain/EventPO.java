@@ -20,7 +20,7 @@ public class EventPO {
     @JoinColumn(name = "calendar_id", referencedColumnName = "id")
     private CalendarPO calendar;
 
-    @Column(name = "uid", nullable = false)
+    @Column(name = "uid")
     private String uid;
 
     @Column(name = "name")
@@ -48,6 +48,10 @@ public class EventPO {
     @OneToOne
     @JoinColumn(name = "recurrence_id", referencedColumnName = "id")
     private RecurrencePO recurrence;
+
+    @OneToOne
+    @JoinColumn(name = "orig_event_id", referencedColumnName = "id")
+    private EventPO origEvent;
 
     public Long getId() {
         return id;
@@ -162,5 +166,13 @@ public class EventPO {
 
     public void setRecurrence(RecurrencePO recurrence) {
         this.recurrence = recurrence;
+    }
+
+    public EventPO getOrigEvent() {
+        return origEvent;
+    }
+
+    public void setOrigEvent(EventPO origEvent) {
+        this.origEvent = origEvent;
     }
 }

@@ -1,53 +1,73 @@
-<div id="accordion">
-	<h3><i class="fa fa-envelope"/>Mail</h3>
+<div class="accordion" id="accordion">
+	<h3><i class="fa fa-envelope mr5"/>Mail</h3>
     <div class="nav_mail_content">
 
-        <ul class="nav_mail_actions_list">
+        <ul>
             <!-- COMPOSE -->
-            <li><a href="#mailcompose"><i class="fa fa-pencil"/>New Mail</a></li>
+            <li><a href="#mailcompose"><i class="fa fa-pencil mr5"/>Compose...</a></li>
+        </ul>
+        <div class="hline" />
+        <ul>
             <!-- INTEGRATED INBOX -->
-            <li><a href="#maillist"><i class="fa fa-list-alt" />Integrated Inbox</a></li>
+            <li><a href="#maillist"><i class="fa fa-inbox mr5" />Integrated Inbox</a></li>
             <!-- ALL MAIL -->
-            <li><a href="#maillist"><i class="fa fa-list-alt" />All Messages</a></li>
+            <li><a href="#maillist"><i class="fa fa-bars mr5"/>All Messages</a></li>
             <!-- UNREAD MAIL -->
-            <li><a href="#maillist/read/false"><i class="fa fa-envelope-o" />Unread</a></li>
+            <li><a href="#maillist/read/false"><i class="fa fa-envelope mr5" />Unread</a></li>
+            <!-- STARRED -->
+            <li><a href="#maillist/starred"><i class="fa fa-star mr5"/>Starred</a></li>
         </ul>
         <!-- MAIL ACCOUNTS TREE -->
+        <div class="hline" />
         <ul class="nav_mail_account_list" data-bind="foreach: messageAccounts">
             <li>
-                <div class="nav_mail_account_list_title"><i class="fa fa-folder-o" />
+                <div class="nav_mail_account_list_title"><i class="fa fa-envelope-o mr5" />
                     <a class="messageAccountListItem" data-bind="html: accountName, attr: {href: url}" />
-                    <span class="accountSyncButton" data-bind="click: syncAccount"><i class="fa fa-refresh"></i></span>
+                    <span class="accountSyncButton" data-bind="click: syncAccount"><i class="fa fa-refresh lightIcon"></i></span>
                 </div>
                 <div class="messageAccountTree" data-bind="tree: tagHierarchy"></div>
             </li>
         </ul>
+        <div class="hline" />
         <!-- MANAGE ACCOUNTS -->
         <ul class="nav_mail_actions_list">
-            <li><a href="#mailaccounts"><i class="fa fa-gears" />Manage Accounts</a></li>
+            <li><a href="#mailaccounts"><i class="fa fa-gears mr5" />Manage Accounts...</a></li>
         </ul>
     </div>
 
     <!-- CHAT -->
-    <h3><i class="fa fa-group" />Chat</h3>
+    <h3><i class="fa fa-comments mr5" />Chat</h3>
     <div>
         <ul class="nav_chat_user_list" data-bind="foreach: users">
-            <li data-bind="click:$root.openChat"><i class="fa fa-male" /><a href="#" class="chatLink" data-bind="text: userName"></a></li>
+            <li data-bind="click:$root.openChat"><i class="fa fa-comment mr5" /><a href="#" class="chatLink" data-bind="text: userName"></a></li>
         </ul>
     </div>
 
     <!-- CONTACTS -->
-    <h3><i class="fa fa-group" />Contacts</h3>
+    <h3><i class="fa fa-group mr5" />Contacts</h3>
 	<div>
 		<a href="#contactlist">Contacts</a>
 	</div>
 
     <!-- CALENDAR -->
-    <h3><i class="fa fa-calendar" />Calendar</h3>
+    <h3><i class="fa fa-calendar mr5" />Calendar</h3>
 	<div>
         <ul>
-            <li><a href="#calendar">Calendar</a></li>
-            <li><a href="#calendarsettings">Settings</a></li>
+            <li><i class="fa fa-calendar-o mr5"/><a href="#calendar">Calendar</a></li>
+        </ul>
+        <div class="hline" />
+        <ul class="calendarList" data-bind="foreach: calendars">
+            <li>
+                <div class="calColorField" data-bind="style:{backgroundColor:color}"></div>
+                <span data-bind="text: name" class="calendarListItem"></span>
+                <span data-bind="click:calendarSettings" class="calendarSettingsButton"><i class="fa fa-gear lightIcon"/></span>
+            </li>
+        </ul>
+        <div class="hline" />
+        <ul>
+            <li><i class="fa fa-arrow-down mr5"/><a href="#import">Import...</a></li>
+            <li><i class="fa fa-plus mr5"/><a href="#addcalendar">Add...</a></li>
         </ul>
 	</div>
+
 </div>

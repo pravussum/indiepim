@@ -234,6 +234,29 @@
             <artifactId>joda-time</artifactId>
             <version>2.3</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.ical</groupId>-->
+            <!--<artifactId>google-rfc-2445</artifactId>-->
+            <!--<version>1.0</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/lib/rfc2445-4Mar2011.jar</systemPath>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jadira.usertype</groupId>
+            <artifactId>usertype.jodatime</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j-connector</artifactId>
+            <version>0.9.5-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
 		<finalName>IndiePIM2</finalName>

@@ -11,24 +11,17 @@ define(['Boiler', 'text!./view.html', './viewmodel', 'path!./style.css', 'i18n!.
                 vm = new ViewModel(moduleContext);
 
 				ko.applyBindings(vm, panel.getDomElement());
-//                $("#composeeditor").jqte({
-//                    sub: false,
-//                    sup: false,
-//                    placeholder: "Compose new message..."
-//                });
+
                 $("#composeeditor").ckeditor({allowedContent: true});
 
-                $('#typeheadtest').select2({width: "500px"  , tags:["red", "green", "blue"], placeholder:"email adress",
-                    id: function(object) {
-                        return object.emailAddress;
-                    }
-                });
 			}
 
 			if(params.replyid) {
                 vm.initialize(params.replyid, "REPLY");
             } else if(params.forwardid) {
                 vm.initialize(params.forwardid, "FORWARD");
+            } else if(params.replyallid) {
+                vm.initialize(params.replyallid, "REPLYALL")
             } else {
                 vm.initialize();
             }

@@ -2,32 +2,51 @@
 <ul data-bind="foreach: messageAccounts, visible: messageAccounts().length > 0 ">
     <li><span class="messageAccountListItem" data-bind="text: accountName, click: $parent.selectAccount"></span></li>
 </ul>
-<button data-bind="click: addAccount">Add...</button>
+<button class="stylishButton" data-bind="click: addAccount">Add...</button>
 <div data-bind="with:selectedAccount">
-    <a href="#" data-bind="click: $root.removeAccount">Remove account</a>
-    <a href="#" data-bind="click: $root.saveAccount">Save account</a>
-    <p>Account name: <input data-bind="value: accountName" /></p>
-    <p>Tag: <input data-bind="value: tag" /></p>
-    <p>Email address: <input data-bind="value: email" /></p>
-    <p>User name: <input data-bind="value: userName" /></p>
-    <p>Password: <input type="password" data-bind="value: password" /></p>
-    <p>Host: <input data-bind="value: host" /></p>
-    <p>Port: <input data-bind="value: port" /></p>
-    <p>Authentication method: <select data-bind="value: authentication, options: $root.availableAuthentications, optionsText: 'key', optionsValue: 'key'" /></p>
-    <p>Protocol: <select data-bind="value: protocol,options: $root.availableProtocols, optionsText: 'key', optionsValue: 'key'" /></p>
-    <p>Encryption: <select data-bind="value: encryption, options: $root.availableEncryptions, optionsText: 'key', optionsValue: 'key'" /></p>
-    <p>Host (sending): <input data-bind="value: outgoingHost" /></p>
-    <p>Port (sending): <input data-bind="value: outgoingPort" /></p>
-    <p>Authentication method (sending): <select data-bind="value: outgoingAuthentication,options: $root.availableAuthentications, optionsText: 'key', optionsValue: 'key'" /></p>
-    <!-- TODO: outgoing password !!! -->
-    <p>Encryption (sending): <select data-bind="value: outgoingEncryption,options: $root.availableEncryptions, optionsText: 'key', optionsValue: 'key'" /></p>
-    <p>Account sync update method: <select data-bind="value: syncMethod,options: $root.availableSyncUpdateMethods, optionsText: 'key', optionsValue: 'value'" /></p>
-    <p>Account sync interval (minutes): <input data-bind="value: syncInterval"/></p>
-    <p>Trust invalid SSL certificates: <input type="checkbox" data-bind="checked: trustInvalidSSLCertificates"/></p>
-    <!--<p data-bind="text: moment(lastSyncRun).format('LL')"></p>-->
-    <p>Last synchronized <span data-bind="text: moment(lastSyncRun()).fromNow()" /></p>
-    <div id="syncInfoPanel" data-bind="visible: syncActive">
-        <p>Synchronizing...</p><span data-bind="text: syncProgress" /><p>
-        <div id="syncProgressBar" data-bind="progressBind: syncProgressValue"> </div>
+    <div id="msgacc_tabs">
+        <ul>
+            <li><a href="#msgacc_tab1">General</a></li>
+            <li><a href="#msgacc_tab2">Connection</a></li>
+            <li><a href="#msgacc_tab3">Outgoing</a></li>
+            <li><a href="#msgacc_tab4">Synchronisation</a></li>
+        </ul>
+        <div id="msgacc_tab1">
+            <p><label class="formLabel" for="accountName">Account name:</label><input type="text" name="accountName" data-bind="value: accountName" /></p>
+            <p><label class="formLabel" for="accountTag">Tag:</label><input type="text" name="accountTag" data-bind="value: tag" /></p>
+            <p><label class="formLabel" for="accountEmail">Email address:</label><input type="email" name ="accountEmail" data-bind="value: email" /></p>
+
+        </div>
+        <div id="msgacc_tab2">
+            <p><label class="formLabel" for="accountUserName">User name:</label><input type="text" name="accountUserName" data-bind="value: userName" /></p>
+            <p><label class="formLabel" for="accountPassword">Password:</label><input type="text" name="accountPassword" type="password" data-bind="value: password" /></p>
+            <p><label class="formLabel" for="accountHost">Host:</label><input type="text" name="accountHost" data-bind="value: host" /></p>
+            <p><label class="formLabel" for="accountPort">Port:</label><input type="number" name="accountPort" data-bind="value: port" /></p>
+            <p><label class="formLabel" for="accountAuthMethod">Authentication method:</label><select name="accountAuthMethod" data-bind="value: authentication, options: $root.availableAuthentications, optionsText: 'key', optionsValue: 'key'" /></p>
+            <p><label class="formLabel" for="accountProtocol">Protocol:</label><select name="accountProtocol" data-bind="value: protocol,options: $root.availableProtocols, optionsText: 'key', optionsValue: 'key'" /></p>
+            <p><label class="formLabel" for="accountEncryption">Encryption:</label><select name="accountEncryption" data-bind="value: encryption, options: $root.availableEncryptions, optionsText: 'key', optionsValue: 'key'" /></p>
+            <p><label class="formLabel" for="accountTrustInvalidCerts">Trust invalid SSL certificates:</label><input name="accountTrustInvalidCerts" type="checkbox" data-bind="checked: trustInvalidSSLCertificates"/></p>
+        </div>
+        <div id="msgacc_tab3">
+            <p><label class="formLabel" for="outgoingHost">Host (sending):</label><input type="text" name="outgoingHost" data-bind="value: outgoingHost" /></p>
+            <p><label class="formLabel" for="outgoingPort">Port (sending):</label><input type="number" name="outgoingPort" data-bind="value: outgoingPort" /></p>
+            <p><label class="formLabel" for="outgoingAuthMethod">Authentication method (sending):</label><select name="outgoingAuthMethod" data-bind="value: outgoingAuthentication,options: $root.availableAuthentications, optionsText: 'key', optionsValue: 'key'" /></p>
+            <!-- TODO: outgoing password !!! -->
+            <p><label class="formLabel" for="outgoingEncryption">Encryption (sending): </label><select name="outgoingEncryption" data-bind="value: outgoingEncryption,options: $root.availableEncryptions, optionsText: 'key', optionsValue: 'key'" /></p>
+        </div>
+        <div id="msgacc_tab4">
+            <p><label class="formLabel" for="accountSyncMethod">Account sync update method:</label><select name="accountSyncMethod" data-bind="value: syncMethod,options: $root.availableSyncUpdateMethods, optionsText: 'key', optionsValue: 'value'" /></p>
+            <p><label class="formLabel" for="accountSyncInterval">Account sync interval (minutes):</label><input type="number" name="accountSyncInterval" data-bind="value: syncInterval"/></p>
+            <p><label class="formLabel" for="accountLastSync">Last synchronized</label><span name="accountLastSync" data-bind="text: moment(lastSyncRun()).fromNow()" /></p>
+            <div id="syncInfoPanel" data-bind="visible: syncActive">
+                <p>Synchronizing...</p><span data-bind="text: syncProgress" /><p>
+                <div id="syncProgressBar" data-bind="progressBind: syncProgressValue"> </div>
+            </div>
+            <!--<p data-bind="text: moment(lastSyncRun).format('LL')"></p>-->
+        </div>
     </div>
+
+    <button class="stylishButton attentionButton" data-bind="click: $root.removeAccount"><i class="fa fa-trash-o mr5"/>Remove account</button>
+    <button class="stylishButton importantButton" data-bind="click: $root.saveAccount"><i class="fa fa-floppy-o mr5"/>Save account</button>
+
 </div>

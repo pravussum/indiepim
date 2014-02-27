@@ -19,7 +19,6 @@ define(['Boiler', 'text!./view.html', './viewmodel', 'path!./style.css', 'i18n!.
                     }
                 );
 			}
-
 			panel.show();
 		}
 

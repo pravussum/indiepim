@@ -5,15 +5,13 @@ import net.mortalsilence.indiepim.server.dao.UserDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
-import net.mortalsilence.indiepim.server.message.synchronisation.SynchroService;
+import net.mortalsilence.indiepim.server.message.synchronisation.MsgSynchroService;
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -27,7 +25,7 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
     @Inject
     private MessageDAO messageDAO;
     @Inject
-    private SynchroService synchroService;
+    private MsgSynchroService msgSynchroService;
 
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     /**
@@ -50,10 +48,10 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
 
         if(account.getMessageAccountStats().getLastSyncRun() != null) {
             logger.info("Starting account synchronisation for user " + user.getUserName() + ", account " + account.getName() + ".");
-            synchroService.synchronize(user, account, SyncUpdateMethod.get(account.getSyncMethod()));
+            msgSynchroService.synchronize(user, account, SyncUpdateMethod.get(account.getSyncMethod()));
         } else {
             logger.info("Starting very first account synchronisation for user " + user.getUserName() + ", account " + account.getName());
-            synchroService.synchronize(user, account, SyncUpdateMethod.NONE);
+            msgSynchroService.synchronize(user, account, SyncUpdateMethod.NONE);
         }
 	}
 }

@@ -15,7 +15,6 @@
     padding-top: 2px;
     padding-bottom: 3px;
     padding-left: 3px;
-    font-size: 100%;
 }
 .select2-container {
     display: inline-block;
@@ -26,11 +25,9 @@
 
 #wrapper {
     padding: 20px;
-}
-
-label {
-    font-size: 90%;
-    color: #666666;
+    position: absolute;
+    right: 300px;
+    left: 0;
 }
 
 .row {
@@ -39,4 +36,11 @@ label {
 
 #sendButton {
     margin-top: 30px;
+}
+
+#attachmentPanel {
+    width: 280px;
+    position: absolute;
+    right: 0;
+    padding: 20px;
 }

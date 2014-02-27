@@ -2,8 +2,9 @@ define(function(require) {
 
 	var Boiler = require('Boiler'),
 		settings = require('./settings'),
-		CalendarSettings = require('./settingsComponent/component'),
-        CalendarComponent = require('./calendarComponent/component');
+		ImportComponent = require('./importComponent/component'),
+        CalendarComponent = require('./calendarComponent/component'),
+        CalendarSettings = require('./settingsComponent/component');
 
 	return {
 		initialize : function(parentContext) {
@@ -12,9 +13,12 @@ define(function(require) {
 			context.addSettings(settings);
 
 			var controller = new Boiler.UrlController($("#content"));
-			controller.addRoutes({
-				'calendar' : new CalendarComponent(context),
-                'calendarsettings' : new CalendarSettings(context)
+			var settings = new CalendarSettings(context);
+            controller.addRoutes({
+				'import' : new ImportComponent(context),
+                'calendar' : new CalendarComponent(context),
+                'calendarsettings/{calendarId}' : settings,
+                'addcalendar' : settings
 			});
 			controller.start();
 

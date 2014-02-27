@@ -14,6 +14,10 @@ public class RecurrencePO {
     @OneToOne (mappedBy = "recurrence")
     private EventPO event;
 
+    @ManyToOne(optional=false)
+    @JoinColumn(name="user_id", referencedColumnName="id")
+    private UserPO user;
+
     @Column(name = "rec_interval")
     private Integer interval;
 
@@ -178,5 +182,13 @@ public class RecurrencePO {
 
     public void setWeekStartDay(String weekStartDay) {
         this.weekStartDay = weekStartDay;
+    }
+
+    public UserPO getUser() {
+        return user;
+    }
+
+    public void setUser(UserPO user) {
+        this.user = user;
     }
 }

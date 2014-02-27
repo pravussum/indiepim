@@ -35,10 +35,12 @@ public class SendService implements MessageConstants {
 								) {
         // TODO argument validation !!!
 
-        if(to == null || to.isEmpty())
+        if((to == null || to.isEmpty()) && (cc == null || cc.isEmpty()) && (bcc == null || bcc.isEmpty()))
             throw new UserRuntimeException("No recipients given. Message is not sent.");
 
 		final MessageAccountPO account = messageDAO.getMessageAccount(userId, accountId);
+        if(account == null)
+            throw new UserRuntimeException("No message account given.");
 
 		final String protocol = connectionUtils.getOutgoingProtocol(account);
 		final Session outgoingSession = connectionUtils.getSession(account, false);
