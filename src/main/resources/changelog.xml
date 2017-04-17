@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet author="AmIEvil (generated)" id="1319026263161-1">
         <createTable tableName="address">
             <column autoIncrement="true" name="id" type="INT UNSIGNED">
@@ -43,7 +43,7 @@
             <column autoIncrement="true" name="id" type="INT UNSIGNED">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="name" type="VARCHAR(300)">
+            <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="INT UNSIGNED">
@@ -416,7 +416,7 @@
     <changeSet author="AmIEvil (generated)" id="1319026263161-57">
         <createIndex indexName="idx_tag_lineage" tableName="tag_lineage" unique="false">
             <column name="user_id"/>
-            <column name="lineage(300)"/>
+            <column name="lineage(255)"/>
         </createIndex>
     </changeSet>
     <changeSet author="AmIEvil (generated)" id="1319026263161-58">
@@ -669,20 +669,20 @@
                 <constraints nullable="true"/>
             </column>            
 		</createTable>
-		<addForeignKeyConstraint baseColumnNames="user_id" 
-								 baseTableName="user_config" 
+		<addForeignKeyConstraint baseColumnNames="user_id"
+								 baseTableName="user_config"
 								 constraintName="user_config_user"
-								 deferrable="false" 
-								 initiallyDeferred="false" 
+								 deferrable="false"
+								 initiallyDeferred="false"
 								 onDelete="NO ACTION"
                                  onUpdate="CASCADE"
-								 referencedColumnNames="id" 
-								 referencedTableName="user" 
+								 referencedColumnNames="id"
+								 referencedTableName="user"
 								 referencesUniqueColumn="false"/>
         <createIndex indexName="IDX_USER_CONFIG_KEY" tableName="user_config" unique="true">
             <column name="user_id"/>
             <column name="config_key"/>
-        </createIndex>								 
+        </createIndex>
 	</changeSet>
     <changeSet author="AmIEvil" id="1319026263161-94">
         <createTable tableName="image">
@@ -845,14 +845,14 @@
     </changeSet>
     <changeSet id="1319026263161-112" author="AmIEvil">
         <addColumn tableName="msg_account">
-            <column name="msg_account_stats_id" type="INT UNSIGNED"></column>
+            <column name="msg_account_stats_id" type="INT UNSIGNED" />
         </addColumn>
         <sql>update msg_account set msg_account_stats_id = (select id from msg_account_stats where msg_account_id = msg_account.id)</sql>
-        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="msg_account_stats_id" constraintName="fk_msg_account_2_msg_acc_stats"
-                                 referencedTableName="msg_account_stats" referencedColumnNames="id" />
         <dropForeignKeyConstraint baseTableName="msg_account_stats" constraintName="fk_msg_acc_stats_msg_acc" />
         <dropColumn tableName="msg_account_stats" columnName="msg_account_id" />
         <addNotNullConstraint tableName="msg_account" columnName="msg_account_stats_id" columnDataType="INT UNSIGNED"/>
+        <addForeignKeyConstraint baseTableName="msg_account" baseColumnNames="msg_account_stats_id" constraintName="fk_msg_account_2_msg_acc_stats"
+                                 referencedTableName="msg_account_stats" referencedColumnNames="id" />
     </changeSet>
     <changeSet id="1319026263161-113" author="AmIEvil">
         <createTable tableName="calendar">

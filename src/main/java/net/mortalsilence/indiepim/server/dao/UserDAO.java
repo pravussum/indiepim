@@ -2,7 +2,6 @@ package net.mortalsilence.indiepim.server.dao;
 
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;

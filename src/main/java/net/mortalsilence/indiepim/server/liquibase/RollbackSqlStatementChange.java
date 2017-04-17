@@ -26,22 +26,18 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
 
     private String rollbackSql;
 
-    @Override
     public String getConfirmationMessage() {
         return null;
     }
 
-    @Override
     public void setUp() throws SetupException {
 
     }
 
-    @Override
     public void setFileOpener(ResourceAccessor resourceAccessor) {
 
     }
 
-    @Override
     public ValidationErrors validate(Database database) {
         final ValidationErrors errors = new ValidationErrors();
         return errors;
@@ -55,7 +51,6 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
         this.sql = sql;
     }
 
-    @Override
     public void execute(Database database) throws CustomChangeException {
         if(sql == null)
             throw new CustomChangeException("parameter 'sql' must be given.");
@@ -78,7 +73,6 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
         }
     }
 
-    @Override
     public void rollback(Database database) throws CustomChangeException, UnsupportedChangeException, RollbackImpossibleException {
         if(rollbackSql == null)
             throw new CustomChangeException("parameter 'rollbackSql' must be given.");

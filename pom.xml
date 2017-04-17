@@ -20,17 +20,16 @@
     <groupId>net.mortalsilence</groupId>
     <artifactId>IndiePIM2</artifactId>
     <version>2.0-alpha</version>
-
 	<properties>
-		<spring.version>3.2.4.RELEASE</spring.version>
-		<spring.security.version>3.1.4.RELEASE</spring.security.version>
-        <spring-data-jpa.version>1.4.1.RELEASE</spring-data-jpa.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
+		<spring.security.version>4.2.2.RELEASE</spring.security.version>
+        <spring-data-jpa.version>1.10.8.RELEASE</spring-data-jpa.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<jetty-maven-plugin.version>9.1.0.M0</jetty-maven-plugin.version>
         <hibernate.version>4.1.12.Final</hibernate.version>
         <hibernate.search.version>4.4.0.Final</hibernate.search.version>
         <mysql.connector.version>5.1.26</mysql.connector.version>
-        <liquibase.version>3.0.6</liquibase.version>
+        <liquibase.version>3.5.3</liquibase.version>
         <jackson.version>2.2.3</jackson.version>
 	</properties>
     <dependencies>
@@ -147,7 +146,7 @@
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0-rc1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -243,6 +242,14 @@
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty-maven-plugin.version}</version>
@@ -257,7 +264,7 @@
                     <dependency>
                         <groupId>com.sun.mail</groupId>
                         <artifactId>javax.mail</artifactId>
-                        <version>1.5.0</version>
+                        <version>1.6.0-rc1</version>
                     </dependency>
                     <dependency>
                         <groupId>mysql</groupId>
@@ -290,6 +297,7 @@
                             <changeLogFile>src/main/resources/changelog.xml</changeLogFile>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                             <contexts>production</contexts>
+                            <!--<logging>debug</logging>-->
                         </configuration>
                         <dependencies>
                             <dependency>
