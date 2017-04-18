@@ -26,7 +26,7 @@ public class IndieUserDetailsService implements UserDetailsService {
         if (user == null)
             throw new UsernameNotFoundException("User " + s + " not found.");
 
-        final Collection<GrantedAuthority> grants = new LinkedList<GrantedAuthority>();
+        final Collection<GrantedAuthority> grants = new LinkedList<>();
         grants.add(new SimpleGrantedAuthority("ROLE_USER"));
         if(user.isAdmin()) {
             grants.add(new SimpleGrantedAuthority("ROLE_ADMIN"));

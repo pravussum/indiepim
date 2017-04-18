@@ -11,7 +11,7 @@
                       http://www.springframework.org/schema/tx        http://www.springframework.org/schema/tx/spring-tx.xsd
                       http://www.springframework.org/schema/data/jpa  http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
                       http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd
-                      http://www.springframework.org/schema/util      http://www.springframework.org/schema/util/spring-util-3.1.xsd"
+                      http://www.springframework.org/schema/util      http://www.springframework.org/schema/util/spring-util-4.3.xsd"
         >
 
     <!-- scan everything except MVC controllers -->
@@ -105,14 +105,15 @@
         <security:custom-filter ref="concurrencyFilter" position="CONCURRENT_SESSION_FILTER" />
         <security:custom-filter ref="authenticationFilter" position="FORM_LOGIN_FILTER" />
         <security:session-management session-authentication-strategy-ref="sas" />
-        <security:intercept-url pattern="/setup" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <security:intercept-url pattern="/expired" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <security:intercept-url pattern="/command/createOrUpdateUser" access="ROLE_ADMIN" />
-        <security:intercept-url pattern="/command/getUsers" access="ROLE_USER" />
-        <security:intercept-url pattern="/command/**" access="ROLE_USER" />
-        <security:intercept-url pattern="/" access="ROLE_USER" />
+        <security:intercept-url pattern="/setup" access="permitAll" />
+        <security:intercept-url pattern="/login" access="permitAll" />
+        <security:intercept-url pattern="/expired" access="permitAll" />
+        <security:intercept-url pattern="/command/createOrUpdateUser" access="hasRole('ROLE_ADMIN')" />
+        <security:intercept-url pattern="/command/getUsers" access="hasRole('ROLE_USER')" />
+        <security:intercept-url pattern="/command/**" access="hasRole('ROLE_USER')" />
+        <security:intercept-url pattern="/" access="hasRole('ROLE_USER')" />
         <security:logout />
+        <security:csrf disabled="true" />
     </security:http>
 
     <security:authentication-manager alias="authenticationManager">

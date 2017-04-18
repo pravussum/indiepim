@@ -73,7 +73,7 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
         }
     }
 
-    public void rollback(Database database) throws CustomChangeException, UnsupportedChangeException, RollbackImpossibleException {
+    public void rollback(Database database) throws CustomChangeException, RollbackImpossibleException {
         if(rollbackSql == null)
             throw new CustomChangeException("parameter 'rollbackSql' must be given.");
             final JdbcConnection conn = (JdbcConnection)database.getConnection();
