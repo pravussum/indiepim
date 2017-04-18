@@ -71,7 +71,7 @@ public class CommandController {
     @Inject private CreateOrUpdateCalendarHandler createOrUpdateCalendarHandler;
     @Inject private DeleteCalendarHandler deleteCalendarHandler;
     @Inject private CreateOrUpdateEventHandler createOrUpdateEventHandler;
-
+    @Inject private DeleteEventHandler deleteEventHandler;
 
 
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
@@ -315,6 +315,13 @@ public class CommandController {
     public Long createOrUpdateEvent(@RequestBody final EventDTO eventDTO) {
         return createOrUpdateEventHandler.execute(new CreateOrUpdateEvent(eventDTO)).getId();
     }
+
+    @RequestMapping(value="deleteEvent/{id}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object deleteEvent(@PathVariable("id") final Long eventId) {
+        return deleteEventHandler.execute(new DeleteEvent(eventId)).getResult();
+    }
+
 
     @RequestMapping(value="getMessageStats", produces = "application/json;charset=UTF-8")
     @ResponseBody

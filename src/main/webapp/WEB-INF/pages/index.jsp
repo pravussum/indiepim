@@ -42,7 +42,7 @@
 <script src="libs/jquery/jqueryui/jquery-ui-1.10.3.custom.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-    var libcnt = 29;
+    var libcnt = 30;
     var libi = 0;
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
@@ -75,7 +75,12 @@
 </script>
 <%--<script src="libs/knockout/knockout-2.2.1.debug.js" type="text/javascript" charset="utf-8"></script>--%>
     <script src="libs/knockout/knockout-2.3.0.debug.js" type="text/javascript" charset="utf-8"></script>
+    <%--<script src="libs/knockout/knockout-3.1.0beta.debug.js" type="text/javascript" charset="utf-8"></script>--%>
 <!-- BPJS initializer scripts-->
+<script type="text/javascript">
+    $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
+</script>
+<script src="libs/knockout/ko.editables.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>

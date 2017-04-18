@@ -1123,13 +1123,10 @@
             baseColumnNames="related_msg_id"
             baseTableName="message"
             constraintName="fk_msg_msg"
-            deferrable="false"
-            initiallyDeferred="false"
             onDelete="SET NULL"
             onUpdate="NO ACTION"
             referencedColumnNames="id"
-            referencedTableName="message"
-            referencesUniqueColumn="true"/>
+            referencedTableName="message" />
         <createIndex indexName="idx_msg_msg" tableName="message">
             <column name="related_msg_id"/>
         </createIndex>
@@ -1188,5 +1185,10 @@
     <changeSet id="1319026263161-147" author="AmIEvil">
         <dropNotNullConstraint tableName="event" columnName="uid" columnDataType="VARCHAR(50)"/>
     </changeSet>
-    
+    <changeSet id="1319026263161-148" author="AmIEvil">
+        <createIndex indexName="idx_msg_user_read" tableName="message" unique="false">
+            <column name="user_id"/>
+            <column name="read_flag" />
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

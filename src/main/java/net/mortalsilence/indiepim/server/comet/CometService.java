@@ -18,7 +18,7 @@ public class CometService {
     final public static Integer ONLINE_TIMEOUT = 60 * 1000;
 
     public CometService() {
-        System.err.println("Instiating Comet service");
+        System.err.println("Instantiating Comet service");
     }
 
     public Map<Long, Map<String, BlockingQueue<CometMessage>>> user2SessionsMap = new HashMap<Long, Map<String, BlockingQueue<CometMessage>>>();

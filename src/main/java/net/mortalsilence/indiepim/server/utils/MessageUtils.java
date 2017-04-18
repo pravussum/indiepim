@@ -155,6 +155,10 @@ public class MessageUtils implements MessageConstants {
 		accountPO.setTrustInvalidSSLCertificates(account.trustInvalidSSLCertificates);
 		accountPO.setTsUpdate(account.version);
 		/* new messages flag is only updated on server side */
+		if(account.deleteMode != null)
+			accountPO.setDeleteMode(MESSAGE_DELETE_MODE.valueOf(account.deleteMode));
+		else
+			accountPO.setDeleteMode(MESSAGE_DELETE_MODE.MOVE_2_TRASH);
 	}	
 
 	public String getMsgUID(final Folder folder, final Message message) {
@@ -209,6 +213,8 @@ public class MessageUtils implements MessageConstants {
 	public String getSenderStr(final Message message) throws MessagingException {
 		Address[] addresses;
 		addresses = message.getFrom();
+        if(addresses == null)
+            return null;
 		String[] senders = new String[addresses.length]; 
 		for(int j=0; j<addresses.length; j++) {
 			try {
@@ -217,8 +223,7 @@ public class MessageUtils implements MessageConstants {
                 senders[j] = ((InternetAddress) addresses[j]).getAddress();
 			}
 		}
-		String senderStr = StringUtils.join(senders, ',');
-		return senderStr;
+		return StringUtils.join(senders, ',');
 	}
 
 	public String getReceiverStr(final Message message) throws MessagingException {

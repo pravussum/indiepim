@@ -11,7 +11,7 @@ define([], function () {
                 console.log("unselect");
                 if(this.element)
                     $(this.element).fullCalendar('unselect');
-            }
+            };
             this.onEventChanged = configuration.eventChangedCallback;
             this.onEventClicked = configuration.eventClickCallback;
         }
@@ -30,8 +30,38 @@ define([], function () {
             var options = ko.utils.unwrapObservable(viewModel.options);
 
             options.events = function(start, end, timezone, callback) {
+                function registerSubscriptions() {
+                    console.log("registering vm event subscriptions");
+                    for (var i = 0; i < viewModel.events().length; i++) {
+                        var vmEvent = viewModel.events()[i];
+                        console.log("subscribing for updates from event " + vmEvent.id());
+                        vmEvent.title.subscribe(function (newVal) {getCalEvent4VmEvent(vmEvent, function(calEvent, vmEvent){
+                            console.log("updating title for event " + vmEvent.id());
+                            calEvent.title = newVal;
+                            $(element).fullCalendar('updateEvent', calEvent);
+                        })});
+                        vmEvent.color.subscribe(function (newVal) {getCalEvent4VmEvent(vmEvent, function(calEvent, vmEvent){
+                            calEvent.color = newVal;
+                            $(element).fullCalendar('updateEvent', calEvent);
+                        })});
+                        vmEvent.start.subscribe(function (newVal) {getCalEvent4VmEvent(vmEvent, function(calEvent, vmEvent){
+                            calEvent.start = newVal;
+                            $(element).fullCalendar('updateEvent', calEvent);
+                        })});
+                        vmEvent.end.subscribe(function (newVal) {getCalEvent4VmEvent(vmEvent, function(calEvent, vmEvent){
+                            calEvent.end = newVal;
+                            $(element).fullCalendar('updateEvent', calEvent);
+                        })});
+                    }
+                }
+
                 if(updatingFromVM) {
-                    console.log("ko.init.fc.events(): Updating from VM - NOT firing VM update")
+                    console.log("ko.init.fc.events(): Updating from VM - NOT firing VM update");
+                    var unwrappedArray = ko.toJS(viewModel.events);
+                    console.log("ko.init.fc.events(): updating cal with " + unwrappedArray.length + " events");
+                    // register for event changes
+                    registerSubscriptions();
+                    callback(unwrappedArray);
                     return;
                 } else {
                     console.log("ko.init.fc.events(): updatingFromCal = true");
@@ -42,12 +72,24 @@ define([], function () {
                         console.log("ko.init.fc.events()/loadCallback.callback: vm update finished, updating fullCalendar from from viewmodel events");
                         var unwrappedArray = ko.toJS(viewModel.events);
                         console.log("ko.init.fc.events()/loadCallback.callback: updating cal with " + unwrappedArray.length + " events");
+                        registerSubscriptions();
                         callback(unwrappedArray);
                         console.log("ko.init.fc.events()/loadCallback.callback: updatingFromCal = false");
                         updatingFromCal = false;
                     });
                 }
-            }
+            };
+
+            function getCalEvent4VmEvent(vmEvent, updateCallback) {
+                console.log("getCalEvent4VmEvent");
+                var calendarEvents = $(element).fullCalendar('clientEvents');
+                for(var i=0; i<calendarEvents.length; i++) {
+                    if(vmEvent.id() == calendarEvents[i].id) {
+                        updateCallback(calendarEvents[i], vmEvent);
+                        return;
+                    }
+                }
+            };
 
             // TODO make function nullsafe
             // TODO handle all day events
@@ -62,7 +104,7 @@ define([], function () {
                     }
                 }
                 console.log("updateVMEventTimes(): View model event with id " + calEvent.id + " not found to update.");
-            }
+            };
 
             options.eventResize = function( calEvent, revertFunc, jsEvent, ui, view ){
                 console.log("ko.init.fc.eventResize: updatingFromCal = true");
@@ -93,21 +135,26 @@ define([], function () {
 //                console.log("VM updated with new value: " +newValue);
 //            });
 
+
+            viewModel.events.subscribe(function(newValue) {
+                console.log("ko.update: entering");
+                if(updatingFromCal) {
+                    console.log("ko.update: request to update came from calendar. Not updating cal from view model.");
+                    return;
+                }
+                console.log("ko.update: updatingFromVM = true");
+                updatingFromVM = true;
+                console.log("ko.update: viewmodel updated - triggering event refetch on fullcalendar");
+                $(element).fullCalendar('refetchEvents');
+                console.log("ko.update: updatingFromVM = false");
+                updatingFromVM = false;
+            });
+
             $(element).fullCalendar(options);
         },
 
-        update: function(element, viewModelAccessor) {
-            if(updatingFromCal) {
-                console.log("ko.update: request to update came from calendar. Not updating cal from view model.");
-                return;
-            }
-            console.log("ko.update: updatingFromVM = true");
-            updatingFromVM = true;
-            console.log("ko.update: viewmodel updated - triggering event refetch on fullcalendar")
-            var calendarEvents = $(element).fullCalendar('clientEvents');
-//          $(element).fullCalendar('refetchEvents');
-            console.log("ko.update: updatingFromVM = false");
-            updatingFromVM = false;
+        updateInt: function(element, viewModelAccessor) {
+            console.log("ko.update original")
         }
     };
 });

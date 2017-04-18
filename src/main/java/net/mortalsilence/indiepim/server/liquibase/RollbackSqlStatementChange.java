@@ -26,25 +26,20 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
 
     private String rollbackSql;
 
-    @Override
     public String getConfirmationMessage() {
         return null;
     }
 
-    @Override
     public void setUp() throws SetupException {
 
     }
 
-    @Override
     public void setFileOpener(ResourceAccessor resourceAccessor) {
 
     }
 
-    @Override
     public ValidationErrors validate(Database database) {
-        final ValidationErrors errors = new ValidationErrors();
-        return errors;
+        return new ValidationErrors();
     }
 
     public String getSql() {
@@ -55,7 +50,6 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
         this.sql = sql;
     }
 
-    @Override
     public void execute(Database database) throws CustomChangeException {
         if(sql == null)
             throw new CustomChangeException("parameter 'sql' must be given.");
@@ -68,8 +62,8 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
             } else {
                 sqls = new String[] {sql};
             }
-            for(int i=0;i<sqls.length;i++) {
-                conn.prepareStatement(sqls[i]).execute();
+            for (String sql1 : sqls) {
+                conn.prepareStatement(sql1).execute();
             }
         } catch (SQLException e) {
             throw new CustomChangeException(e);
@@ -78,7 +72,6 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
         }
     }
 
-    @Override
     public void rollback(Database database) throws CustomChangeException, UnsupportedChangeException, RollbackImpossibleException {
         if(rollbackSql == null)
             throw new CustomChangeException("parameter 'rollbackSql' must be given.");
@@ -90,9 +83,9 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
             } else {
                 sqls = new String[] {rollbackSql};
             }
-            for(int i=0;i<sqls.length;i++) {
-                System.out.println("Executing sql statement '" + sqls[i] + "'");
-                conn.prepareStatement(sqls[i]).execute();
+            for (String curSql : sqls) {
+                System.out.println("Executing sql statement '" + curSql + "'");
+                conn.prepareStatement(curSql).execute();
             }
         } catch (SQLException e) {
             throw new CustomChangeException(e);

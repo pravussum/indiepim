@@ -48,8 +48,6 @@ public class CalSynchroService {
 
         } catch (MalformedURLException me) {
             throw new RuntimeException(me);
-        } catch(IOException ioe) {
-            throw new RuntimeException(ioe);
         } finally {
             if(store != null)
                 store.disconnect();
@@ -72,8 +70,6 @@ public class CalSynchroService {
             }
         } catch (MalformedURLException me) {
             throw new RuntimeException(me);
-        } catch(IOException ioe) {
-            throw new RuntimeException(ioe);
         } finally {
             if(store != null) store.disconnect();
         }

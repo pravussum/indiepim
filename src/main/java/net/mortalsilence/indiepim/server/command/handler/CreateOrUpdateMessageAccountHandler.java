@@ -38,7 +38,6 @@ public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpda
     @Inject private Scheduler scheduler;
 
     @Transactional
-    @Override
     public IdVersionResult execute(CreateOrUpdateMessageAccount action) {
 
 		final MessageAccountDTO account = action.getAccount();
@@ -127,7 +126,6 @@ public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpda
 		}			
 	}
 
-    @Override
 	public void rollback(CreateOrUpdateMessageAccount arg0, IdVersionResult arg1) {
 		// TODO implement rollback
 	}

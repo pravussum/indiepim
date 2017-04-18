@@ -22,6 +22,8 @@ import java.util.List;
 @Named
 public class CalendarDAO {
 
+    @Inject GenericDAO genericDAO;
+
     @PersistenceContext
     private EntityManager em;
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
@@ -75,6 +77,26 @@ public class CalendarDAO {
             .setParameter("userId", userId)
             .setParameter("eventId", eventId)
             .executeUpdate();
+    }
+
+    public boolean deleteEvent(final Long userId, final Long eventId) {
+
+        deleteEventOccurences(userId, eventId);
+        em.createQuery("delete from RecurrencePO where id in (select recurrence.id from EventPO where id = :eventId) and user.id = :userId")
+                .setParameter("userId", userId)
+                .setParameter("eventId", eventId)
+                .executeUpdate();
+        int cnt = em.createQuery("delete from EventPO where id = :eventId and user.id = :userId")
+                .setParameter("userId", userId)
+                .setParameter("eventId", eventId)
+                .executeUpdate();
+        if(cnt == 1) {
+            return true;
+        } else if (cnt > 1) {
+            throw new RuntimeException();
+        } else {
+            return false;
+        }
     }
 
     public List<CalendarPO> getCalendars(final Long userId) {

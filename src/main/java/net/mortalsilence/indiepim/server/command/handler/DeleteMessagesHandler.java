@@ -37,7 +37,6 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
 	@Transactional
-    @Override
     public DeleteMessagesResult execute(DeleteMessages action) {
 		final List<Long> messageIds = action.getMessageIds();
         final Long userId = ActionUtils.getUserId();
@@ -65,7 +64,6 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                 final Set<MessageTagLineageMappingPO> tagLineageMappingsToDelete = new LinkedHashSet<MessageTagLineageMappingPO>();
                 messageUpdateService.updateImapMessages(userId, messages, accountId, expunge, new ImapMsgOperationCallback() {
                     // TODO performance tuning
-                    @Override
                     public MessagePO processMessage(IMAPFolder folder, Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO tagLineageMapping) throws MessagingException {
                         boolean finalDeleteFromTrash = false;
                         try {
@@ -149,7 +147,6 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
 	}
 
 
-	@Override
 	public void rollback(DeleteMessages arg0, DeleteMessagesResult arg1) {
 		// TODO how to roll back?
 	}

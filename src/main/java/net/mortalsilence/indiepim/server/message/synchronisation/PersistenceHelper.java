@@ -56,7 +56,10 @@ public class PersistenceHelper {
         try {
             if(logger.isInfoEnabled())
                 logger.info("MSG_UID: " + msgUid);
-            final String hash = messageUtils.getHash(messageUtils.getSenderStr(message),
+            String senderStr = messageUtils.getSenderStr(message);
+            if(senderStr == null)
+                senderStr = "";
+            final String hash = messageUtils.getHash(senderStr,
                     messageUtils.getReceiverStr(message),
                     message.getSubject(),
                     message.getReceivedDate());

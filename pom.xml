@@ -30,7 +30,7 @@
         <hibernate.version>4.1.12.Final</hibernate.version>
         <hibernate.search.version>4.4.0.Final</hibernate.search.version>
         <mysql.connector.version>5.1.26</mysql.connector.version>
-        <liquibase.version>3.0.6</liquibase.version>
+        <liquibase.version>3.4.1</liquibase.version>
         <jackson.version>2.2.3</jackson.version>
 	</properties>
     <dependencies>
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>1.5.1</version>
+            <version>1.5.4</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -244,7 +244,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12-SNAPSHOT</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -256,6 +256,16 @@
             <groupId>org.mnode.ical4j</groupId>
             <artifactId>ical4j-connector</artifactId>
             <version>0.9.5-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome-opml</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome-fetcher</artifactId>
+            <version>1.5.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -280,7 +290,7 @@
                     <dependency>
                         <groupId>com.sun.mail</groupId>
                         <artifactId>javax.mail</artifactId>
-                        <version>1.5.0</version>
+                        <version>1.5.5</version>
                     </dependency>
                     <dependency>
                         <groupId>mysql</groupId>

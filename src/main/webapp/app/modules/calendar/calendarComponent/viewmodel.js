@@ -31,9 +31,10 @@ define([], function () {
                     end: end.valueOf()
                 },
                 function(data){
-                    self.events($.map(data, function(item,index) {
+                    var eventarray = $.map(data, function (item, index) {
                         return new Event(item);
-                    }));
+                    });
+                    self.events(eventarray);
                     console.log("vm.load.success: updated vm with " + self.events().length + " events.");
                     callback();
                 }
@@ -46,18 +47,21 @@ define([], function () {
         };
 
         self.select = function( start, end, jsEvent, view ) {
+            console.log("vm.select() calling calmodel unselect");
             self.calendarViewModel.unselect();
             var newEvent = new Event({
-                title: "Tolles Event",
+                title: "New Event",
                 start: start,
                 end: end
             });
+
+            console.log("vm.select() pushing new event to vm");
             self.events.push(newEvent);
-            // TODO open edit dialog
-            self.calEventChanged(newEvent);
+            self.showEditDialog(newEvent);
+            self.createOrUpdateEvent(newEvent);
         }
 
-        self.calEventChanged = function(event) {
+        self.createOrUpdateEvent = function(event) {
             var requestData = {
                 id: event.id(),
                 title: event.title(),
@@ -75,8 +79,13 @@ define([], function () {
                 {
                     data:JSON.stringify(requestData),
                     type: "post",
-                    success : function(data) {
-                        toastr.info("Event with id " + data + " successfully saved.");
+                    success : function(eventId) {
+                        toastr.info("Event with id " + eventId + " successfully saved.");
+                        // set created events id
+                        if(!event.id()) {
+                            // TODO update the corresponding fullcalendar event
+                            event.id(eventId);
+                        }
                     },
                     contentType:"application/json; charset=UTF-8"
                 }
@@ -88,25 +97,65 @@ define([], function () {
             });
         };
 
-        self.calEventClicked = function(event) {
+        self.currentEvent.subscribe(function(newValue){
+            console.log("currentEvent changed.");
+        });
+
+        self.showEditDialog = function(event) {
+            ko.editable(event);
+            event.beginEdit();
             self.currentEvent(event);
-            $(".eventEditorDialog").dialog({
-                autoOpen:false,
+            $("#eventEditorDialog").dialog({
+                autoOpen:true,
                 height: 400,
                 width: 500,
                 modal:true
             });
-            $(".eventEditorDialog").dialog("open");
+        };
+
+        self.saveEvent = function(event) {
+            self.currentEvent().commit();
+            // TODO uncomment
+//          self.createOrUpdateEvent(event);
+            self.closeEditDialog();
+        };
+
+        self.cancelEdit = function() {
+            self.currentEvent().rollback();
+            self.closeEditDialog();
         }
 
-        self.saveEvent = function() {
-            console.log("save event.");
+        self.closeEditDialog = function() {
+            if(self.currentEvent())
+                self.currentEvent(undefined);
+            $("#eventEditorDialog").dialog("close");
+
+        };
+
+        self.calEventClicked = function(event) {
+            self.showEditDialog(event);
+        };
+
+        self.deleteEvent = function(event) {
+            $.getJSON(
+                "command/deleteEvent/" + event.id(),
+                function(data) {
+                    toastr.info("Event with id " + data + " successfully deleted.");
+                }
+            ).fail(function(xhr, textStatus, errorThrown) {
+                    if(xhr.status == 403)
+                        window.location.href = contextPath + "/login"; // access denied = not logged in --> redirect to login
+                    else
+                        toastr.error(JSON.stringify(xhr));
+            });
+            self.closeEditDialog();
+            self.events.remove(event);
         };
 
         self.calendarViewModel = new ko.fullCalendar.viewModel({
             events: self.events,
             loadCallback: self.load,
-            eventChangedCallback: self.calEventChanged,
+            eventChangedCallback: self.createOrUpdateEvent,
             eventClickCallback: self.calEventClicked,
             options:{
 

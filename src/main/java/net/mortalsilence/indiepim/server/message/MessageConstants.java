@@ -6,19 +6,19 @@ import java.util.Map;
 
 public interface MessageConstants {
 
-    public enum EMAIL_ADDRESS_TYPE {
+    enum EMAIL_ADDRESS_TYPE {
         HOME,
         WORK,
         OTHER
     }
 
-    public enum MESSAGE_DELETE_MODE {
+    enum MESSAGE_DELETE_MODE {
         MOVE_2_TRASH,
         MARK_DELETED,
         EXPUNGE
     }
 
-	public enum EncryptionMode {
+	enum EncryptionMode {
 		NONE (1), 
 		STARTTLS (2),
 		TLS (3), 
@@ -35,7 +35,7 @@ public interface MessageConstants {
         public static EncryptionMode get(int value) { return lookup.get(value); }
     }
 	
-	public enum AuthenticationMode {
+	enum AuthenticationMode {
 		NONE (1),
 		PASSWORD_NORMAL (2);
         
@@ -50,7 +50,7 @@ public interface MessageConstants {
         public static AuthenticationMode get(int value) { return lookup.get(value); }        
 	}
 	
-	public enum SyncUpdateMethod {
+	enum SyncUpdateMethod {
 		NONE (0),
         FLAGS (1),
 		FULL (2);
@@ -65,27 +65,27 @@ public interface MessageConstants {
 	    public static SyncUpdateMethod get(int value) { return lookup.get(value); }
 	}
 	
-	public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
-    public static final String CONTENT_TYPE_TEXT_PLAIN_UTF8 = CONTENT_TYPE_TEXT_PLAIN + "; charset=utf-8";
-	public static final String CONTENT_TYPE_TEXT_HTML = "text/html";
-    public static final String CONTENT_TYPE_TEXT_HTML_UTF8 = CONTENT_TYPE_TEXT_HTML + "; charset=utf-8";
-    public static final String CONTENT_TYPE_TEXT_ALL = "text/*";
-    public static final String CONTENT_TYPE_IMAGE_ALL = "image/*";
-    public static final String CONTENT_TYPE_MULTIPART_ALL = "multipart/*";
-	public static final String CONTENT_TYPE = "Content-Type:";
-    public static final String CONTENT_TYPE_PARAM_CHARSET = "charset";
+	String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
+    String CONTENT_TYPE_TEXT_PLAIN_UTF8 = CONTENT_TYPE_TEXT_PLAIN + "; charset=utf-8";
+	String CONTENT_TYPE_TEXT_HTML = "text/html";
+    String CONTENT_TYPE_TEXT_HTML_UTF8 = CONTENT_TYPE_TEXT_HTML + "; charset=utf-8";
+    String CONTENT_TYPE_TEXT_ALL = "text/*";
+    String CONTENT_TYPE_IMAGE_ALL = "image/*";
+    String CONTENT_TYPE_MULTIPART_ALL = "multipart/*";
+	String CONTENT_TYPE = "Content-Type:";
+    String CONTENT_TYPE_PARAM_CHARSET = "charset";
 
-	public static final String PROTOCOL_IMAP = "IMAP";
-	public static final String PROTOCOL_POP3 = "POP3";
+	String PROTOCOL_IMAP = "IMAP";
+	String PROTOCOL_POP3 = "POP3";
 	
-	public static final String DATETIME_FORMAT_EUR = "yyyy-MM-dd HH.mm.ss";
+	String DATETIME_FORMAT_EUR = "yyyy-MM-dd HH.mm.ss";
 
-    public static final String DEFAULT_FOLDER_SENT = "Sent";
-    public static final String DEFAULT_FOLDER_TRASH = "Trash";
-    public static final String DEFAULT_FOLDER_JUNK = "Junk";
-    public static final String DEFAULT_FOLDER_DRAFTS = "Drafts";
-    public static final String DEFAULT_FOLDER_INBOX = "INBOX";
+    String DEFAULT_FOLDER_SENT = "Sent";
+    String DEFAULT_FOLDER_TRASH = "Trash";
+    String DEFAULT_FOLDER_JUNK = "Junk";
+    String DEFAULT_FOLDER_DRAFTS = "Drafts";
+    String DEFAULT_FOLDER_INBOX = "INBOX";
 
-    public static final String DISPOSITION_ATTACHMENT = "attachment";
-    public static final String DISPOSITION_INLINE = "inline";
+    String DISPOSITION_ATTACHMENT = "attachment";
+    String DISPOSITION_INLINE = "inline";
 }
