@@ -1110,4 +1110,7 @@
             <column name="draft_flag" type="boolean" />
         </addColumn>
     </changeSet>
+    <changeSet id="1319026263161-135" author="AmIEvil">
+        <modifyDataType tableName="msg_account" columnName="password" newDataType="varchar(500)"/>
+    </changeSet>
 </databaseChangeLog>

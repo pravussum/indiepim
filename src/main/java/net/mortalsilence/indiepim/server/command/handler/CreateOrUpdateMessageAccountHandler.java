@@ -12,6 +12,7 @@ import net.mortalsilence.indiepim.server.domain.MessageAccountStatsPO;
 import net.mortalsilence.indiepim.server.domain.TagPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.dto.MessageAccountDTO;
+import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.schedule.AccountIncSyncroJob;
 import net.mortalsilence.indiepim.server.utils.MessageUtils;
 import org.quartz.DateBuilder.IntervalUnit;
@@ -56,6 +57,7 @@ public class CreateOrUpdateMessageAccountHandler implements Command<CreateOrUpda
 		} else {
 			accountPO = new MessageAccountPO();
 			accountPO.setUser(user);
+			accountPO.setDeleteMode(MessageConstants.MESSAGE_DELETE_MODE.MOVE_2_TRASH);
 		}
 		messageUtils.mapMessageAccountDTO2MessageAccountPO(account, accountPO);
 
