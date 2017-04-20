@@ -2,3 +2,17 @@
 .messageAccountListItem {
     cursor: pointer;
 }
+
+#syncProgressBar {
+    box-sizing: border-box;
+    height: 10px;
+    width: 40%;
+}
+
+#msgacc_tabs {
+    height: 500px;
+}
+
+button {
+    margin: 5px 0;
+}

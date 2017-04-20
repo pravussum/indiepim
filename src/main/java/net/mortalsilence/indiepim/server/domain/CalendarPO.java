@@ -1,7 +1,6 @@
 package net.mortalsilence.indiepim.server.domain;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +31,21 @@ public class CalendarPO {
 
     @OneToMany(mappedBy = "calendar")
     private List<EventPO> events = new LinkedList<EventPO>();
+
+    @Column(name = "syncUrl")
+    private String syncUrl;
+
+    @Column(name = "syncUserName")
+    private String syncUserName;
+
+    @Column(name = "syncPassword")
+    private String syncPassword;
+
+    @Column(name = "syncCalendarName")
+    private String syncCalendarId;
+
+    @Column(name = "syncPrincipalPath")
+    private String syncPrincipalPath;
 
     public Long getId() {
         return id;
@@ -83,5 +97,45 @@ public class CalendarPO {
 
     public void setEvents(List<EventPO> events) {
         this.events = events;
+    }
+
+    public String getSyncUrl() {
+        return syncUrl;
+    }
+
+    public void setSyncUrl(String syncUrl) {
+        this.syncUrl = syncUrl;
+    }
+
+    public String getSyncUserName() {
+        return syncUserName;
+    }
+
+    public void setSyncUserName(String syncUserName) {
+        this.syncUserName = syncUserName;
+    }
+
+    public String getSyncPassword() {
+        return syncPassword;
+    }
+
+    public void setSyncPassword(String syncPassword) {
+        this.syncPassword = syncPassword;
+    }
+
+    public String getSyncCalendarId() {
+        return syncCalendarId;
+    }
+
+    public void setSyncCalendarId(String syncCalendarName) {
+        this.syncCalendarId = syncCalendarName;
+    }
+
+    public String getSyncPrincipalPath() {
+        return syncPrincipalPath;
+    }
+
+    public void setSyncPrincipalPath(String syncPrincipalPath) {
+        this.syncPrincipalPath = syncPrincipalPath;
     }
 }

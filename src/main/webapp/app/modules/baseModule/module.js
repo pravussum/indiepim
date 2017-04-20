@@ -17,12 +17,23 @@ define(function(require) {
             var context = new Boiler.Context(parentContext);
             var self = this;
 
-            $('#page-content').layout({
-                north__initClosed: true,
-                north__togglerLength_closed: '100%',
-                north__size: 25,
-                west__onresize: $.layout.callbacks.resizePaneAccordions
+//            $('#page-content').layout({
+//                north__initClosed: true,
+//                north__togglerLength_closed: '100%',
+//                north__size: 25,
+//                west__onresize_end: function(){ alert("resize event"); $.layout.callbacks.resizePaneAccordions; }
+//            });
+
+            $('#page-content').layout({north:{
+                    initClosed: true,
+                    togglerLength_closed: '100%',
+                    size: 25
+                },
+                west:{
+                    onresize_end:$.layout.callbacks.resizePaneAccordions
+                }
             });
+
 
             //scoped DomController that will be effective only on $('#page-content')
             var controller = new Boiler.DomController($('#page-content'));

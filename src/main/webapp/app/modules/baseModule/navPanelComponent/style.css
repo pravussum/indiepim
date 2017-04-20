@@ -1,61 +1,76 @@
-#accordion {
+.accordion {
     background-color: #FFFFFF;
 }
 
-#accordion a {
-    font-size: small;
+.accordion a {
     text-decoration: none;
     width: 100%;
 }
 
-.nav_mail_actions_list li, .nav_chat_user_list li {
-    padding-left: 5px;
-}
-
 .nav_mail_account_list_title {
+    padding-top: 2px;
     padding-left: 5px;
+    padding-bottom: 2px;
+    margin-bottom: 2px;
 }
 
-.nav_mail_actions_list li:hover, .nav_chat_user_list li:hover {
+.accordion li {
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.nav_mail_account_list li {
+    padding: 0;
+}
+
+.lightIcon {
+    color: #555555;
+}
+
+.accordion li:hover {
     background-color: #b0b0b0;
     -webkit-border-radius: 2px;
     border-radius: 2px;
+}
+
+.nav_mail_account_list li:hover {
+    background-color: white !important;
 }
 
 .nav_mail_account_list_title:hover {
-    background-color: #b0b0b0;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-
+    background-color: #b0b0b0;
 }
 
-#accordion ul {
+.accordion ul {
     list-style-type: none;
     list-style-position: outside;
+    padding-left: 5px;
 }
 
-.nav_mail_actions_list, .nav_mail_account_list, .nav_chat_user_list {
-    padding-left: 0;
-    margin-top: 0.2em;
-    margin-bottom: 0;
-}
-
-#accordion .ui-accordion-content {
+.accordion .ui-accordion-content {
     padding-left: 0.4em;
     padding-right: 0.2em;
     padding-bottom: 0;
     padding-top: 0;
 }
 
-#accordion i {
-    margin-right: 5px;
+.accountSyncButton, .calendarSyncButton, .calendarSettingsButton {
+    cursor: pointer;
 }
 
-.accountSyncButton {
-    cursor: pointer;
-    font-size: 80%;
+.calendarListItem {
+
 }
 
 .chatLink {
     cursor: pointer;
+}
+
+.calColorField {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
 }

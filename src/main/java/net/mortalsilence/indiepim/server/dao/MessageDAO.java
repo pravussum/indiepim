@@ -344,4 +344,22 @@ public class MessageDAO {
         message.getMsgTagLineageMappings().add(mapping);
     }
 
+    public MessagePO getDraft(final Long userId, final Long relatedMessageId) {
+        try {
+            if(relatedMessageId != null) {
+                return em.createQuery("from MessagePO where user.id = :userId and draft = true and relatedMessage.id = :relatedMessageId", MessagePO.class)
+                        .setParameter("userId", userId)
+                        .setParameter("relatedMessageId", relatedMessageId)
+                        .getSingleResult();
+            } else {
+                return em.createQuery("from MessagePO where user.id = :userId and draft = true and relatedMessage is null", MessagePO.class)
+                        .setParameter("userId", userId)
+                        .getSingleResult();
+            }
+
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
 }

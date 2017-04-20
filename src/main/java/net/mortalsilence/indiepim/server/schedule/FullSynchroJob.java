@@ -5,7 +5,7 @@ import net.mortalsilence.indiepim.server.dao.UserDAO;
 import net.mortalsilence.indiepim.server.domain.MessageAccountPO;
 import net.mortalsilence.indiepim.server.domain.UserPO;
 import net.mortalsilence.indiepim.server.message.MessageConstants.SyncUpdateMethod;
-import net.mortalsilence.indiepim.server.message.synchronisation.SynchroService;
+import net.mortalsilence.indiepim.server.message.synchronisation.MsgSynchroService;
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -24,7 +24,7 @@ public class FullSynchroJob implements Job/* implements JobListener */{
     @Inject
     private MessageDAO messageDAO;
 	@Inject
-    private SynchroService synchroService;
+    private MsgSynchroService msgSynchroService;
 
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
@@ -38,7 +38,7 @@ public class FullSynchroJob implements Job/* implements JobListener */{
 		MessageAccountPO account = messageDAO.getMessageAccount(userId, accountId);
 		
 		logger.info("Starting FULL account synchronisation for user " + user.getUserName() + ", account " + account.getName());
-		synchroService.synchronize(user, account, SyncUpdateMethod.FULL);
+		msgSynchroService.synchronize(user, account, SyncUpdateMethod.FULL);
 		
 	}	
 }

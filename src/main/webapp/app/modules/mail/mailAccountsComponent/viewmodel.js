@@ -54,6 +54,7 @@ define([], function () {
 
         self.selectAccount = function(account) {
             self.selectedAccount(account);
+            $("#msgacc_tabs").tabs();
         };
 
         self.addAccount = function() {

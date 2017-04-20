@@ -18,13 +18,13 @@ public class MailAddressHandler implements IncomingMessageHandler {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-    public void handleMessage(final Message message,
-                              final MessagePO messageObj,
-                              final Long msgUid,
-                              final MessageAccountPO account,
-                              final Folder folder,
-                              final TagLineagePO tagLineage,
-                              final Session session, UserPO user) {
+    public MessagePO handleMessage(final Message message,
+                                   final MessagePO messageObj,
+                                   final Long msgUid,
+                                   final MessageAccountPO account,
+                                   final Folder folder,
+                                   final TagLineagePO tagLineage,
+                                   final Session session, UserPO user) {
 
 		Address[] fromAddresses;
 		try {
@@ -43,7 +43,8 @@ public class MailAddressHandler implements IncomingMessageHandler {
 				messageObj.getEmailAddresses().add(emailAddr);
 			}
 		}
-		
+
+        return messageObj;
 	}
 
 }

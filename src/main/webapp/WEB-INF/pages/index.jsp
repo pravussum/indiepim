@@ -12,7 +12,6 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- optional static style definition to render the presentation fast, before styling get applied via JS code.
     see 'src/modules/baseModule/theme/component.js' to see dynamic stylesheet setup on themes, TODO find a better way to supportstyles -->
-    <link href="libs/jquery/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet" />
     <!--<link href="libs/DataTables/media/css/jquery.dataTables.css" rel="stylesheet" />-->
     <link href="libs/toastr/toastr.min.css" rel="stylesheet"/>
     <link href="libs/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -21,6 +20,9 @@
     <link href="libs/knockout/css/ui-tree.css" rel="stylesheet">
     <link href="libs/select2-3.4.5/select2.css" rel="stylesheet">
     <link href="libs/jquery.ui.chatbox/jquery.ui.chatbox.css" rel="stylesheet" />
+    <link href="libs/jquery.ui.colpick/colpick.css" rel="stylesheet" />
+    <link href="libs/jquery/css/indie-theme/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -32,20 +34,15 @@
 	</section>
     <div id="progressbar"></div>
 
-<%--<div class="headerPanel" id="header"></div>--%>
-<%--<div class="mainPanel" id="mainPanel">--%>
-    <%--<div class="navigationPanel" id="navigationPanel"></div>--%>
-    <%--<div class="contentPanel" id="content"></div>--%>
-<%--</div>--%>
 <script type="text/javascript">
     var contextPath = "${pageContext.request.contextPath}"
 </script>
 <!-- we use jquery and underscore as 2 utilities in the BoilerplateJS core -->
-<script src="libs/jquery/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/jquery/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
 <script src="libs/jquery/jqueryui/jquery-ui-1.10.3.custom.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-    var libcnt = 25;
+    var libcnt = 30;
     var libi = 0;
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
@@ -76,12 +73,14 @@
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
-<script src="libs/knockout/knockout-2.2.1.debug.js" type="text/javascript" charset="utf-8"></script>
+<%--<script src="libs/knockout/knockout-2.2.1.debug.js" type="text/javascript" charset="utf-8"></script>--%>
+    <script src="libs/knockout/knockout-2.3.0.debug.js" type="text/javascript" charset="utf-8"></script>
+    <%--<script src="libs/knockout/knockout-3.1.0beta.debug.js" type="text/javascript" charset="utf-8"></script>--%>
 <!-- BPJS initializer scripts-->
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
-<script src="libs/boilerplate/groundwork.js" type="text/javascript" charset="utf-8"></script>
+<script src="libs/knockout/ko.editables.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
@@ -115,7 +114,11 @@
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
-<script src="libs/fullcalendar/fullcalendar.min.js" charset="utf-8"></script>
+<script src="libs/fullcalendar/fullcalendar.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
+</script>
+<script src="libs/fullcalendar/lang/all.js" charset="utf-8"></script>
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
@@ -149,6 +152,22 @@
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
 </script>
 <script src="libs/jquery.ui.chatbox/jquery.ui.chatbox.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
+</script>
+<script src="libs/jquery.ui.colpick/colpick.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
+</script>
+<script src="libs/jquery/jquery-file-upload/vendor/jquery.ui.widget.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
+</script>
+<script src="libs/jquery/jquery-file-upload/jquery.fileupload.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
+</script>
+<script src="libs/jquery/jquery-file-upload/jquery.iframe-transport.js" charset="utf-8"></script>
 <script type="text/javascript">
     $("#progressbar").progressbar({value: Math.ceil(100/libcnt * ++libi)});
     $("#progressbar").hide();

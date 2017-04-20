@@ -56,7 +56,7 @@ public class ConfigDAO {
 			genericDAO.persist(cfg);
 		} else {
 			cfg.setValue(value);
-			genericDAO.update(cfg);
+			cfg = genericDAO.update(cfg);
 		}
 	}
 	

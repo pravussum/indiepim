@@ -15,5 +15,5 @@ import javax.mail.MessagingException;
  * Time: 23:13
  */
 public interface ImapMsgOperationCallback {
-    public void processMessage(final IMAPFolder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage, MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException;
+    public MessagePO processMessage(final IMAPFolder folder, final Message imapMessage, Long messageUID, final MessagePO indieMessage, MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException;
 }

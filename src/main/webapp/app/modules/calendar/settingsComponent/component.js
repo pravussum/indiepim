@@ -11,11 +11,15 @@ define(['Boiler', 'text!./view.html', './viewmodel', 'path!./style.css', 'i18n!.
 				vm = new ViewModel(moduleContext);
 				ko.applyBindings(vm, panel.getDomElement());
                 Boiler.ViewTemplate.setStyleLink(styleText);
-                $('#uploadform').ajaxForm(function(result) {
-                    $('#uploadresult').html(result);
-                });
-
+                // intialize color picker
+                $("#calendarColor").colpick({layout:'rgbhex', onSubmit:vm.colorChanged});
 			}
+            if(params.calendarId) {
+                vm.loadCalendar(params.calendarId);
+            } else {
+                vm.clearCalendar();
+            }
+
 			panel.show();
 		}
 

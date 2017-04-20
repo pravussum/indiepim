@@ -30,4 +30,5 @@ public class MessageAccountDTO implements Serializable {
 	public Boolean newMessages;
 	public Boolean trustInvalidSSLCertificates;
 	public Timestamp version;
+	public String deleteMode;
 }

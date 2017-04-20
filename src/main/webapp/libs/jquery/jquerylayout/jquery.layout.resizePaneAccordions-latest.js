@@ -25,10 +25,9 @@ _.callbacks.resizePaneAccordions = function (x, ui) {
 	// find all VISIBLE accordions inside this pane and resize them
 	$P.find(".ui-accordion:visible").each(function(){
 		var $E = $(this);
-		if ($E.data("accordion"))		// jQuery < 1.9
-			$E.accordion("resize");
-		if ($E.data("ui-accordion"))	// jQuery >= 1.9
-			$E.accordion("refresh");
+		if ($E.data("ui-accordion")) {
+            $E.accordion("refresh");
+        }
 	});
 };
 })( jQuery );

@@ -20,6 +20,8 @@ public class MessageDTO implements Serializable {
 	public List<String> bcc;
     @JsonIgnore public Date dateReceived;
     @JsonProperty("dateReceived") public String getDateReceived() {
+        if(dateReceived == null)
+            return null;
         return ISODateTimeFormat.dateTime().print(dateReceived.getTime());
     }
 	public String contentHtml;

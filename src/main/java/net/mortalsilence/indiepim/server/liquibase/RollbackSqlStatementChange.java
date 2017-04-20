@@ -39,8 +39,7 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
     }
 
     public ValidationErrors validate(Database database) {
-        final ValidationErrors errors = new ValidationErrors();
-        return errors;
+        return new ValidationErrors();
     }
 
     public String getSql() {
@@ -63,8 +62,8 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
             } else {
                 sqls = new String[] {sql};
             }
-            for(int i=0;i<sqls.length;i++) {
-                conn.prepareStatement(sqls[i]).execute();
+            for (String sql1 : sqls) {
+                conn.prepareStatement(sql1).execute();
             }
         } catch (SQLException e) {
             throw new CustomChangeException(e);
@@ -84,9 +83,9 @@ public class RollbackSqlStatementChange implements CustomTaskChange, CustomTaskR
             } else {
                 sqls = new String[] {rollbackSql};
             }
-            for(int i=0;i<sqls.length;i++) {
-                System.out.println("Executing sql statement '" + sqls[i] + "'");
-                conn.prepareStatement(sqls[i]).execute();
+            for (String curSql : sqls) {
+                System.out.println("Executing sql statement '" + curSql + "'");
+                conn.prepareStatement(curSql).execute();
             }
         } catch (SQLException e) {
             throw new CustomChangeException(e);

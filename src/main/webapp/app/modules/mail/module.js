@@ -26,6 +26,7 @@ define(function(require) {
                 'mailcompose' : composeComponent,
                 'mailcompose/forward/{forwardid}' : composeComponent,
                 'mailcompose/reply/{replyid}' : composeComponent,
+                'mailcompose/replyall/{replyallid}' : composeComponent,
                 'mailaccounts' : new MailAccountsComponent(context)
 			});
 			controller.start();

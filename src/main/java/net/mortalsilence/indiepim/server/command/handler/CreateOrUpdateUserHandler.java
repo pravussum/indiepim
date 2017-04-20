@@ -22,7 +22,6 @@ public class CreateOrUpdateUserHandler implements Command<CreateOrUpdateUser, Id
     @Inject private SecurityUtils securityUtils;
 
     @Transactional
-    @Override
     public IdResult execute(CreateOrUpdateUser action) {
 
         final UserDTO userDTO = action.getUser();
@@ -70,7 +69,6 @@ public class CreateOrUpdateUserHandler implements Command<CreateOrUpdateUser, Id
         genericDAO.persist(defaultCalendarPO);
     }
 
-    @Override
 	public void rollback(CreateOrUpdateUser arg0, IdResult arg1) {
 		// TODO implement rollback
 	}

@@ -11,12 +11,12 @@ import javax.mail.Session;
 
 public interface IncomingMessageHandler {
 
-	public void handleMessage(Message message,
-                              MessagePO messageObj,
-                              Long msgUid,
-                              MessageAccountPO account,
-                              Folder folder,
-                              TagLineagePO tagLineage,
-                              Session session, UserPO user);
+	public MessagePO handleMessage(Message message,
+                                   MessagePO messageObj,
+                                   Long msgUid,
+                                   MessageAccountPO account,
+                                   Folder folder,
+                                   TagLineagePO tagLineage,
+                                   Session session, UserPO user);
 	
 }

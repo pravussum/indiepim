@@ -39,7 +39,6 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
 	@Transactional
-    @Override
     public DeleteMessagesResult execute(DeleteMessages action) {
 		final List<Long> messageIds = action.getMessageIds();
         final Long userId = ActionUtils.getUserId();
@@ -68,8 +67,7 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                 final Set<Long> messageIdsToDelete = new LinkedHashSet<Long>();
                 messageUpdateService.updateImapMessages(userId, messages, accountId, expunge, new ImapMsgOperationCallback() {
                     // TODO performance tuning
-                    @Override
-                    public void processMessage(IMAPFolder folder, Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO tagLineageMapping) throws MessagingException {
+                    public MessagePO processMessage(IMAPFolder folder, Message imapMessage, Long messageUID, MessagePO indieMessage, MessageTagLineageMappingPO tagLineageMapping) throws MessagingException {
                         boolean finalDeleteFromTrash = false;
                         try {
                             if (account.getDeleteMode().equals(MessageConstants.MESSAGE_DELETE_MODE.MOVE_2_TRASH)) {
@@ -121,6 +119,7 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                             logger.error("Deletion of message with UID " + messageUID + " from folder " + folder.getFullName() + " failed.", e);
                             result.put(indieMessage.getId(), new DeleteResultInfo(false, e.getMessage()));
                         }
+                        return indieMessage;
                     }
                 });
 
@@ -159,7 +158,6 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
 	}
 
 
-	@Override
 	public void rollback(DeleteMessages arg0, DeleteMessagesResult arg1) {
 		// TODO how to roll back?
 	}

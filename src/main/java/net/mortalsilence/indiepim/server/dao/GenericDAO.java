@@ -16,19 +16,21 @@ public class GenericDAO {
     final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
 	
-	public void updateOrPersist(final PersistentObject object) {
+	public<T extends PersistentObject> T updateOrPersist(final T object) {
 		if(object.getId() != null)
-			update(object);
-		else 
+			return update(object);
+		else {
 			persist(object);
+            return object;
+        }
 	}
 	
 	public <T> void persist(final T object) {
 		em.persist(object);
 	}
 	
-	public<T> void update(final T object) {
-		em.merge(object);
+	public<T> T update(final T object) {
+		return em.merge(object);
 	}
 	
 	public <T> void remove(final T object) {

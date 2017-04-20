@@ -3,21 +3,22 @@ package net.mortalsilence.indiepim.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.mortalsilence.indiepim.server.calendar.EventDTO;
+import net.mortalsilence.indiepim.server.calendar.synchronisation.CalSynchroService;
+import net.mortalsilence.indiepim.server.dto.*;
 import net.mortalsilence.indiepim.server.calendar.ICSParser;
 import net.mortalsilence.indiepim.server.command.actions.*;
 import net.mortalsilence.indiepim.server.command.exception.CommandException;
 import net.mortalsilence.indiepim.server.command.handler.*;
 import net.mortalsilence.indiepim.server.command.results.*;
+import net.mortalsilence.indiepim.server.dao.CalendarDAO;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.UserDAO;
-import net.mortalsilence.indiepim.server.domain.AttachmentPO;
-import net.mortalsilence.indiepim.server.domain.CalendarPO;
-import net.mortalsilence.indiepim.server.domain.UserPO;
-import net.mortalsilence.indiepim.server.dto.EmailAddressDTO;
-import net.mortalsilence.indiepim.server.dto.MessageAccountDTO;
-import net.mortalsilence.indiepim.server.dto.TagDTO;
-import net.mortalsilence.indiepim.server.dto.UserDTO;
+import net.mortalsilence.indiepim.server.domain.*;
+import net.mortalsilence.indiepim.server.message.MessageConstants;
+import net.mortalsilence.indiepim.server.security.EncryptionService;
+import net.mortalsilence.indiepim.server.utils.CalendarUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -25,12 +26,11 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,6 +43,7 @@ import java.util.List;
 @RequestMapping("/command")
 public class CommandController {
 
+    // TODO move ActionHandlers to registry!!!
     @Inject private GetMessageAccountsHandler getMessageAccountsHandler;
     @Inject private GetAllMessagesHandler getMessagesHandler;
     @Inject private GetMessageHandler getMessageHandler;
@@ -61,7 +62,19 @@ public class CommandController {
     @Inject private SendChatMessageHandler chatMessageHandler;
     @Inject private DeleteMessagesHandler deleteMessagesHandler;
     @Inject private GetAttachmentHandler attachmentHandler;
+    @Inject private CreateDraftHandler createDraftHandler;
     @Inject private MessageDAO messageDAO;
+    @Inject private CalendarDAO calendarDAO;
+    @Inject private GetCalendarsHandler getCalendarsHandler;
+    @Inject private CalSynchroService calSyncService;
+    @Inject private CalendarUtils calUtils;
+    @Inject private CreateOrUpdateCalendarHandler createOrUpdateCalendarHandler;
+    @Inject private DeleteCalendarHandler deleteCalendarHandler;
+    @Inject private CreateOrUpdateEventHandler createOrUpdateEventHandler;
+    @Inject private DeleteEventHandler deleteEventHandler;
+
+
+    final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 
     @RequestMapping(value="getMessageAccounts", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -93,6 +106,16 @@ public class CommandController {
         try {
             final MessageDTOResult result = getMessageHandler.execute(new GetMessage(messageId));
             return result.getMessageDTO();
+        } catch (CommandException e) {
+            return new ErrorResult(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="createDraft", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object createDraft (@RequestParam(value = "origMessageId", required = false) final Long origMessageId){
+        try {
+            return createDraftHandler.execute(new CreateDraft(origMessageId));
         } catch (CommandException e) {
             return new ErrorResult(e.getMessage());
         }
@@ -170,21 +193,135 @@ public class CommandController {
     @ResponseBody
     public String importIcs(@RequestParam("file") CommonsMultipartFile upload) {
         final UserPO user = userDAO.getUser(ActionUtils.getUserId());
-        final CalendarPO newCalendar = icsParser.persistCalendarFromICSFile(user, upload);
-
-        int imported = newCalendar.getEvents().size();
-        return "<h3>Import successful</h3><p>Imported " + imported + " events.";
+        try {
+            final CalendarPO newCalendar = icsParser.updateCalFromIcalInputStream(user, null, upload.getInputStream(), upload.getName());
+            int imported = newCalendar.getEvents().size();
+            return "<h3>Import successful</h3><p>Imported " + imported + " events.";
+        } catch(IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
     }
 
+    @RequestMapping(value="uploadAttachment", consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object uploadAttachment(@RequestParam("file") CommonsMultipartFile attachment,
+                                   @RequestParam("messageId") Long messageId) {
+
+        if(attachment.getOriginalFilename() == null)
+            throw new IllegalArgumentException("Attachment has no name!");
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            final File tmpFile = File.createTempFile(attachment.getOriginalFilename(), ".tmp");
+            os = new FileOutputStream(tmpFile);
+            is = attachment.getInputStream();
+            IOUtils.copy(is, os);
+            final AttachmentPO attachmentPO = new AttachmentPO();
+            final UserPO user = userDAO.getUser(ActionUtils.getUserId());
+            final MessagePO msg = messageDAO.getMessageByIdAndUser(messageId, user.getId());
+            if(msg == null)
+                throw new IllegalArgumentException("Message with id " + messageId + " not found.");
+            attachmentPO.setUser(user);
+            attachmentPO.setDisposition(MessageConstants.DISPOSITION_ATTACHMENT);
+            attachmentPO.setFilename(attachment.getOriginalFilename());
+            attachmentPO.setMimeType(attachment.getContentType());
+            attachmentPO.setMessage(msg);
+            attachmentPO.setTempFilename(tmpFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(is != null) {
+                try { is.close();} catch(IOException ioe) {};
+            }
+            if(os != null) {
+                try {os.close();} catch(IOException ioe) {};
+            }
+        }
+        return "{\"result\":\"OK\"}";
+    }
+
+    @RequestMapping(value="getCalendars", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object getCalendars() {
+        return getCalendarsHandler.execute(new GetCalendars()).getCalendars();
+    }
+
+    @RequestMapping(value="getCalendar/{id}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object getCalendars(@PathVariable("id") final Long calendarId) {
+        final Collection<Long> calIds = new LinkedList<Long>();
+        calIds.add(calendarId);
+        List<CalendarDTO> calendars = getCalendarsHandler.execute(new GetCalendars(calIds)).getCalendars();
+        if(calendars == null || calendars.isEmpty())
+            throw new RuntimeException("Calendar with id " + calendarId + " not found!");
+        return calendars.get(0);
+    }
+
+
+    @RequestMapping(value="syncCalendar/{id}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object syncCalendar(@PathVariable("id") final Long calendarId){
+        final CalendarPO cal = calendarDAO.getCalendarById(ActionUtils.getUserId(), calendarId);
+        if(cal == null)  {
+            throw new RuntimeException("Calendar with id " + calendarId + " not found.");
+        }
+        calSyncService.syncExternalCalendar(cal);
+        return "{\"result\":\"OK\"}";
+    }
+
+
+    @RequestMapping(value="addExternalCalendar", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object addExternalCalendar(@RequestParam("url") final String url,
+                                      @RequestParam(value = "username", required = false) final String username,
+                                      @RequestParam(value = "password", required = false) final String password) {
+        final CalendarDTO calendarDTO = new CalendarDTO();
+        calendarDTO.syncUrl = url;
+        calendarDTO.userName = username;
+        if(password != null && !password.isEmpty())
+            calendarDTO.password = password;
+        return createOrUpdateCalendarHandler.execute(new CreateOrUpdateCalendar(calendarDTO)).getId();
+    }
+
+    @RequestMapping(value="createOrUpdateCalendar", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Long createOrUpdateCalendar(@RequestBody final CalendarDTO calendarDTO) {
+        return createOrUpdateCalendarHandler.execute(new CreateOrUpdateCalendar(calendarDTO)).getId();
+    }
+
+    @RequestMapping(value="deleteCalendar/{id}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object deleteCalendar(@PathVariable("id") final Long calendarId) {
+        return deleteCalendarHandler.execute(new DeleteCalendar(calendarId)).getResult();
+    }
 
     @RequestMapping(value="getEvents", produces = "application/json;charset=UTF-8")
     @ResponseBody
+    /**
+     * start milliseconds from unix epoch
+     * end milliseconds from unix epoch
+     */
     public Object getEvents(@RequestParam("start") final Long start,
                             @RequestParam("end") final Long end) {
-        final Collection<EventDTO> events = new LinkedList<EventDTO>();
 
-        return events;
+        final List<EventPO> events = calendarDAO.getEvents(ActionUtils.getUserId(), new Timestamp(start), new Timestamp(end));
+        if(events == null)
+            return null;
+         return calUtils.mapEventPO2EventDTOList(events);
     }
+
+    @RequestMapping(value="createOrUpdateEvent", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Long createOrUpdateEvent(@RequestBody final EventDTO eventDTO) {
+        return createOrUpdateEventHandler.execute(new CreateOrUpdateEvent(eventDTO)).getId();
+    }
+
+    @RequestMapping(value="deleteEvent/{id}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object deleteEvent(@PathVariable("id") final Long eventId) {
+        return deleteEventHandler.execute(new DeleteEvent(eventId)).getResult();
+    }
+
 
     @RequestMapping(value="getMessageStats", produces = "application/json;charset=UTF-8")
     @ResponseBody

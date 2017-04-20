@@ -57,11 +57,11 @@ public class GetAttachmentHandler implements Command<GetAttachment, BooleanResul
                                                     false,
                                                     new ImapMsgOperationCallback() {
                 @Override
-                public void processMessage(IMAPFolder folder,
-                                           Message imapMessage,
-                                           Long messageUID,
-                                           MessagePO indieMessage,
-                                           MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException {
+                public MessagePO processMessage(IMAPFolder folder,
+                                                Message imapMessage,
+                                                Long messageUID,
+                                                MessagePO indieMessage,
+                                                MessageTagLineageMappingPO msgTagLineageMapping) throws MessagingException {
                     try {
                         final InputStream is = getContentStreamByFilename(imapMessage, attachment.getFilename());
                         if(is != null) {
@@ -85,6 +85,7 @@ public class GetAttachmentHandler implements Command<GetAttachment, BooleanResul
                     } catch (MessagingException me) {
                         throw new RuntimeException(me);
                     }
+                    return indieMessage;
                 }
             }
         );

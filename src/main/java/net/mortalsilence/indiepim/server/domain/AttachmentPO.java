@@ -32,6 +32,9 @@ public class AttachmentPO implements Serializable, PersistentObject {
 	@Column(name = "disposition")
 	private String disposition;
 
+    @Column(name = "tempfilename")
+    private String tempFilename;
+
 	public Long getId() {
 		return id;
 	}
@@ -90,5 +93,12 @@ public class AttachmentPO implements Serializable, PersistentObject {
 	public void setDisposition(String disposition) {
 		this.disposition = disposition;
 	}
-	
+
+    public String getTempFilename() {
+        return tempFilename;
+    }
+
+    public void setTempFilename(String tempFilename) {
+        this.tempFilename = tempFilename;
+    }
 }

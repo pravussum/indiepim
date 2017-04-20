@@ -44,7 +44,7 @@
 
 .messageViewSenderHeader, .messageViewReceiverHeader {
     color: darkslategray;
-    font-size: 90%;
+    font-size: .9em;
 }
 
 .messageViewTagHeader{
@@ -75,6 +75,10 @@
 
 .controls button {
     width: 100px;
+}
+
+.controls .styleButtonWide {
+    width: 105px;
 }
 
 .controls button i {
@@ -113,4 +117,8 @@
 
 .messageViewDateReceivedHeader {
     text-align: right;
+}
+
+.deleteButton {
+    margin-top: 20px;
 }

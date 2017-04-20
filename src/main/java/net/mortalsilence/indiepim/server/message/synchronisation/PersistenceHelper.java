@@ -40,6 +40,7 @@ public class PersistenceHelper {
 
     @Transactional(propagation = Propagation.REQUIRED)
     /* made public for transactional annotation to work */
+    // TODO: the messsage handle method return the changed messagePO! Is this used after calling persistMessage?
     public boolean persistMessage(final MessageAccountPO account,
                                   final Folder folder,
                                   final TagLineagePO tagLineage,
@@ -55,25 +56,28 @@ public class PersistenceHelper {
         try {
             if(logger.isInfoEnabled())
                 logger.info("MSG_UID: " + msgUid);
-            final String hash = messageUtils.getHash(messageUtils.getSenderStr(message),
+            String senderStr = messageUtils.getSenderStr(message);
+            if(senderStr == null)
+                senderStr = "";
+            final String hash = messageUtils.getHash(senderStr,
                     messageUtils.getReceiverStr(message),
                     message.getSubject(),
                     message.getReceivedDate());
             if(hashCache.contains(hash) || hasDuplicate(account, hash)) {
                 /* Update existing message in different folder */
-                final MessagePO duplicate = getDuplicate(account, hash);
+                MessagePO duplicate = getDuplicate(account, hash);
                 if(!duplicate.hasTagLineage(tagLineage, msgUid)){
                     messageDAO.addTagLineage(duplicate, tagLineage, msgUid);
                 }
                 // TODO: replace by something cool
                 if(updateHandler != null)
-                    updateHandler.handleMessage(message, duplicate, msgUid, account, folder, tagLineage, session, user);
+                    duplicate = updateHandler.handleMessage(message, duplicate, msgUid, account, folder, tagLineage, session, user);
             } else {
                 /* handle new messages */
                 MessagePO newMessage = new MessagePO();
                 newMessage.setHash(hash);
-                persistHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
-                addressHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
+                newMessage = persistHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
+                newMessage = addressHandler.handleMessage(message, newMessage, msgUid, account, folder, tagLineage, session, user);
                 isNew = true;
             }
             hashCache.add(hash);
