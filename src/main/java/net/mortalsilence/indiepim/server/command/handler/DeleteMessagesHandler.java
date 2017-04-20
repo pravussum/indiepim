@@ -17,6 +17,8 @@ import net.mortalsilence.indiepim.server.message.ConnectionUtils;
 import net.mortalsilence.indiepim.server.message.ImapMsgOperationCallback;
 import net.mortalsilence.indiepim.server.message.MessageConstants;
 import net.mortalsilence.indiepim.server.message.MessageUpdateService;
+import net.mortalsilence.indiepim.server.utils.ArgUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +65,7 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
 
                 final long start = System.currentTimeMillis();
                 final Set<MessageTagLineageMappingPO> tagLineageMappingsToDelete = new LinkedHashSet<MessageTagLineageMappingPO>();
+                final Set<Long> messageIdsToDelete = new LinkedHashSet<Long>();
                 messageUpdateService.updateImapMessages(userId, messages, accountId, expunge, new ImapMsgOperationCallback() {
                     // TODO performance tuning
                     @Override
@@ -92,10 +95,12 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                                         trashFolderTagLineage = connectionUtils.getOrCreateTagLineage(userDAO.getUser(userId), account, trashFolder);
                                     }
                                     messageDAO.addTagLineage(indieMessage, trashFolderTagLineage, copyResult[0].uid);
+                                    tagLineageMappingsToDelete.add(tagLineageMapping);
+                                } else {
+                                    messageIdsToDelete.add(indieMessage.getId());
                                 }
 
                                 // defer the deletion of the tag lineage mappings, since the caller of the callback keeps them in an iterator
-                                tagLineageMappingsToDelete.add(tagLineageMapping);
                             }
 
                             if (logger.isDebugEnabled())
@@ -119,21 +124,27 @@ public class DeleteMessagesHandler implements Command<DeleteMessages, DeleteMess
                     }
                 });
 
-                final Iterator<MessageTagLineageMappingPO> it = tagLineageMappingsToDelete.iterator();
-                while(it.hasNext()) {
-                    final MessageTagLineageMappingPO curTagLineageMapping = it.next();
+
+                final Iterator<MessageTagLineageMappingPO> tlmIt = tagLineageMappingsToDelete.iterator();
+                while(tlmIt.hasNext()) {
+                    final MessageTagLineageMappingPO curTagLineageMapping = tlmIt.next();
                     if(logger.isDebugEnabled())
                         logger.debug("Removing tag lineage " + curTagLineageMapping.getTagLineage().getLineage() + " from message with UID " + curTagLineageMapping.getMsgUid());
-                    it.remove();
+                    tlmIt.remove();
                     final MessagePO indieMessage = curTagLineageMapping.getMessage();
                     final Long msgId = indieMessage.getId();
                     indieMessage.getMsgTagLineageMappings().remove(curTagLineageMapping);
-                    // TODO not working
+
                     genericDAO.remove(curTagLineageMapping);
                     if(!result.containsKey(msgId)) {
                         // return true to get the message deleted from the clients views
                         result.put(msgId, new DeleteResultInfo(true, "Message not found on server. Deleted locally."));
                     }
+                }
+                final Iterator<Long> msgIt = messageIdsToDelete.iterator();
+                while(msgIt.hasNext()) {
+                    final Long msgToDelete = msgIt.next();
+                    messageDAO.deleteMessages(userId, ArgUtils.object2Collection(msgToDelete));
                 }
 
                 if(logger.isDebugEnabled())
