@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class UrlPO implements Serializable, PersistentObject {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	

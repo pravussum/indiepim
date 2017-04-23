@@ -1,14 +1,11 @@
 package net.mortalsilence.indiepim.server.domain;
 
-import net.mortalsilence.indiepim.server.comet.CometMessage;
 import org.hibernate.search.annotations.ContainedIn;
-import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.DocumentId;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -16,9 +13,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class UserPO implements Serializable, PersistentObject {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-    @Field
+    @DocumentId
 	private Long id;
 	
 	@Column(name = "username")

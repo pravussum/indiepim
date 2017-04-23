@@ -10,7 +10,7 @@ import java.util.Date;
 public class DatePO implements Serializable, PersistentObject {
 	
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	

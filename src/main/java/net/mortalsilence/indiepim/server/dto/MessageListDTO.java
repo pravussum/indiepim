@@ -14,6 +14,7 @@ public class MessageListDTO implements Serializable {
 
     @JsonIgnore public Date dateReceived;
     @JsonProperty("dateReceived") public String getDateReceived() {
+    	if(dateReceived == null) return null;
         return ISODateTimeFormat.dateTime().print(dateReceived.getTime());
     }
 

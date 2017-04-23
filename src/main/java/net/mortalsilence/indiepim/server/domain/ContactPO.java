@@ -15,7 +15,7 @@ import java.util.TreeSet;
 public class ContactPO implements Serializable, PersistentObject {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	

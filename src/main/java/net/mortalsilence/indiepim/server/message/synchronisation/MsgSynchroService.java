@@ -6,7 +6,6 @@ import net.mortalsilence.indiepim.server.comet.AccountSyncProgressMessage;
 import net.mortalsilence.indiepim.server.comet.AccountSyncedMessage;
 import net.mortalsilence.indiepim.server.comet.CometService;
 import net.mortalsilence.indiepim.server.comet.NewMsgMessage;
-import net.mortalsilence.indiepim.server.dao.GenericDAO;
 import net.mortalsilence.indiepim.server.dao.MessageDAO;
 import net.mortalsilence.indiepim.server.dao.TagDAO;
 import net.mortalsilence.indiepim.server.domain.*;
@@ -29,17 +28,37 @@ public class MsgSynchroService implements MessageConstants {
 	final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 	private static final ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<String, ReentrantLock>(); 
 	
-	private static final Set<String> hashCache = new HashSet<String>();
-	private static long cometEventTime;
-    @Inject private MessageDAO messageDAO;
-    @Inject private TagDAO tagDAO;
-    @Inject private ConnectionUtils connectionUtils;
-    @Inject private PersistMessageHandler persistMessageHandler;
-    @Inject private UpdateFlagsAndFoldersHandler updateFlagsAndFoldersHandler;
-    @Inject private MailAddressHandler mailAddressHandler;
-    @Inject private CometService cometService;
-    @Inject private PersistenceHelper persistenceHelper;
-    @Inject private GenericDAO genericDAO;
+	private static final Set<String> hashCache = new HashSet<>();
+    private final MessageDAO messageDAO;
+    private final TagDAO tagDAO;
+    private final ConnectionUtils connectionUtils;
+    private final PersistMessageHandler persistMessageHandler;
+    private final UpdateFlagsAndFoldersHandler updateFlagsAndFoldersHandler;
+    private final MailAddressHandler mailAddressHandler;
+    private final CometService cometService;
+    private final PersistenceHelper persistenceHelper;
+    private final NewMessageHandler newMessageHandler;
+
+	@Inject
+    public MsgSynchroService(MessageDAO messageDAO,
+							 TagDAO tagDAO,
+							 ConnectionUtils connectionUtils,
+							 PersistMessageHandler persistMessageHandler,
+							 UpdateFlagsAndFoldersHandler updateFlagsAndFoldersHandler,
+							 MailAddressHandler mailAddressHandler,
+							 CometService cometService,
+							 PersistenceHelper persistenceHelper,
+							 NewMessageHandler newMessageHandler) {
+		this.messageDAO = messageDAO;
+		this.tagDAO = tagDAO;
+		this.connectionUtils = connectionUtils;
+		this.persistMessageHandler = persistMessageHandler;
+		this.updateFlagsAndFoldersHandler = updateFlagsAndFoldersHandler;
+		this.mailAddressHandler = mailAddressHandler;
+		this.cometService = cometService;
+		this.persistenceHelper = persistenceHelper;
+		this.newMessageHandler = newMessageHandler;
+	}
 
 	public boolean synchronize(	final UserPO user,
 								final MessageAccountPO account,
@@ -49,7 +68,6 @@ public class MsgSynchroService implements MessageConstants {
 			logger.debug("Starting synchronisation for account " + account.getName());
 		long overallTime = System.currentTimeMillis();
         final Long accountId = account.getId();
-        cometEventTime = overallTime;
 
         if(user == null || account == null) {
             throw new IllegalArgumentException();
@@ -79,11 +97,11 @@ public class MsgSynchroService implements MessageConstants {
                 updateHandler = null;
             else throw new IllegalArgumentException();
 
-			Folder folder = null;
+			IMAPFolder folder = null;
 			try {
 				Folder[] folders = store.getDefaultFolder().list("*");
 				for (int j=0; j<folders.length; j++) {
-					folder = folders[j];
+					folder = (IMAPFolder)folders[j];
 					if ((folder.getType() & Folder.HOLDS_MESSAGES) != 0) {
 						if(logger.isInfoEnabled())
 							logger.info("Synchronizing folder: ##### " + folder.getFullName() + " #####");						
@@ -92,19 +110,18 @@ public class MsgSynchroService implements MessageConstants {
 						/* Tag lineage */
 						final TagLineagePO tagLineage = persistenceHelper.getOrCreateTagLineage(user, account, folder);
 						
-						final Map<Long, Message> uidMsgMap = getMessageUids((IMAPFolder)folder, updateMode);
+						final Map<Long, Message> uidMsgMap = getMessageUids(folder, updateMode);
 
 						final Set<Long> remoteUids = uidMsgMap.keySet();
 						final List<Long> knownUids = tagDAO.getAllMsgUidsForTagLineage(user.getId(), tagLineage.getId());
-						
-						
+
 						/* Handle new Messages */
 						@SuppressWarnings("unchecked")
-						final Collection<Long> newUids = ListUtils.removeAll(remoteUids, knownUids);
+						final List<Long> newUids = ListUtils.removeAll(remoteUids, knownUids);
 						cometService.sendCometMessages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), accountId, folder.getFullName(), newUids.size(), 0));
 						if(newUids.size() > 0) {
                             // ignore failed messages
-                            newMessages |= handleNewMessages(uidMsgMap, newUids, account, folder, tagLineage, updateHandler, persistMessageHandler, mailAddressHandler, session, user);
+                            newMessages |= newMessageHandler.handleNewMessages(uidMsgMap, newUids, account, folder, tagLineage, updateHandler, persistMessageHandler, mailAddressHandler, session, user, hashCache);
 						}
 						
 						/* Handle message updates if applicable */
@@ -192,52 +209,6 @@ public class MsgSynchroService implements MessageConstants {
 
 	private boolean isUpdateFlags(SyncUpdateMethod updateMode) {
 		return SyncUpdateMethod.FLAGS.equals(updateMode) || SyncUpdateMethod.FULL.equals(updateMode);
-	}
-
-	private boolean handleNewMessages(final Map<Long, Message> uidMsgMap,
-                                      final Collection<Long> uids,
-                                      MessageAccountPO account,
-                                      final Folder folder,
-                                      TagLineagePO tagLineage,
-                                      IncomingMessageHandler updateHandler,
-                                      IncomingMessageHandler persistHandler,
-                                      IncomingMessageHandler addressHandler,
-                                      Session session,
-                                      UserPO user) {
-
-		boolean newMessages = false;
-
-		final Iterator<Long> it = uids.iterator();
-		int i = 0;
-		while(it.hasNext()) {
-			/* Update clients every second */
-			i++;
-            if(System.currentTimeMillis() - cometEventTime > 1000) {
-				cometService.sendCometMessages(account.getUser().getId(), new AccountSyncProgressMessage(account.getUser().getId(), account.getId(), folder.getFullName(), uids.size(), i));
-				cometEventTime = System.currentTimeMillis();
-			}
-			Long msgUid = it.next();
-			final Message message = uidMsgMap.get(msgUid);
-
-            try {
-                newMessages |= persistenceHelper.persistMessage(account,
-                        folder,
-                        tagLineage,
-                        updateHandler,
-                        persistHandler,
-                        addressHandler,
-                        session,
-                        user,
-                        msgUid,
-                        message,
-                        hashCache);
-            } catch (Exception e) {
-                // log and do not fail the whole sync because of one invalid message
-                logger.error("Persisting message " + msgUid + " in folder " + folder.getName() + " failed.", e);
-            }
-        }
-
-		return newMessages;
 	}
 
 	private Map<Long, Message> getMessageUids(IMAPFolder folder, SyncUpdateMethod updateMode) throws MessagingException {

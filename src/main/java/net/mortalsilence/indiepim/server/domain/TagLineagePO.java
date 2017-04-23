@@ -16,7 +16,7 @@ import java.util.List;
 public class TagLineagePO implements Serializable, Comparable<TagLineagePO>, PersistentObject {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	

@@ -1,13 +1,13 @@
 package net.mortalsilence.indiepim.server.domain;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.analysis.HTMLStripCharFilterFactory;
-import org.apache.solr.analysis.LowerCaseFilterFactory;
-import org.apache.solr.analysis.StandardTokenizerFactory;
+import org.apache.lucene.analysis.charfilter.HTMLStripCharFilterFactory;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.search.annotations.*;
-import org.springframework.stereotype.Component;
+import org.hibernate.search.annotations.Index;
 
 import javax.inject.Named;
 import javax.persistence.*;
@@ -43,7 +43,7 @@ public class MessagePO implements Serializable, PersistentObject {
 	final static Logger logger = Logger.getLogger("net.mortalsilence.indiepim");
 	
 	@Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
     @DocumentId
 	private Long id;

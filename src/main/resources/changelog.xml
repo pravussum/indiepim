@@ -568,11 +568,7 @@
     		<column name="hash" />
 		</createIndex>
 	</changeSet>                
-	
-	<!-- changeSet id="1319026263161-82" author="AmIEvil">
-		<addUniqueConstraint tableName="message" columnNames="user_id, msg_account_id, hash"/>
-	</changeSet-->
-	
+
 	<changeSet author="AmIEvil" id="1319026263161-83">
         <createTable tableName="msg_tag_lineage_mapping">
             <column autoIncrement="true" name="id" type="INT UNSIGNED">
@@ -1111,9 +1107,6 @@
         </addColumn>
     </changeSet>
     <changeSet id="1319026263161-135" author="AmIEvil">
-        <modifyDataType tableName="msg_account" columnName="password" newDataType="varchar(500)"/>
-    </changeSet>
-    <changeSet id="1319026263161-135" author="AmIEvil">
         <addColumn tableName="attachment">
             <column name="tempfilename" type="varchar(300)" />
         </addColumn>
@@ -1193,5 +1186,25 @@
             <column name="user_id"/>
             <column name="read_flag" />
         </createIndex>
+    </changeSet>
+    <changeSet id="1319026263161-149" author="AmIEvil">
+        <modifyDataType tableName="msg_account" columnName="password" newDataType="varchar(500)"/>
+    </changeSet>
+    <changeSet id="20170422-2252" author="AmIEvil">
+        <addUniqueConstraint tableName="tag_hierarchy" columnNames="user_id, name" />
+    </changeSet>
+    <changeSet id="20170422-2254" author="AmIEvil">
+        <preConditions onFail="CONTINUE">
+            <not>
+                <dbms type="mysql" />
+            </not>
+        </preConditions>
+        <addUniqueConstraint tableName="tag_lineage" columnNames="user_id, tag_hierarchy_id, lineage" />
+    </changeSet>
+    <changeSet id="20170423-2055" author="AmIEvil" dbms="mysql">
+        <addColumn tableName="tag_lineage">
+            <column name="lineage_hash" type="char(32) GENERATED ALWAYS AS (MD5(lineage))" />
+        </addColumn>
+        <addUniqueConstraint tableName="tag_lineage" columnNames="user_id, tag_hierarchy_id, lineage_hash" />
     </changeSet>
 </databaseChangeLog>

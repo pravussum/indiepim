@@ -7,7 +7,6 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 public class MessageAccountPO implements Serializable, PersistentObject {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	
@@ -80,7 +79,7 @@ public class MessageAccountPO implements Serializable, PersistentObject {
 
 	@OneToMany( mappedBy="messageAccount", targetEntity=MessagePO.class)
 	@Cascade( {CascadeType.DELETE})
-	private List<MessagePO> messages = new LinkedList<MessagePO>();
+	private List<MessagePO> messages = new LinkedList<>();
 	
 	/*
 	 * sync method (new msg. always persisted, deleted always removed):

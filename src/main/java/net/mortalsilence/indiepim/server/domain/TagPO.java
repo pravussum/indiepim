@@ -10,7 +10,7 @@ import java.util.List;
 public class TagPO implements Serializable, PersistentObject, Comparable<TagPO> {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	

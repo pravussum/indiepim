@@ -13,7 +13,7 @@ import java.util.List;
 public class TagHierarchyPO implements Serializable, PersistentObject {
 
 	@Id
-    @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	

@@ -92,6 +92,9 @@ public class ConnectionUtils implements MessageConstants {
 		props.remove("mail." + protocol + ".user");
 		props.remove("mail.user");		
 
+		/* address parsing */
+        props.setProperty("mail.mime.address.strict", "false");
+
 		/* Authentication */
 		final AuthenticationMode authenticationMode = AuthenticationMode.valueOf(incoming ? account.getAuthentication() : account.getOutgoingAuthentication());
 		final String auth = authenticationMode == AuthenticationMode.PASSWORD_NORMAL ? "true" : "false";
@@ -243,5 +246,6 @@ public class ConnectionUtils implements MessageConstants {
         tagHierarchy.setName(account.getTag().getTag());
         genericDAO.persist(tagHierarchy);
         account.setTagHierarchy(tagHierarchy);
+        genericDAO.merge(account);
     }
 }

@@ -1,10 +1,6 @@
 package net.mortalsilence.indiepim.server.domain;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
@@ -12,7 +8,7 @@ import java.util.Date;
 public class MessageAccountStatsPO {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

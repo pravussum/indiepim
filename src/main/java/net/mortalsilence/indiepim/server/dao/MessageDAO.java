@@ -116,7 +116,7 @@ public class MessageDAO {
         org.hibernate.search.jpa.FullTextQuery persistenceQuery = fullTextEntityManager.createFullTextQuery(query, MessagePO.class);
 
         /* add sort order */
-        persistenceQuery.setSort(new Sort(new SortField("dateReceived", SortField.LONG, true)));
+        persistenceQuery.setSort(new Sort(new SortField("dateReceived", SortField.Type.LONG, true)));
 
         /* execute search */
         List result = persistenceQuery

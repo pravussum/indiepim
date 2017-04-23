@@ -29,7 +29,7 @@ public class AccountIncSyncroJob implements Job, MessageConstants {
 
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     /**
-     * Transaction demarcation is handled inside the SynchroService respectivly its sub-services (PersistenceHelper)
+     * Transaction demarcation is handled inside the SynchroService or its sub-services respectivly (PersistenceHelper)
      * and not on this global level.
      * This is due to the fact that a synchronization is really long running but single invalid messages should fail
      * recoverably and valid message should be "visible" right away (not until the sync tx is commited)
